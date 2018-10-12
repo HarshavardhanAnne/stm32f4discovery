@@ -1,0 +1,342 @@
+ARM GAS  /tmp/cclP8232.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m4
+   3              		.eabi_attribute 27, 1
+   4              		.eabi_attribute 28, 1
+   5              		.fpu fpv4-sp-d16
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.thumb
+  16              		.file	"usb_host.c"
+  17              		.text
+  18              	.Ltext0:
+  19              		.cfi_sections	.debug_frame
+  20              		.section	.text.USBH_UserProcess,"ax",%progbits
+  21              		.align	2
+  22              		.thumb
+  23              		.thumb_func
+  25              	USBH_UserProcess:
+  26              	.LFB125:
+  27              		.file 1 "Src/usb_host.c"
+   1:Src/usb_host.c **** /**
+   2:Src/usb_host.c ****   ******************************************************************************
+   3:Src/usb_host.c ****   * @file            : usb_host.c
+   4:Src/usb_host.c ****   * @version         : v1.0_Cube
+   5:Src/usb_host.c ****   * @brief           : This file implements the USB Host
+   6:Src/usb_host.c ****   ******************************************************************************
+   7:Src/usb_host.c ****   * This notice applies to any and all portions of this file
+   8:Src/usb_host.c ****   * that are not between comment pairs USER CODE BEGIN and
+   9:Src/usb_host.c ****   * USER CODE END. Other portions of this file, whether 
+  10:Src/usb_host.c ****   * inserted by the user or by software development tools
+  11:Src/usb_host.c ****   * are owned by their respective copyright owners.
+  12:Src/usb_host.c ****   *
+  13:Src/usb_host.c ****   * Copyright (c) 2018 STMicroelectronics International N.V. 
+  14:Src/usb_host.c ****   * All rights reserved.
+  15:Src/usb_host.c ****   *
+  16:Src/usb_host.c ****   * Redistribution and use in source and binary forms, with or without 
+  17:Src/usb_host.c ****   * modification, are permitted, provided that the following conditions are met:
+  18:Src/usb_host.c ****   *
+  19:Src/usb_host.c ****   * 1. Redistribution of source code must retain the above copyright notice, 
+  20:Src/usb_host.c ****   *    this list of conditions and the following disclaimer.
+  21:Src/usb_host.c ****   * 2. Redistributions in binary form must reproduce the above copyright notice,
+  22:Src/usb_host.c ****   *    this list of conditions and the following disclaimer in the documentation
+  23:Src/usb_host.c ****   *    and/or other materials provided with the distribution.
+  24:Src/usb_host.c ****   * 3. Neither the name of STMicroelectronics nor the names of other 
+  25:Src/usb_host.c ****   *    contributors to this software may be used to endorse or promote products 
+  26:Src/usb_host.c ****   *    derived from this software without specific written permission.
+  27:Src/usb_host.c ****   * 4. This software, including modifications and/or derivative works of this 
+  28:Src/usb_host.c ****   *    software, must execute solely and exclusively on microcontroller or
+  29:Src/usb_host.c ****   *    microprocessor devices manufactured by or for STMicroelectronics.
+  30:Src/usb_host.c ****   * 5. Redistribution and use of this software other than as permitted under 
+  31:Src/usb_host.c ****   *    this license is void and will automatically terminate your rights under 
+ARM GAS  /tmp/cclP8232.s 			page 2
+
+
+  32:Src/usb_host.c ****   *    this license. 
+  33:Src/usb_host.c ****   *
+  34:Src/usb_host.c ****   * THIS SOFTWARE IS PROVIDED BY STMICROELECTRONICS AND CONTRIBUTORS "AS IS" 
+  35:Src/usb_host.c ****   * AND ANY EXPRESS, IMPLIED OR STATUTORY WARRANTIES, INCLUDING, BUT NOT 
+  36:Src/usb_host.c ****   * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
+  37:Src/usb_host.c ****   * PARTICULAR PURPOSE AND NON-INFRINGEMENT OF THIRD PARTY INTELLECTUAL PROPERTY
+  38:Src/usb_host.c ****   * RIGHTS ARE DISCLAIMED TO THE FULLEST EXTENT PERMITTED BY LAW. IN NO EVENT 
+  39:Src/usb_host.c ****   * SHALL STMICROELECTRONICS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+  40:Src/usb_host.c ****   * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  41:Src/usb_host.c ****   * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+  42:Src/usb_host.c ****   * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF 
+  43:Src/usb_host.c ****   * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING 
+  44:Src/usb_host.c ****   * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+  45:Src/usb_host.c ****   * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  46:Src/usb_host.c ****   *
+  47:Src/usb_host.c ****   ******************************************************************************
+  48:Src/usb_host.c ****   */
+  49:Src/usb_host.c **** 
+  50:Src/usb_host.c **** /* Includes ------------------------------------------------------------------*/
+  51:Src/usb_host.c **** 
+  52:Src/usb_host.c **** #include "usb_host.h"
+  53:Src/usb_host.c **** #include "usbh_core.h"
+  54:Src/usb_host.c **** #include "usbh_cdc.h"
+  55:Src/usb_host.c **** 
+  56:Src/usb_host.c **** /* USER CODE BEGIN Includes */
+  57:Src/usb_host.c **** 
+  58:Src/usb_host.c **** /* USER CODE END Includes */
+  59:Src/usb_host.c **** 
+  60:Src/usb_host.c **** /* USER CODE BEGIN PV */
+  61:Src/usb_host.c **** /* Private variables ---------------------------------------------------------*/
+  62:Src/usb_host.c **** 
+  63:Src/usb_host.c **** /* USER CODE END PV */
+  64:Src/usb_host.c **** 
+  65:Src/usb_host.c **** /* USER CODE BEGIN PFP */
+  66:Src/usb_host.c **** /* Private function prototypes -----------------------------------------------*/
+  67:Src/usb_host.c **** 
+  68:Src/usb_host.c **** /* USER CODE END PFP */
+  69:Src/usb_host.c **** 
+  70:Src/usb_host.c **** /* USB Host core handle declaration */
+  71:Src/usb_host.c **** USBH_HandleTypeDef hUsbHostFS;
+  72:Src/usb_host.c **** ApplicationTypeDef Appli_state = APPLICATION_IDLE;
+  73:Src/usb_host.c **** 
+  74:Src/usb_host.c **** /*
+  75:Src/usb_host.c ****  * -- Insert your variables declaration here --
+  76:Src/usb_host.c ****  */
+  77:Src/usb_host.c **** /* USER CODE BEGIN 0 */
+  78:Src/usb_host.c **** 
+  79:Src/usb_host.c **** /* USER CODE END 0 */
+  80:Src/usb_host.c **** 
+  81:Src/usb_host.c **** /*
+  82:Src/usb_host.c ****  * user callback declaration
+  83:Src/usb_host.c ****  */
+  84:Src/usb_host.c **** static void USBH_UserProcess(USBH_HandleTypeDef *phost, uint8_t id);
+  85:Src/usb_host.c **** 
+  86:Src/usb_host.c **** /*
+  87:Src/usb_host.c ****  * -- Insert your external function declaration here --
+  88:Src/usb_host.c ****  */
+ARM GAS  /tmp/cclP8232.s 			page 3
+
+
+  89:Src/usb_host.c **** /* USER CODE BEGIN 1 */
+  90:Src/usb_host.c **** 
+  91:Src/usb_host.c **** /* USER CODE END 1 */
+  92:Src/usb_host.c **** 
+  93:Src/usb_host.c **** /**
+  94:Src/usb_host.c ****   * Init USB host library, add supported class and start the library
+  95:Src/usb_host.c ****   * @retval None
+  96:Src/usb_host.c ****   */
+  97:Src/usb_host.c **** void MX_USB_HOST_Init(void)
+  98:Src/usb_host.c **** {
+  99:Src/usb_host.c ****   /* USER CODE BEGIN USB_HOST_Init_PreTreatment */
+ 100:Src/usb_host.c ****   
+ 101:Src/usb_host.c ****   /* USER CODE END USB_HOST_Init_PreTreatment */
+ 102:Src/usb_host.c ****   
+ 103:Src/usb_host.c ****   /* Init host Library, add supported class and start the library. */
+ 104:Src/usb_host.c ****   USBH_Init(&hUsbHostFS, USBH_UserProcess, HOST_FS);
+ 105:Src/usb_host.c **** 
+ 106:Src/usb_host.c ****   USBH_RegisterClass(&hUsbHostFS, USBH_CDC_CLASS);
+ 107:Src/usb_host.c **** 
+ 108:Src/usb_host.c ****   USBH_Start(&hUsbHostFS);
+ 109:Src/usb_host.c **** 
+ 110:Src/usb_host.c ****   /* USER CODE BEGIN USB_HOST_Init_PostTreatment */
+ 111:Src/usb_host.c ****   
+ 112:Src/usb_host.c ****   /* USER CODE END USB_HOST_Init_PostTreatment */
+ 113:Src/usb_host.c **** }
+ 114:Src/usb_host.c **** 
+ 115:Src/usb_host.c **** /*
+ 116:Src/usb_host.c ****  * Background task
+ 117:Src/usb_host.c ****  */
+ 118:Src/usb_host.c **** void MX_USB_HOST_Process(void)
+ 119:Src/usb_host.c **** {
+ 120:Src/usb_host.c ****   /* USB Host Background task */
+ 121:Src/usb_host.c ****   USBH_Process(&hUsbHostFS);
+ 122:Src/usb_host.c **** }
+ 123:Src/usb_host.c **** /*
+ 124:Src/usb_host.c ****  * user callback definition
+ 125:Src/usb_host.c ****  */
+ 126:Src/usb_host.c **** static void USBH_UserProcess  (USBH_HandleTypeDef *phost, uint8_t id)
+ 127:Src/usb_host.c **** {
+  28              		.loc 1 127 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  33              	.LVL0:
+ 128:Src/usb_host.c ****   /* USER CODE BEGIN CALL_BACK_1 */
+ 129:Src/usb_host.c ****   switch(id)
+  34              		.loc 1 129 0
+  35 0000 0429     		cmp	r1, #4
+  36 0002 0CD0     		beq	.L3
+  37 0004 0529     		cmp	r1, #5
+  38 0006 02D0     		beq	.L4
+  39 0008 0229     		cmp	r1, #2
+  40 000a 0BD1     		bne	.L1
+  41 000c 03E0     		b	.L5
+  42              	.L4:
+ 130:Src/usb_host.c ****   {
+ARM GAS  /tmp/cclP8232.s 			page 4
+
+
+ 131:Src/usb_host.c ****   case HOST_USER_SELECT_CONFIGURATION:
+ 132:Src/usb_host.c ****   break;
+ 133:Src/usb_host.c **** 
+ 134:Src/usb_host.c ****   case HOST_USER_DISCONNECTION:
+ 135:Src/usb_host.c ****   Appli_state = APPLICATION_DISCONNECT;
+  43              		.loc 1 135 0
+  44 000e 0322     		movs	r2, #3
+  45 0010 054B     		ldr	r3, .L6
+  46 0012 1A70     		strb	r2, [r3]
+ 136:Src/usb_host.c ****   break;
+  47              		.loc 1 136 0
+  48 0014 7047     		bx	lr
+  49              	.L5:
+ 137:Src/usb_host.c **** 
+ 138:Src/usb_host.c ****   case HOST_USER_CLASS_ACTIVE:
+ 139:Src/usb_host.c ****   Appli_state = APPLICATION_READY;
+  50              		.loc 1 139 0
+  51 0016 0222     		movs	r2, #2
+  52 0018 034B     		ldr	r3, .L6
+  53 001a 1A70     		strb	r2, [r3]
+ 140:Src/usb_host.c ****   break;
+  54              		.loc 1 140 0
+  55 001c 7047     		bx	lr
+  56              	.L3:
+ 141:Src/usb_host.c **** 
+ 142:Src/usb_host.c ****   case HOST_USER_CONNECTION:
+ 143:Src/usb_host.c ****   Appli_state = APPLICATION_START;
+  57              		.loc 1 143 0
+  58 001e 0122     		movs	r2, #1
+  59 0020 014B     		ldr	r3, .L6
+  60 0022 1A70     		strb	r2, [r3]
+  61              	.L1:
+  62 0024 7047     		bx	lr
+  63              	.L7:
+  64 0026 00BF     		.align	2
+  65              	.L6:
+  66 0028 00000000 		.word	.LANCHOR0
+  67              		.cfi_endproc
+  68              	.LFE125:
+  70              		.section	.text.MX_USB_HOST_Init,"ax",%progbits
+  71              		.align	2
+  72              		.global	MX_USB_HOST_Init
+  73              		.thumb
+  74              		.thumb_func
+  76              	MX_USB_HOST_Init:
+  77              	.LFB123:
+  98:Src/usb_host.c ****   /* USER CODE BEGIN USB_HOST_Init_PreTreatment */
+  78              		.loc 1 98 0
+  79              		.cfi_startproc
+  80              		@ args = 0, pretend = 0, frame = 0
+  81              		@ frame_needed = 0, uses_anonymous_args = 0
+  82 0000 10B5     		push	{r4, lr}
+  83              	.LCFI0:
+  84              		.cfi_def_cfa_offset 8
+  85              		.cfi_offset 4, -8
+  86              		.cfi_offset 14, -4
+ 104:Src/usb_host.c **** 
+ARM GAS  /tmp/cclP8232.s 			page 5
+
+
+  87              		.loc 1 104 0
+  88 0002 074C     		ldr	r4, .L10
+  89 0004 2046     		mov	r0, r4
+  90 0006 0749     		ldr	r1, .L10+4
+  91 0008 0122     		movs	r2, #1
+  92 000a FFF7FEFF 		bl	USBH_Init
+  93              	.LVL1:
+ 106:Src/usb_host.c **** 
+  94              		.loc 1 106 0
+  95 000e 2046     		mov	r0, r4
+  96 0010 0549     		ldr	r1, .L10+8
+  97 0012 FFF7FEFF 		bl	USBH_RegisterClass
+  98              	.LVL2:
+ 108:Src/usb_host.c **** 
+  99              		.loc 1 108 0
+ 100 0016 2046     		mov	r0, r4
+ 101 0018 FFF7FEFF 		bl	USBH_Start
+ 102              	.LVL3:
+ 103 001c 10BD     		pop	{r4, pc}
+ 104              	.L11:
+ 105 001e 00BF     		.align	2
+ 106              	.L10:
+ 107 0020 00000000 		.word	hUsbHostFS
+ 108 0024 00000000 		.word	USBH_UserProcess
+ 109 0028 00000000 		.word	CDC_Class
+ 110              		.cfi_endproc
+ 111              	.LFE123:
+ 113              		.section	.text.MX_USB_HOST_Process,"ax",%progbits
+ 114              		.align	2
+ 115              		.global	MX_USB_HOST_Process
+ 116              		.thumb
+ 117              		.thumb_func
+ 119              	MX_USB_HOST_Process:
+ 120              	.LFB124:
+ 119:Src/usb_host.c ****   /* USB Host Background task */
+ 121              		.loc 1 119 0
+ 122              		.cfi_startproc
+ 123              		@ args = 0, pretend = 0, frame = 0
+ 124              		@ frame_needed = 0, uses_anonymous_args = 0
+ 125 0000 08B5     		push	{r3, lr}
+ 126              	.LCFI1:
+ 127              		.cfi_def_cfa_offset 8
+ 128              		.cfi_offset 3, -8
+ 129              		.cfi_offset 14, -4
+ 121:Src/usb_host.c **** }
+ 130              		.loc 1 121 0
+ 131 0002 0248     		ldr	r0, .L14
+ 132 0004 FFF7FEFF 		bl	USBH_Process
+ 133              	.LVL4:
+ 134 0008 08BD     		pop	{r3, pc}
+ 135              	.L15:
+ 136 000a 00BF     		.align	2
+ 137              	.L14:
+ 138 000c 00000000 		.word	hUsbHostFS
+ 139              		.cfi_endproc
+ 140              	.LFE124:
+ 142              		.global	Appli_state
+ARM GAS  /tmp/cclP8232.s 			page 6
+
+
+ 143              		.comm	hUsbHostFS,968,4
+ 144              		.section	.bss.Appli_state,"aw",%nobits
+ 145              		.set	.LANCHOR0,. + 0
+ 148              	Appli_state:
+ 149 0000 00       		.space	1
+ 150              		.text
+ 151              	.Letext0:
+ 152              		.file 2 "/usr/include/newlib/machine/_default_types.h"
+ 153              		.file 3 "/usr/include/newlib/sys/_stdint.h"
+ 154              		.file 4 "Inc/usb_host.h"
+ 155              		.file 5 "Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_def.h"
+ 156              		.file 6 "Drivers/CMSIS/Include/core_cm4.h"
+ 157              		.file 7 "Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc/usbh_cdc.h"
+ 158              		.file 8 "Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_core.h"
+ARM GAS  /tmp/cclP8232.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 usb_host.c
+     /tmp/cclP8232.s:21     .text.USBH_UserProcess:0000000000000000 $t
+     /tmp/cclP8232.s:25     .text.USBH_UserProcess:0000000000000000 USBH_UserProcess
+     /tmp/cclP8232.s:66     .text.USBH_UserProcess:0000000000000028 $d
+     /tmp/cclP8232.s:71     .text.MX_USB_HOST_Init:0000000000000000 $t
+     /tmp/cclP8232.s:76     .text.MX_USB_HOST_Init:0000000000000000 MX_USB_HOST_Init
+     /tmp/cclP8232.s:107    .text.MX_USB_HOST_Init:0000000000000020 $d
+                            *COM*:00000000000003c8 hUsbHostFS
+     /tmp/cclP8232.s:114    .text.MX_USB_HOST_Process:0000000000000000 $t
+     /tmp/cclP8232.s:119    .text.MX_USB_HOST_Process:0000000000000000 MX_USB_HOST_Process
+     /tmp/cclP8232.s:138    .text.MX_USB_HOST_Process:000000000000000c $d
+     /tmp/cclP8232.s:148    .bss.Appli_state:0000000000000000 Appli_state
+     /tmp/cclP8232.s:149    .bss.Appli_state:0000000000000000 $d
+                     .debug_frame:0000000000000010 $d
+
+UNDEFINED SYMBOLS
+USBH_Init
+USBH_RegisterClass
+USBH_Start
+CDC_Class
+USBH_Process
