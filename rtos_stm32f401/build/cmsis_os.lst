@@ -1,4 +1,4 @@
-ARM GAS  /tmp/cceiVOjn.s 			page 1
+ARM GAS  /tmp/cc4G1S3k.s 			page 1
 
 
    1              		.syntax unified
@@ -58,7 +58,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
   29:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****  * Portions Copyright © 2016 STMicroelectronics International N.V. All rights reserved.
   30:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****  * Portions Copyright (c) 2013 ARM LIMITED
   31:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****  * All rights reserved.
-ARM GAS  /tmp/cceiVOjn.s 			page 2
+ARM GAS  /tmp/cc4G1S3k.s 			page 2
 
 
   32:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****  * Redistribution and use in source and binary forms, with or without
@@ -118,7 +118,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
   86:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   * PARTICULAR PURPOSE AND NON-INFRINGEMENT OF THIRD PARTY INTELLECTUAL PROPERTY
   87:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   * RIGHTS ARE DISCLAIMED TO THE FULLEST EXTENT PERMITTED BY LAW. IN NO EVENT 
   88:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   * SHALL STMICROELECTRONICS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-ARM GAS  /tmp/cceiVOjn.s 			page 3
+ARM GAS  /tmp/cc4G1S3k.s 			page 3
 
 
   89:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
@@ -178,7 +178,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  143:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** extern void xPortSysTickHandler(void);
  144:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** 
  145:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** /* Convert from CMSIS type osPriority to FreeRTOS priority number */
-ARM GAS  /tmp/cceiVOjn.s 			page 4
+ARM GAS  /tmp/cc4G1S3k.s 			page 4
 
 
  146:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** static unsigned portBASE_TYPE makeFreeRtosPriority (osPriority priority)
@@ -238,7 +238,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
   65 0000 0628     		cmp	r0, #6
   66 0002 02D8     		bhi	.L6
  164:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****     priority = (osPriority)((int)osPriorityIdle + (int)(fpriority - tskIDLE_PRIORITY));
-ARM GAS  /tmp/cceiVOjn.s 			page 5
+ARM GAS  /tmp/cc4G1S3k.s 			page 5
 
 
   67              		.loc 1 164 0
@@ -298,7 +298,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
   13:Drivers/CMSIS/Include/cmsis_gcc.h ****      notice, this list of conditions and the following disclaimer.
   14:Drivers/CMSIS/Include/cmsis_gcc.h ****    - Redistributions in binary form must reproduce the above copyright
   15:Drivers/CMSIS/Include/cmsis_gcc.h ****      notice, this list of conditions and the following disclaimer in the
-ARM GAS  /tmp/cceiVOjn.s 			page 6
+ARM GAS  /tmp/cc4G1S3k.s 			page 6
 
 
   16:Drivers/CMSIS/Include/cmsis_gcc.h ****      documentation and/or other materials provided with the distribution.
@@ -358,7 +358,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
   70:Drivers/CMSIS/Include/cmsis_gcc.h **** {
   71:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("cpsid i" : : : "memory");
   72:Drivers/CMSIS/Include/cmsis_gcc.h **** }
-ARM GAS  /tmp/cceiVOjn.s 			page 7
+ARM GAS  /tmp/cc4G1S3k.s 			page 7
 
 
   73:Drivers/CMSIS/Include/cmsis_gcc.h **** 
@@ -418,7 +418,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  115              	.LFE32:
  117              		.section	.text.osKernelStart,"ax",%progbits
  118              		.align	2
-ARM GAS  /tmp/cceiVOjn.s 			page 8
+ARM GAS  /tmp/cc4G1S3k.s 			page 8
 
 
  119              		.global	osKernelStart
@@ -478,7 +478,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  202:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** * @param  None
  203:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** * @retval (0) RTOS is not started
  204:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** *         (1) RTOS is started
-ARM GAS  /tmp/cceiVOjn.s 			page 9
+ARM GAS  /tmp/cc4G1S3k.s 			page 9
 
 
  205:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** *         (-1) if this feature is disabled in FreeRTOSConfig.h 
@@ -538,7 +538,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  228:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** {
  184              		.loc 1 228 0
  185              		.cfi_startproc
-ARM GAS  /tmp/cceiVOjn.s 			page 10
+ARM GAS  /tmp/cc4G1S3k.s 			page 10
 
 
  186              		@ args = 0, pretend = 0, frame = 0
@@ -598,7 +598,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  224              	.LCFI3:
  225              		.cfi_def_cfa_offset 20
  226              		.cfi_offset 4, -20
-ARM GAS  /tmp/cceiVOjn.s 			page 11
+ARM GAS  /tmp/cc4G1S3k.s 			page 11
 
 
  227              		.cfi_offset 5, -16
@@ -658,7 +658,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  271:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****     return NULL;
  272:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   }     
  273:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** #endif
-ARM GAS  /tmp/cceiVOjn.s 			page 12
+ARM GAS  /tmp/cc4G1S3k.s 			page 12
 
 
  274:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   
@@ -718,7 +718,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  294              		.cfi_endproc
  295              	.LFE37:
  297              		.section	.text.osThreadTerminate,"ax",%progbits
-ARM GAS  /tmp/cceiVOjn.s 			page 13
+ARM GAS  /tmp/cc4G1S3k.s 			page 13
 
 
  298              		.align	2
@@ -778,7 +778,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  314:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** {
  332              		.loc 1 314 0
  333              		.cfi_startproc
-ARM GAS  /tmp/cceiVOjn.s 			page 14
+ARM GAS  /tmp/cc4G1S3k.s 			page 14
 
 
  334              		@ args = 0, pretend = 0, frame = 0
@@ -838,7 +838,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  376 0002 0446     		mov	r4, r0
  329:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** #if (INCLUDE_vTaskPrioritySet == 1)
  330:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   vTaskPrioritySet(thread_id, makeFreeRtosPriority(priority));
-ARM GAS  /tmp/cceiVOjn.s 			page 15
+ARM GAS  /tmp/cc4G1S3k.s 			page 15
 
 
  377              		.loc 1 330 0
@@ -898,7 +898,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  415              		.loc 1 348 0
  416 000a 2046     		mov	r0, r4
  417 000c FFF7FEFF 		bl	uxTaskPriorityGetFromISR
-ARM GAS  /tmp/cceiVOjn.s 			page 16
+ARM GAS  /tmp/cc4G1S3k.s 			page 16
 
 
  418              	.LVL29:
@@ -958,7 +958,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  368:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   TickType_t ticks = millisec / portTICK_PERIOD_MS;
  369:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   
  370:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   vTaskDelay(ticks ? ticks : 1);          /* Minimum delay = 1 tick */
-ARM GAS  /tmp/cceiVOjn.s 			page 17
+ARM GAS  /tmp/cc4G1S3k.s 			page 17
 
 
  455              		.loc 1 370 0
@@ -1018,7 +1018,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  480              		.loc 1 401 0
  481              		.cfi_startproc
  482              		@ args = 0, pretend = 0, frame = 0
-ARM GAS  /tmp/cceiVOjn.s 			page 18
+ARM GAS  /tmp/cc4G1S3k.s 			page 18
 
 
  483              		@ frame_needed = 0, uses_anonymous_args = 0
@@ -1078,7 +1078,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  440:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** /**
  441:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** * @brief  Start or restart a timer.
  442:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** * @param  timer_id      timer ID obtained by \ref osTimerCreate.
-ARM GAS  /tmp/cceiVOjn.s 			page 19
+ARM GAS  /tmp/cc4G1S3k.s 			page 19
 
 
  443:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** * @param  millisec      time delay value of the timer.
@@ -1138,7 +1138,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  521              	.LFB45:
  479:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** 
  480:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** /**
-ARM GAS  /tmp/cceiVOjn.s 			page 20
+ARM GAS  /tmp/cc4G1S3k.s 			page 20
 
 
  481:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** * @brief  Stop a timer.
@@ -1198,7 +1198,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  516:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** {
  543              		.loc 1 516 0
  544              		.cfi_startproc
-ARM GAS  /tmp/cceiVOjn.s 			page 21
+ARM GAS  /tmp/cc4G1S3k.s 			page 21
 
 
  545              		@ args = 0, pretend = 0, frame = 0
@@ -1258,7 +1258,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  571              		.cfi_def_cfa_offset 12
  572              		.cfi_offset 4, -12
  573              		.cfi_offset 5, -8
-ARM GAS  /tmp/cceiVOjn.s 			page 22
+ARM GAS  /tmp/cc4G1S3k.s 			page 22
 
 
  574              		.cfi_offset 14, -4
@@ -1318,7 +1318,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  616              		.loc 1 558 0 is_stmt 1
  617 003e 2846     		mov	r0, r5
  618 0040 2146     		mov	r1, r4
-ARM GAS  /tmp/cceiVOjn.s 			page 23
+ARM GAS  /tmp/cc4G1S3k.s 			page 23
 
 
  619 0042 0122     		movs	r2, #1
@@ -1378,7 +1378,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  573:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** * @param  signals    specifies the signal flags of the thread that shall be cleared.
  574:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** * @retval  previous signal flags of the specified thread or 0x80000000 in case of incorrect paramet
  575:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** * @note   MUST REMAIN UNCHANGED: \b osSignalClear shall be consistent in every CMSIS-RTOS.
-ARM GAS  /tmp/cceiVOjn.s 			page 24
+ARM GAS  /tmp/cc4G1S3k.s 			page 24
 
 
  576:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** */
@@ -1438,7 +1438,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  687              		.loc 1 601 0
  688 0016 02B9     		cbnz	r2, .L53
  602:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****       ticks = 1;
-ARM GAS  /tmp/cceiVOjn.s 			page 25
+ARM GAS  /tmp/cc4G1S3k.s 			page 25
 
 
  689              		.loc 1 602 0
@@ -1498,7 +1498,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  619:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****       ret.status =  osErrorValue;     
  727              		.loc 1 619 0
  728 004a 8623     		movs	r3, #134
-ARM GAS  /tmp/cceiVOjn.s 			page 26
+ARM GAS  /tmp/cc4G1S3k.s 			page 26
 
 
  729 004c 0193     		str	r3, [sp, #4]
@@ -1558,7 +1558,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  763 0000 08B5     		push	{r3, lr}
  764              	.LCFI17:
  765              		.cfi_def_cfa_offset 8
-ARM GAS  /tmp/cceiVOjn.s 			page 27
+ARM GAS  /tmp/cc4G1S3k.s 			page 27
 
 
  766              		.cfi_offset 3, -8
@@ -1618,7 +1618,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  793              		.cfi_def_cfa_offset 12
  794              		.cfi_offset 4, -12
  795              		.cfi_offset 5, -8
-ARM GAS  /tmp/cceiVOjn.s 			page 28
+ARM GAS  /tmp/cc4G1S3k.s 			page 28
 
 
  796              		.cfi_offset 14, -4
@@ -1678,7 +1678,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  829              	.LVL65:
  830 002a 0128     		cmp	r0, #1
  831 002c 17D1     		bne	.L69
-ARM GAS  /tmp/cceiVOjn.s 			page 29
+ARM GAS  /tmp/cc4G1S3k.s 			page 29
 
 
  692:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****       return osErrorOS;
@@ -1738,7 +1738,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  873              	.L70:
  874              		.loc 1 700 0
  875 0062 0020     		movs	r0, #0
-ARM GAS  /tmp/cceiVOjn.s 			page 30
+ARM GAS  /tmp/cc4G1S3k.s 			page 30
 
 
  876 0064 00E0     		b	.L64
@@ -1798,7 +1798,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  713:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   
  714:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   if (inHandlerMode()) {
  920              		.loc 1 714 0
-ARM GAS  /tmp/cceiVOjn.s 			page 31
+ARM GAS  /tmp/cc4G1S3k.s 			page 31
 
 
  921 000a FFF7FEFF 		bl	inHandlerMode
@@ -1858,7 +1858,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  965              		.loc 1 722 0
  966 004c FF20     		movs	r0, #255
  967              	.LVL76:
-ARM GAS  /tmp/cceiVOjn.s 			page 32
+ARM GAS  /tmp/cc4G1S3k.s 			page 32
 
 
  723:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   }
@@ -1918,7 +1918,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  1010 0004 FFF7FEFF 		bl	inHandlerMode
  1011              	.LVL81:
  1012 0008 20B9     		cbnz	r0, .L87
-ARM GAS  /tmp/cceiVOjn.s 			page 33
+ARM GAS  /tmp/cc4G1S3k.s 			page 33
 
 
  736:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****     return osErrorISR;
@@ -1978,7 +1978,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  762:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****     if (count == 1) {
  763:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****       return xSemaphoreCreateBinaryStatic( semaphore_def->controlblock );
  764:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****     }
-ARM GAS  /tmp/cceiVOjn.s 			page 34
+ARM GAS  /tmp/cc4G1S3k.s 			page 34
 
 
  765:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****     else {
@@ -2038,7 +2038,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  1057 000c FFF7FEFF 		bl	xQueueGenericCreate
  1058              	.LVL87:
  1059 0010 0446     		mov	r4, r0
-ARM GAS  /tmp/cceiVOjn.s 			page 35
+ARM GAS  /tmp/cc4G1S3k.s 			page 35
 
 
  1060 0012 20B1     		cbz	r0, .L91
@@ -2098,7 +2098,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  1095              		@ frame_needed = 0, uses_anonymous_args = 0
  1096              	.LVL91:
  1097 0000 30B5     		push	{r4, r5, lr}
-ARM GAS  /tmp/cceiVOjn.s 			page 36
+ARM GAS  /tmp/cc4G1S3k.s 			page 36
 
 
  1098              	.LCFI27:
@@ -2158,7 +2158,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  1131 0020 2846     		mov	r0, r5
  1132 0022 0021     		movs	r1, #0
  1133 0024 01AA     		add	r2, sp, #4
-ARM GAS  /tmp/cceiVOjn.s 			page 37
+ARM GAS  /tmp/cc4G1S3k.s 			page 37
 
 
  1134 0026 FFF7FEFF 		bl	xQueueReceiveFromISR
@@ -2218,7 +2218,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  845:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****     }
  1176              		.loc 1 845 0
  1177 005e FF20     		movs	r0, #255
-ARM GAS  /tmp/cceiVOjn.s 			page 38
+ARM GAS  /tmp/cc4G1S3k.s 			page 38
 
 
  1178 0060 00E0     		b	.L96
@@ -2278,7 +2278,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  1222 0008 0193     		str	r3, [sp, #4]
  866:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   
  867:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   
-ARM GAS  /tmp/cceiVOjn.s 			page 39
+ARM GAS  /tmp/cc4G1S3k.s 			page 39
 
 
  868:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   if (inHandlerMode()) {
@@ -2338,7 +2338,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  1267              	.L112:
  876:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****       result = osErrorOS;
  1268              		.loc 1 876 0
-ARM GAS  /tmp/cceiVOjn.s 			page 40
+ARM GAS  /tmp/cc4G1S3k.s 			page 40
 
 
  1269 004c FF20     		movs	r0, #255
@@ -2398,7 +2398,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  1310              		.cfi_offset 14, -4
  1311 0002 0446     		mov	r4, r0
  891:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   if (inHandlerMode()) {
-ARM GAS  /tmp/cceiVOjn.s 			page 41
+ARM GAS  /tmp/cc4G1S3k.s 			page 41
 
 
  1312              		.loc 1 891 0
@@ -2458,7 +2458,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  919:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** 
  920:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** /**
  921:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** * @brief Create and Initialize a memory pool
-ARM GAS  /tmp/cceiVOjn.s 			page 42
+ARM GAS  /tmp/cc4G1S3k.s 			page 42
 
 
  922:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** * @param  pool_def      memory pool definition referenced with \ref osPool.
@@ -2518,7 +2518,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  942:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****     /* Memory for markers */
  943:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****     thePool->markers = pvPortMalloc(pool_def->pool_sz);
  1374              		.loc 1 943 0
-ARM GAS  /tmp/cceiVOjn.s 			page 43
+ARM GAS  /tmp/cc4G1S3k.s 			page 43
 
 
  1375 0020 2868     		ldr	r0, [r5]
@@ -2578,7 +2578,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  1415 0050 FFF7FEFF 		bl	vPortFree
  1416              	.LVL127:
  956:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****         vPortFree(thePool);
-ARM GAS  /tmp/cceiVOjn.s 			page 44
+ARM GAS  /tmp/cc4G1S3k.s 			page 44
 
 
  1417              		.loc 1 956 0
@@ -2638,7 +2638,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  1449              		.cfi_startproc
  1450              		@ args = 0, pretend = 0, frame = 0
  1451              		@ frame_needed = 0, uses_anonymous_args = 0
-ARM GAS  /tmp/cceiVOjn.s 			page 45
+ARM GAS  /tmp/cc4G1S3k.s 			page 45
 
 
  1452              	.LVL132:
@@ -2698,7 +2698,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  1492              	.L136:
  994:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****     index = pool_id->currentIndex + i;
  1493              		.loc 1 994 0
-ARM GAS  /tmp/cceiVOjn.s 			page 46
+ARM GAS  /tmp/cc4G1S3k.s 			page 46
 
 
  1494 002a 2369     		ldr	r3, [r4, #16]
@@ -2758,7 +2758,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
 1004:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****     }
 1005:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   }
 1006:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   
-ARM GAS  /tmp/cceiVOjn.s 			page 47
+ARM GAS  /tmp/cc4G1S3k.s 			page 47
 
 
 1007:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   if (inHandlerMode()) {
@@ -2818,7 +2818,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
   46:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h **** 
   47:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h ****     http://www.FreeRTOS.org/training - Investing in training allows your team to
   48:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h ****     be as productive as possible as early as possible.  Now you can receive
-ARM GAS  /tmp/cceiVOjn.s 			page 48
+ARM GAS  /tmp/cc4G1S3k.s 			page 48
 
 
   49:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h ****     FreeRTOS training directly from Richard Barry, CEO of Real Time Engineers
@@ -2878,7 +2878,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  103:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h **** 	#define portMAX_DELAY ( TickType_t ) 0xffff
  104:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h **** #else
  105:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h **** 	typedef uint32_t TickType_t;
-ARM GAS  /tmp/cceiVOjn.s 			page 49
+ARM GAS  /tmp/cc4G1S3k.s 			page 49
 
 
  106:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h **** 	#define portMAX_DELAY ( TickType_t ) 0xffffffffUL
@@ -2938,7 +2938,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  160:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h **** 	#define portSUPPRESS_TICKS_AND_SLEEP( xExpectedIdleTime ) vPortSuppressTicksAndSleep( xExpectedIdl
  161:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h **** #endif
  162:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
-ARM GAS  /tmp/cceiVOjn.s 			page 50
+ARM GAS  /tmp/cc4G1S3k.s 			page 50
 
 
  163:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h **** 
@@ -2998,7 +2998,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  217:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h **** 	__asm volatile( "mrs %0, ipsr" : "=r"( ulCurrentInterrupt ) );
  218:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h **** 
  219:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h **** 	if( ulCurrentInterrupt == 0 )
-ARM GAS  /tmp/cceiVOjn.s 			page 51
+ARM GAS  /tmp/cc4G1S3k.s 			page 51
 
 
  220:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h **** 	{
@@ -3058,7 +3058,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  1546 005c 85F31188 			msr basepri, r5	
  1547              	@ 0 "" 2
  1548              		.thumb
-ARM GAS  /tmp/cceiVOjn.s 			page 52
+ARM GAS  /tmp/cc4G1S3k.s 			page 52
 
 
  1549 0060 01E0     		b	.L138
@@ -3118,7 +3118,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  1585              		.loc 1 1027 0
  1586 0006 0246     		mov	r2, r0
  1587 0008 40B1     		cbz	r0, .L142
-ARM GAS  /tmp/cceiVOjn.s 			page 53
+ARM GAS  /tmp/cc4G1S3k.s 			page 53
 
 
 1028:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   {
@@ -3178,7 +3178,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  1621              		.loc 1 1050 0
  1622 0004 A1B1     		cbz	r1, .L147
 1051:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****     return osErrorParameter;
-ARM GAS  /tmp/cceiVOjn.s 			page 54
+ARM GAS  /tmp/cc4G1S3k.s 			page 54
 
 
 1052:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   }
@@ -3238,7 +3238,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
 1051:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   }
  1658              		.loc 1 1051 0
  1659 0030 8020     		movs	r0, #128
-ARM GAS  /tmp/cceiVOjn.s 			page 55
+ARM GAS  /tmp/cc4G1S3k.s 			page 55
 
 
  1660              	.LVL163:
@@ -3298,7 +3298,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  1695              	.LCFI37:
  1696              		.cfi_def_cfa_offset 8
  1697              		.cfi_offset 3, -8
-ARM GAS  /tmp/cceiVOjn.s 			page 56
+ARM GAS  /tmp/cc4G1S3k.s 			page 56
 
 
  1698              		.cfi_offset 14, -4
@@ -3358,7 +3358,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  1727              	.LCFI38:
  1728              		.cfi_def_cfa_offset 12
  1729              		.cfi_offset 4, -12
-ARM GAS  /tmp/cceiVOjn.s 			page 57
+ARM GAS  /tmp/cc4G1S3k.s 			page 57
 
 
  1730              		.cfi_offset 5, -8
@@ -3418,7 +3418,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  1771              	@ 0 "" 2
  1772              	@ 1127 "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c" 1
  1773 0038 BFF36F8F 		isb
-ARM GAS  /tmp/cceiVOjn.s 			page 58
+ARM GAS  /tmp/cc4G1S3k.s 			page 58
 
 
  1774              	@ 0 "" 2
@@ -3478,7 +3478,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  1816              	.LFE62:
  1818              		.section	.text.osMessageGet,"ax",%progbits
  1819              		.align	2
-ARM GAS  /tmp/cceiVOjn.s 			page 59
+ARM GAS  /tmp/cc4G1S3k.s 			page 59
 
 
  1820              		.global	osMessageGet
@@ -3538,7 +3538,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  1855              		.loc 1 1156 0
  1856 0018 93E80700 		ldmia	r3, {r0, r1, r2}
  1857              	.LVL182:
-ARM GAS  /tmp/cceiVOjn.s 			page 60
+ARM GAS  /tmp/cc4G1S3k.s 			page 60
 
 
  1858 001c 84E80700 		stmia	r4, {r0, r1, r2}
@@ -3598,7 +3598,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  1893 004a 0093     		str	r3, [sp]
  1894 004c 01E0     		b	.L170
  1895              	.L169:
-ARM GAS  /tmp/cceiVOjn.s 			page 61
+ARM GAS  /tmp/cc4G1S3k.s 			page 61
 
 
 1176:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****     }
@@ -3658,7 +3658,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  1937              		.loc 1 1188 0 is_stmt 0 discriminator 4
  1938 0086 0093     		str	r3, [sp]
  1939              	.L171:
-ARM GAS  /tmp/cceiVOjn.s 			page 62
+ARM GAS  /tmp/cc4G1S3k.s 			page 62
 
 
 1189:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****     }
@@ -3718,7 +3718,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  1969              		.cfi_startproc
  1970              		@ args = 0, pretend = 0, frame = 16
  1971              		@ frame_needed = 0, uses_anonymous_args = 0
-ARM GAS  /tmp/cceiVOjn.s 			page 63
+ARM GAS  /tmp/cc4G1S3k.s 			page 63
 
 
  1972              	.LVL192:
@@ -3778,7 +3778,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  2010              	.LVL195:
  2011 0032 6860     		str	r0, [r5, #4]
 1232:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** 
-ARM GAS  /tmp/cceiVOjn.s 			page 64
+ARM GAS  /tmp/cc4G1S3k.s 			page 64
 
 
 1233:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** 
@@ -3838,7 +3838,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  2047              		.cfi_endproc
  2048              	.LFE64:
  2050              		.section	.text.osMailAlloc,"ax",%progbits
-ARM GAS  /tmp/cceiVOjn.s 			page 65
+ARM GAS  /tmp/cc4G1S3k.s 			page 65
 
 
  2051              		.align	2
@@ -3898,7 +3898,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
 1267:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****     return NULL;
  2084              		.loc 1 1267 0
  2085 000c 0020     		movs	r0, #0
-ARM GAS  /tmp/cceiVOjn.s 			page 66
+ARM GAS  /tmp/cc4G1S3k.s 			page 66
 
 
  2086              	.LVL203:
@@ -3958,7 +3958,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  2124              	.LVL207:
  2125 0014 00E0     		b	.L189
  2126              	.LVL208:
-ARM GAS  /tmp/cceiVOjn.s 			page 67
+ARM GAS  /tmp/cc4G1S3k.s 			page 67
 
 
  2127              	.L192:
@@ -4018,7 +4018,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
 1305:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   portBASE_TYPE taskWoken;
 1306:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   
 1307:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   
-ARM GAS  /tmp/cceiVOjn.s 			page 68
+ARM GAS  /tmp/cc4G1S3k.s 			page 68
 
 
 1308:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   if (queue_id == NULL) {
@@ -4078,7 +4078,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  2202 0038 0020     		movs	r0, #0
  2203 003a 10E0     		b	.L195
  2204              	.L196:
-ARM GAS  /tmp/cceiVOjn.s 			page 69
+ARM GAS  /tmp/cc4G1S3k.s 			page 69
 
 
 1321:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****       return osErrorOS;
@@ -4138,7 +4138,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  2255              		.thumb_func
  2257              	osMailGet:
  2258              	.LFB68:
-ARM GAS  /tmp/cceiVOjn.s 			page 70
+ARM GAS  /tmp/cc4G1S3k.s 			page 70
 
 
 1328:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** 
@@ -4198,7 +4198,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
 1348:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   
 1349:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   taskWoken = pdFALSE;
  2293              		.loc 1 1349 0
-ARM GAS  /tmp/cceiVOjn.s 			page 71
+ARM GAS  /tmp/cc4G1S3k.s 			page 71
 
 
  2294 0020 0023     		movs	r3, #0
@@ -4258,7 +4258,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  2329              	.L210:
 1369:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****     }
 1370:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****     portEND_SWITCHING_ISR(taskWoken);
-ARM GAS  /tmp/cceiVOjn.s 			page 72
+ARM GAS  /tmp/cc4G1S3k.s 			page 72
 
 
  2330              		.loc 1 1370 0
@@ -4318,7 +4318,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  2372 0088 84E80700 		stmia	r4, {r0, r1, r2}
  2373              	.LVL233:
  2374              	.L204:
-ARM GAS  /tmp/cceiVOjn.s 			page 73
+ARM GAS  /tmp/cc4G1S3k.s 			page 73
 
 
 1383:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** }
@@ -4378,7 +4378,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  2414 0006 FFF7FEFF 		bl	osPoolFree
  2415              	.LVL237:
  2416 000a 08BD     		pop	{r3, pc}
-ARM GAS  /tmp/cceiVOjn.s 			page 74
+ARM GAS  /tmp/cc4G1S3k.s 			page 74
 
 
  2417              	.LVL238:
@@ -4438,7 +4438,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  2455              	.L224:
  2456 000e 08BD     		pop	{r3, pc}
  2457              		.cfi_endproc
-ARM GAS  /tmp/cceiVOjn.s 			page 75
+ARM GAS  /tmp/cc4G1S3k.s 			page 75
 
 
  2458              	.LFE70:
@@ -4498,7 +4498,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
 1462:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** * @param thread_id thread ID obtained by \ref osThreadCreate or \ref osThreadGetId.
 1463:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** * @retval status code that indicates the execution status of the function.
 1464:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** */
-ARM GAS  /tmp/cceiVOjn.s 			page 76
+ARM GAS  /tmp/cc4G1S3k.s 			page 76
 
 
 1465:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** osStatus osThreadIsSuspended(osThreadId thread_id)
@@ -4558,7 +4558,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
 1494:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** osStatus osThreadResume (osThreadId thread_id)
 1495:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** {
  2495              		.loc 1 1495 0
-ARM GAS  /tmp/cceiVOjn.s 			page 77
+ARM GAS  /tmp/cc4G1S3k.s 			page 77
 
 
  2496              		.cfi_startproc
@@ -4618,7 +4618,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
 1512:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** }
  2534              		.loc 1 1512 0
  2535 002c 0020     		movs	r0, #0
-ARM GAS  /tmp/cceiVOjn.s 			page 78
+ARM GAS  /tmp/cc4G1S3k.s 			page 78
 
 
  2536 002e 10BD     		pop	{r4, pc}
@@ -4678,7 +4678,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
 1528:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** */
 1529:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** osStatus osThreadResumeAll (void)
 1530:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** {
-ARM GAS  /tmp/cceiVOjn.s 			page 79
+ARM GAS  /tmp/cc4G1S3k.s 			page 79
 
 
  2579              		.loc 1 1530 0
@@ -4738,7 +4738,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
 1548:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** #if INCLUDE_vTaskDelayUntil
 1549:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   TickType_t ticks = (millisec / portTICK_PERIOD_MS);
 1550:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   vTaskDelayUntil((TickType_t *) PreviousWakeTime, ticks ? ticks : 1);
-ARM GAS  /tmp/cceiVOjn.s 			page 80
+ARM GAS  /tmp/cc4G1S3k.s 			page 80
 
 
 1551:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   
@@ -4798,7 +4798,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  2647              		.align	2
  2648              		.global	osThreadList
  2649              		.thumb
-ARM GAS  /tmp/cceiVOjn.s 			page 81
+ARM GAS  /tmp/cc4G1S3k.s 			page 81
 
 
  2650              		.thumb_func
@@ -4858,7 +4858,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  2683              		.cfi_offset 4, -12
  2684              		.cfi_offset 5, -8
  2685              		.cfi_offset 14, -4
-ARM GAS  /tmp/cceiVOjn.s 			page 82
+ARM GAS  /tmp/cc4G1S3k.s 			page 82
 
 
  2686 0002 85B0     		sub	sp, sp, #20
@@ -4918,7 +4918,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
 1623:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   
 1624:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   if (xQueuePeek(queue_id, &event.value.v, ticks) == pdTRUE) 
  2720              		.loc 1 1624 0
-ARM GAS  /tmp/cceiVOjn.s 			page 83
+ARM GAS  /tmp/cc4G1S3k.s 			page 83
 
 
  2721 002a 0846     		mov	r0, r1
@@ -4978,7 +4978,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  2765              		.global	osMessageWaiting
  2766              		.thumb
  2767              		.thumb_func
-ARM GAS  /tmp/cceiVOjn.s 			page 84
+ARM GAS  /tmp/cc4G1S3k.s 			page 84
 
 
  2769              	osMessageWaiting:
@@ -5038,7 +5038,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  2809              	.LFB80:
 1652:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** 
 1653:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** /**
-ARM GAS  /tmp/cceiVOjn.s 			page 85
+ARM GAS  /tmp/cc4G1S3k.s 			page 85
 
 
 1654:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** * @brief  Get the available space in a message queue.
@@ -5098,7 +5098,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  2849              	.LVL277:
  2850 0008 20B9     		cbnz	r0, .L262
 1671:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****     return osErrorISR;
-ARM GAS  /tmp/cceiVOjn.s 			page 86
+ARM GAS  /tmp/cc4G1S3k.s 			page 86
 
 
 1672:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   }
@@ -5158,7 +5158,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
 1697:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** #else 
 1698:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c ****   return xSemaphoreCreateRecursiveMutex();
 1699:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** #endif
-ARM GAS  /tmp/cceiVOjn.s 			page 87
+ARM GAS  /tmp/cc4G1S3k.s 			page 87
 
 
 1700:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** #else
@@ -5218,7 +5218,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  2915              	osRecursiveMutexWait:
  2916              	.LFB84:
 1724:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** 
-ARM GAS  /tmp/cceiVOjn.s 			page 88
+ARM GAS  /tmp/cc4G1S3k.s 			page 88
 
 
 1725:Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c **** /**
@@ -5278,7 +5278,7 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  2933              		.thumb
  2934              		.thumb_func
  2936              	osSemaphoreGetCount:
-ARM GAS  /tmp/cceiVOjn.s 			page 89
+ARM GAS  /tmp/cc4G1S3k.s 			page 89
 
 
  2937              	.LFB85:
@@ -5321,140 +5321,140 @@ ARM GAS  /tmp/cceiVOjn.s 			page 1
  2965              		.file 11 "Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h"
  2966              		.file 12 "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h"
  2967              		.file 13 "Middlewares/Third_Party/FreeRTOS/Source/include/portable.h"
-ARM GAS  /tmp/cceiVOjn.s 			page 90
+ARM GAS  /tmp/cc4G1S3k.s 			page 90
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 cmsis_os.c
-     /tmp/cceiVOjn.s:21     .text.makeFreeRtosPriority:0000000000000000 $t
-     /tmp/cceiVOjn.s:25     .text.makeFreeRtosPriority:0000000000000000 makeFreeRtosPriority
-     /tmp/cceiVOjn.s:52     .text.makeCmsisPriority:0000000000000000 $t
-     /tmp/cceiVOjn.s:56     .text.makeCmsisPriority:0000000000000000 makeCmsisPriority
-     /tmp/cceiVOjn.s:86     .text.inHandlerMode:0000000000000000 $t
-     /tmp/cceiVOjn.s:90     .text.inHandlerMode:0000000000000000 inHandlerMode
-     /tmp/cceiVOjn.s:118    .text.osKernelStart:0000000000000000 $t
-     /tmp/cceiVOjn.s:123    .text.osKernelStart:0000000000000000 osKernelStart
-     /tmp/cceiVOjn.s:144    .text.osKernelRunning:0000000000000000 $t
-     /tmp/cceiVOjn.s:149    .text.osKernelRunning:0000000000000000 osKernelRunning
-     /tmp/cceiVOjn.s:177    .text.osKernelSysTick:0000000000000000 $t
-     /tmp/cceiVOjn.s:182    .text.osKernelSysTick:0000000000000000 osKernelSysTick
-     /tmp/cceiVOjn.s:211    .text.osThreadCreate:0000000000000000 $t
-     /tmp/cceiVOjn.s:216    .text.osThreadCreate:0000000000000000 osThreadCreate
-     /tmp/cceiVOjn.s:273    .text.osThreadGetId:0000000000000000 $t
-     /tmp/cceiVOjn.s:278    .text.osThreadGetId:0000000000000000 osThreadGetId
-     /tmp/cceiVOjn.s:298    .text.osThreadTerminate:0000000000000000 $t
-     /tmp/cceiVOjn.s:303    .text.osThreadTerminate:0000000000000000 osThreadTerminate
-     /tmp/cceiVOjn.s:325    .text.osThreadYield:0000000000000000 $t
-     /tmp/cceiVOjn.s:330    .text.osThreadYield:0000000000000000 osThreadYield
-     /tmp/cceiVOjn.s:354    .text.osThreadYield:0000000000000014 $d
-     /tmp/cceiVOjn.s:359    .text.osThreadSetPriority:0000000000000000 $t
-     /tmp/cceiVOjn.s:364    .text.osThreadSetPriority:0000000000000000 osThreadSetPriority
-     /tmp/cceiVOjn.s:393    .text.osThreadGetPriority:0000000000000000 $t
-     /tmp/cceiVOjn.s:398    .text.osThreadGetPriority:0000000000000000 osThreadGetPriority
-     /tmp/cceiVOjn.s:437    .text.osDelay:0000000000000000 $t
-     /tmp/cceiVOjn.s:442    .text.osDelay:0000000000000000 osDelay
-     /tmp/cceiVOjn.s:473    .text.osTimerCreate:0000000000000000 $t
-     /tmp/cceiVOjn.s:478    .text.osTimerCreate:0000000000000000 osTimerCreate
-     /tmp/cceiVOjn.s:494    .text.osTimerStart:0000000000000000 $t
-     /tmp/cceiVOjn.s:499    .text.osTimerStart:0000000000000000 osTimerStart
-     /tmp/cceiVOjn.s:515    .text.osTimerStop:0000000000000000 $t
-     /tmp/cceiVOjn.s:520    .text.osTimerStop:0000000000000000 osTimerStop
-     /tmp/cceiVOjn.s:536    .text.osTimerDelete:0000000000000000 $t
-     /tmp/cceiVOjn.s:541    .text.osTimerDelete:0000000000000000 osTimerDelete
-     /tmp/cceiVOjn.s:557    .text.osSignalSet:0000000000000000 $t
-     /tmp/cceiVOjn.s:562    .text.osSignalSet:0000000000000000 osSignalSet
-     /tmp/cceiVOjn.s:647    .text.osSignalSet:0000000000000060 $d
-     /tmp/cceiVOjn.s:652    .text.osSignalWait:0000000000000000 $t
-     /tmp/cceiVOjn.s:657    .text.osSignalWait:0000000000000000 osSignalWait
-     /tmp/cceiVOjn.s:751    .text.osMutexCreate:0000000000000000 $t
-     /tmp/cceiVOjn.s:756    .text.osMutexCreate:0000000000000000 osMutexCreate
-     /tmp/cceiVOjn.s:779    .text.osMutexWait:0000000000000000 $t
-     /tmp/cceiVOjn.s:784    .text.osMutexWait:0000000000000000 osMutexWait
-     /tmp/cceiVOjn.s:890    .text.osMutexWait:000000000000006c $d
-     /tmp/cceiVOjn.s:895    .text.osMutexRelease:0000000000000000 $t
-     /tmp/cceiVOjn.s:900    .text.osMutexRelease:0000000000000000 osMutexRelease
-     /tmp/cceiVOjn.s:986    .text.osMutexRelease:0000000000000058 $d
-     /tmp/cceiVOjn.s:991    .text.osMutexDelete:0000000000000000 $t
-     /tmp/cceiVOjn.s:996    .text.osMutexDelete:0000000000000000 osMutexDelete
-     /tmp/cceiVOjn.s:1030   .text.osSemaphoreCreate:0000000000000000 $t
-     /tmp/cceiVOjn.s:1035   .text.osSemaphoreCreate:0000000000000000 osSemaphoreCreate
-     /tmp/cceiVOjn.s:1085   .text.osSemaphoreWait:0000000000000000 $t
-     /tmp/cceiVOjn.s:1090   .text.osSemaphoreWait:0000000000000000 osSemaphoreWait
-     /tmp/cceiVOjn.s:1193   .text.osSemaphoreWait:0000000000000068 $d
-ARM GAS  /tmp/cceiVOjn.s 			page 91
+     /tmp/cc4G1S3k.s:21     .text.makeFreeRtosPriority:0000000000000000 $t
+     /tmp/cc4G1S3k.s:25     .text.makeFreeRtosPriority:0000000000000000 makeFreeRtosPriority
+     /tmp/cc4G1S3k.s:52     .text.makeCmsisPriority:0000000000000000 $t
+     /tmp/cc4G1S3k.s:56     .text.makeCmsisPriority:0000000000000000 makeCmsisPriority
+     /tmp/cc4G1S3k.s:86     .text.inHandlerMode:0000000000000000 $t
+     /tmp/cc4G1S3k.s:90     .text.inHandlerMode:0000000000000000 inHandlerMode
+     /tmp/cc4G1S3k.s:118    .text.osKernelStart:0000000000000000 $t
+     /tmp/cc4G1S3k.s:123    .text.osKernelStart:0000000000000000 osKernelStart
+     /tmp/cc4G1S3k.s:144    .text.osKernelRunning:0000000000000000 $t
+     /tmp/cc4G1S3k.s:149    .text.osKernelRunning:0000000000000000 osKernelRunning
+     /tmp/cc4G1S3k.s:177    .text.osKernelSysTick:0000000000000000 $t
+     /tmp/cc4G1S3k.s:182    .text.osKernelSysTick:0000000000000000 osKernelSysTick
+     /tmp/cc4G1S3k.s:211    .text.osThreadCreate:0000000000000000 $t
+     /tmp/cc4G1S3k.s:216    .text.osThreadCreate:0000000000000000 osThreadCreate
+     /tmp/cc4G1S3k.s:273    .text.osThreadGetId:0000000000000000 $t
+     /tmp/cc4G1S3k.s:278    .text.osThreadGetId:0000000000000000 osThreadGetId
+     /tmp/cc4G1S3k.s:298    .text.osThreadTerminate:0000000000000000 $t
+     /tmp/cc4G1S3k.s:303    .text.osThreadTerminate:0000000000000000 osThreadTerminate
+     /tmp/cc4G1S3k.s:325    .text.osThreadYield:0000000000000000 $t
+     /tmp/cc4G1S3k.s:330    .text.osThreadYield:0000000000000000 osThreadYield
+     /tmp/cc4G1S3k.s:354    .text.osThreadYield:0000000000000014 $d
+     /tmp/cc4G1S3k.s:359    .text.osThreadSetPriority:0000000000000000 $t
+     /tmp/cc4G1S3k.s:364    .text.osThreadSetPriority:0000000000000000 osThreadSetPriority
+     /tmp/cc4G1S3k.s:393    .text.osThreadGetPriority:0000000000000000 $t
+     /tmp/cc4G1S3k.s:398    .text.osThreadGetPriority:0000000000000000 osThreadGetPriority
+     /tmp/cc4G1S3k.s:437    .text.osDelay:0000000000000000 $t
+     /tmp/cc4G1S3k.s:442    .text.osDelay:0000000000000000 osDelay
+     /tmp/cc4G1S3k.s:473    .text.osTimerCreate:0000000000000000 $t
+     /tmp/cc4G1S3k.s:478    .text.osTimerCreate:0000000000000000 osTimerCreate
+     /tmp/cc4G1S3k.s:494    .text.osTimerStart:0000000000000000 $t
+     /tmp/cc4G1S3k.s:499    .text.osTimerStart:0000000000000000 osTimerStart
+     /tmp/cc4G1S3k.s:515    .text.osTimerStop:0000000000000000 $t
+     /tmp/cc4G1S3k.s:520    .text.osTimerStop:0000000000000000 osTimerStop
+     /tmp/cc4G1S3k.s:536    .text.osTimerDelete:0000000000000000 $t
+     /tmp/cc4G1S3k.s:541    .text.osTimerDelete:0000000000000000 osTimerDelete
+     /tmp/cc4G1S3k.s:557    .text.osSignalSet:0000000000000000 $t
+     /tmp/cc4G1S3k.s:562    .text.osSignalSet:0000000000000000 osSignalSet
+     /tmp/cc4G1S3k.s:647    .text.osSignalSet:0000000000000060 $d
+     /tmp/cc4G1S3k.s:652    .text.osSignalWait:0000000000000000 $t
+     /tmp/cc4G1S3k.s:657    .text.osSignalWait:0000000000000000 osSignalWait
+     /tmp/cc4G1S3k.s:751    .text.osMutexCreate:0000000000000000 $t
+     /tmp/cc4G1S3k.s:756    .text.osMutexCreate:0000000000000000 osMutexCreate
+     /tmp/cc4G1S3k.s:779    .text.osMutexWait:0000000000000000 $t
+     /tmp/cc4G1S3k.s:784    .text.osMutexWait:0000000000000000 osMutexWait
+     /tmp/cc4G1S3k.s:890    .text.osMutexWait:000000000000006c $d
+     /tmp/cc4G1S3k.s:895    .text.osMutexRelease:0000000000000000 $t
+     /tmp/cc4G1S3k.s:900    .text.osMutexRelease:0000000000000000 osMutexRelease
+     /tmp/cc4G1S3k.s:986    .text.osMutexRelease:0000000000000058 $d
+     /tmp/cc4G1S3k.s:991    .text.osMutexDelete:0000000000000000 $t
+     /tmp/cc4G1S3k.s:996    .text.osMutexDelete:0000000000000000 osMutexDelete
+     /tmp/cc4G1S3k.s:1030   .text.osSemaphoreCreate:0000000000000000 $t
+     /tmp/cc4G1S3k.s:1035   .text.osSemaphoreCreate:0000000000000000 osSemaphoreCreate
+     /tmp/cc4G1S3k.s:1085   .text.osSemaphoreWait:0000000000000000 $t
+     /tmp/cc4G1S3k.s:1090   .text.osSemaphoreWait:0000000000000000 osSemaphoreWait
+     /tmp/cc4G1S3k.s:1193   .text.osSemaphoreWait:0000000000000068 $d
+ARM GAS  /tmp/cc4G1S3k.s 			page 91
 
 
-     /tmp/cceiVOjn.s:1198   .text.osSemaphoreRelease:0000000000000000 $t
-     /tmp/cceiVOjn.s:1203   .text.osSemaphoreRelease:0000000000000000 osSemaphoreRelease
-     /tmp/cceiVOjn.s:1289   .text.osSemaphoreRelease:0000000000000058 $d
-     /tmp/cceiVOjn.s:1294   .text.osSemaphoreDelete:0000000000000000 $t
-     /tmp/cceiVOjn.s:1299   .text.osSemaphoreDelete:0000000000000000 osSemaphoreDelete
-     /tmp/cceiVOjn.s:1333   .text.osPoolCreate:0000000000000000 $t
-     /tmp/cceiVOjn.s:1338   .text.osPoolCreate:0000000000000000 osPoolCreate
-     /tmp/cceiVOjn.s:1441   .text.osPoolAlloc:0000000000000000 $t
-     /tmp/cceiVOjn.s:1446   .text.osPoolAlloc:0000000000000000 osPoolAlloc
-     /tmp/cceiVOjn.s:1565   .text.osPoolCAlloc:0000000000000000 $t
-     /tmp/cceiVOjn.s:1570   .text.osPoolCAlloc:0000000000000000 osPoolCAlloc
-     /tmp/cceiVOjn.s:1605   .text.osPoolFree:0000000000000000 $t
-     /tmp/cceiVOjn.s:1610   .text.osPoolFree:0000000000000000 osPoolFree
-     /tmp/cceiVOjn.s:1682   .text.osMessageCreate:0000000000000000 $t
-     /tmp/cceiVOjn.s:1687   .text.osMessageCreate:0000000000000000 osMessageCreate
-     /tmp/cceiVOjn.s:1714   .text.osMessagePut:0000000000000000 $t
-     /tmp/cceiVOjn.s:1719   .text.osMessagePut:0000000000000000 osMessagePut
-     /tmp/cceiVOjn.s:1814   .text.osMessagePut:0000000000000064 $d
-     /tmp/cceiVOjn.s:1819   .text.osMessageGet:0000000000000000 $t
-     /tmp/cceiVOjn.s:1824   .text.osMessageGet:0000000000000000 osMessageGet
-     /tmp/cceiVOjn.s:1956   .text.osMessageGet:0000000000000098 $d
-     /tmp/cceiVOjn.s:1961   .text.osMailCreate:0000000000000000 $t
-     /tmp/cceiVOjn.s:1966   .text.osMailCreate:0000000000000000 osMailCreate
-     /tmp/cceiVOjn.s:2051   .text.osMailAlloc:0000000000000000 $t
-     /tmp/cceiVOjn.s:2056   .text.osMailAlloc:0000000000000000 osMailAlloc
-     /tmp/cceiVOjn.s:2092   .text.osMailCAlloc:0000000000000000 $t
-     /tmp/cceiVOjn.s:2097   .text.osMailCAlloc:0000000000000000 osMailCAlloc
-     /tmp/cceiVOjn.s:2146   .text.osMailPut:0000000000000000 $t
-     /tmp/cceiVOjn.s:2151   .text.osMailPut:0000000000000000 osMailPut
-     /tmp/cceiVOjn.s:2247   .text.osMailPut:0000000000000064 $d
-     /tmp/cceiVOjn.s:2252   .text.osMailGet:0000000000000000 $t
-     /tmp/cceiVOjn.s:2257   .text.osMailGet:0000000000000000 osMailGet
-     /tmp/cceiVOjn.s:2386   .text.osMailGet:0000000000000094 $d
-     /tmp/cceiVOjn.s:2391   .text.osMailFree:0000000000000000 $t
-     /tmp/cceiVOjn.s:2396   .text.osMailFree:0000000000000000 osMailFree
-     /tmp/cceiVOjn.s:2431   .text.osSystickHandler:0000000000000000 $t
-     /tmp/cceiVOjn.s:2436   .text.osSystickHandler:0000000000000000 osSystickHandler
-     /tmp/cceiVOjn.s:2461   .text.osThreadSuspend:0000000000000000 $t
-     /tmp/cceiVOjn.s:2466   .text.osThreadSuspend:0000000000000000 osThreadSuspend
-     /tmp/cceiVOjn.s:2488   .text.osThreadResume:0000000000000000 $t
-     /tmp/cceiVOjn.s:2493   .text.osThreadResume:0000000000000000 osThreadResume
-     /tmp/cceiVOjn.s:2541   .text.osThreadResume:0000000000000030 $d
-     /tmp/cceiVOjn.s:2546   .text.osThreadSuspendAll:0000000000000000 $t
-     /tmp/cceiVOjn.s:2551   .text.osThreadSuspendAll:0000000000000000 osThreadSuspendAll
-     /tmp/cceiVOjn.s:2572   .text.osThreadResumeAll:0000000000000000 $t
-     /tmp/cceiVOjn.s:2577   .text.osThreadResumeAll:0000000000000000 osThreadResumeAll
-     /tmp/cceiVOjn.s:2605   .text.osDelayUntil:0000000000000000 $t
-     /tmp/cceiVOjn.s:2610   .text.osDelayUntil:0000000000000000 osDelayUntil
-     /tmp/cceiVOjn.s:2626   .text.osAbortDelay:0000000000000000 $t
-     /tmp/cceiVOjn.s:2631   .text.osAbortDelay:0000000000000000 osAbortDelay
-     /tmp/cceiVOjn.s:2647   .text.osThreadList:0000000000000000 $t
-     /tmp/cceiVOjn.s:2652   .text.osThreadList:0000000000000000 osThreadList
-     /tmp/cceiVOjn.s:2668   .text.osMessagePeek:0000000000000000 $t
-     /tmp/cceiVOjn.s:2673   .text.osMessagePeek:0000000000000000 osMessagePeek
-     /tmp/cceiVOjn.s:2764   .text.osMessageWaiting:0000000000000000 $t
-     /tmp/cceiVOjn.s:2769   .text.osMessageWaiting:0000000000000000 osMessageWaiting
-     /tmp/cceiVOjn.s:2803   .text.osMessageAvailableSpace:0000000000000000 $t
-ARM GAS  /tmp/cceiVOjn.s 			page 92
+     /tmp/cc4G1S3k.s:1198   .text.osSemaphoreRelease:0000000000000000 $t
+     /tmp/cc4G1S3k.s:1203   .text.osSemaphoreRelease:0000000000000000 osSemaphoreRelease
+     /tmp/cc4G1S3k.s:1289   .text.osSemaphoreRelease:0000000000000058 $d
+     /tmp/cc4G1S3k.s:1294   .text.osSemaphoreDelete:0000000000000000 $t
+     /tmp/cc4G1S3k.s:1299   .text.osSemaphoreDelete:0000000000000000 osSemaphoreDelete
+     /tmp/cc4G1S3k.s:1333   .text.osPoolCreate:0000000000000000 $t
+     /tmp/cc4G1S3k.s:1338   .text.osPoolCreate:0000000000000000 osPoolCreate
+     /tmp/cc4G1S3k.s:1441   .text.osPoolAlloc:0000000000000000 $t
+     /tmp/cc4G1S3k.s:1446   .text.osPoolAlloc:0000000000000000 osPoolAlloc
+     /tmp/cc4G1S3k.s:1565   .text.osPoolCAlloc:0000000000000000 $t
+     /tmp/cc4G1S3k.s:1570   .text.osPoolCAlloc:0000000000000000 osPoolCAlloc
+     /tmp/cc4G1S3k.s:1605   .text.osPoolFree:0000000000000000 $t
+     /tmp/cc4G1S3k.s:1610   .text.osPoolFree:0000000000000000 osPoolFree
+     /tmp/cc4G1S3k.s:1682   .text.osMessageCreate:0000000000000000 $t
+     /tmp/cc4G1S3k.s:1687   .text.osMessageCreate:0000000000000000 osMessageCreate
+     /tmp/cc4G1S3k.s:1714   .text.osMessagePut:0000000000000000 $t
+     /tmp/cc4G1S3k.s:1719   .text.osMessagePut:0000000000000000 osMessagePut
+     /tmp/cc4G1S3k.s:1814   .text.osMessagePut:0000000000000064 $d
+     /tmp/cc4G1S3k.s:1819   .text.osMessageGet:0000000000000000 $t
+     /tmp/cc4G1S3k.s:1824   .text.osMessageGet:0000000000000000 osMessageGet
+     /tmp/cc4G1S3k.s:1956   .text.osMessageGet:0000000000000098 $d
+     /tmp/cc4G1S3k.s:1961   .text.osMailCreate:0000000000000000 $t
+     /tmp/cc4G1S3k.s:1966   .text.osMailCreate:0000000000000000 osMailCreate
+     /tmp/cc4G1S3k.s:2051   .text.osMailAlloc:0000000000000000 $t
+     /tmp/cc4G1S3k.s:2056   .text.osMailAlloc:0000000000000000 osMailAlloc
+     /tmp/cc4G1S3k.s:2092   .text.osMailCAlloc:0000000000000000 $t
+     /tmp/cc4G1S3k.s:2097   .text.osMailCAlloc:0000000000000000 osMailCAlloc
+     /tmp/cc4G1S3k.s:2146   .text.osMailPut:0000000000000000 $t
+     /tmp/cc4G1S3k.s:2151   .text.osMailPut:0000000000000000 osMailPut
+     /tmp/cc4G1S3k.s:2247   .text.osMailPut:0000000000000064 $d
+     /tmp/cc4G1S3k.s:2252   .text.osMailGet:0000000000000000 $t
+     /tmp/cc4G1S3k.s:2257   .text.osMailGet:0000000000000000 osMailGet
+     /tmp/cc4G1S3k.s:2386   .text.osMailGet:0000000000000094 $d
+     /tmp/cc4G1S3k.s:2391   .text.osMailFree:0000000000000000 $t
+     /tmp/cc4G1S3k.s:2396   .text.osMailFree:0000000000000000 osMailFree
+     /tmp/cc4G1S3k.s:2431   .text.osSystickHandler:0000000000000000 $t
+     /tmp/cc4G1S3k.s:2436   .text.osSystickHandler:0000000000000000 osSystickHandler
+     /tmp/cc4G1S3k.s:2461   .text.osThreadSuspend:0000000000000000 $t
+     /tmp/cc4G1S3k.s:2466   .text.osThreadSuspend:0000000000000000 osThreadSuspend
+     /tmp/cc4G1S3k.s:2488   .text.osThreadResume:0000000000000000 $t
+     /tmp/cc4G1S3k.s:2493   .text.osThreadResume:0000000000000000 osThreadResume
+     /tmp/cc4G1S3k.s:2541   .text.osThreadResume:0000000000000030 $d
+     /tmp/cc4G1S3k.s:2546   .text.osThreadSuspendAll:0000000000000000 $t
+     /tmp/cc4G1S3k.s:2551   .text.osThreadSuspendAll:0000000000000000 osThreadSuspendAll
+     /tmp/cc4G1S3k.s:2572   .text.osThreadResumeAll:0000000000000000 $t
+     /tmp/cc4G1S3k.s:2577   .text.osThreadResumeAll:0000000000000000 osThreadResumeAll
+     /tmp/cc4G1S3k.s:2605   .text.osDelayUntil:0000000000000000 $t
+     /tmp/cc4G1S3k.s:2610   .text.osDelayUntil:0000000000000000 osDelayUntil
+     /tmp/cc4G1S3k.s:2626   .text.osAbortDelay:0000000000000000 $t
+     /tmp/cc4G1S3k.s:2631   .text.osAbortDelay:0000000000000000 osAbortDelay
+     /tmp/cc4G1S3k.s:2647   .text.osThreadList:0000000000000000 $t
+     /tmp/cc4G1S3k.s:2652   .text.osThreadList:0000000000000000 osThreadList
+     /tmp/cc4G1S3k.s:2668   .text.osMessagePeek:0000000000000000 $t
+     /tmp/cc4G1S3k.s:2673   .text.osMessagePeek:0000000000000000 osMessagePeek
+     /tmp/cc4G1S3k.s:2764   .text.osMessageWaiting:0000000000000000 $t
+     /tmp/cc4G1S3k.s:2769   .text.osMessageWaiting:0000000000000000 osMessageWaiting
+     /tmp/cc4G1S3k.s:2803   .text.osMessageAvailableSpace:0000000000000000 $t
+ARM GAS  /tmp/cc4G1S3k.s 			page 92
 
 
-     /tmp/cceiVOjn.s:2808   .text.osMessageAvailableSpace:0000000000000000 osMessageAvailableSpace
-     /tmp/cceiVOjn.s:2829   .text.osMessageDelete:0000000000000000 $t
-     /tmp/cceiVOjn.s:2834   .text.osMessageDelete:0000000000000000 osMessageDelete
-     /tmp/cceiVOjn.s:2868   .text.osRecursiveMutexCreate:0000000000000000 $t
-     /tmp/cceiVOjn.s:2873   .text.osRecursiveMutexCreate:0000000000000000 osRecursiveMutexCreate
-     /tmp/cceiVOjn.s:2889   .text.osRecursiveMutexRelease:0000000000000000 $t
-     /tmp/cceiVOjn.s:2894   .text.osRecursiveMutexRelease:0000000000000000 osRecursiveMutexRelease
-     /tmp/cceiVOjn.s:2910   .text.osRecursiveMutexWait:0000000000000000 $t
-     /tmp/cceiVOjn.s:2915   .text.osRecursiveMutexWait:0000000000000000 osRecursiveMutexWait
-     /tmp/cceiVOjn.s:2931   .text.osSemaphoreGetCount:0000000000000000 $t
-     /tmp/cceiVOjn.s:2936   .text.osSemaphoreGetCount:0000000000000000 osSemaphoreGetCount
+     /tmp/cc4G1S3k.s:2808   .text.osMessageAvailableSpace:0000000000000000 osMessageAvailableSpace
+     /tmp/cc4G1S3k.s:2829   .text.osMessageDelete:0000000000000000 $t
+     /tmp/cc4G1S3k.s:2834   .text.osMessageDelete:0000000000000000 osMessageDelete
+     /tmp/cc4G1S3k.s:2868   .text.osRecursiveMutexCreate:0000000000000000 $t
+     /tmp/cc4G1S3k.s:2873   .text.osRecursiveMutexCreate:0000000000000000 osRecursiveMutexCreate
+     /tmp/cc4G1S3k.s:2889   .text.osRecursiveMutexRelease:0000000000000000 $t
+     /tmp/cc4G1S3k.s:2894   .text.osRecursiveMutexRelease:0000000000000000 osRecursiveMutexRelease
+     /tmp/cc4G1S3k.s:2910   .text.osRecursiveMutexWait:0000000000000000 $t
+     /tmp/cc4G1S3k.s:2915   .text.osRecursiveMutexWait:0000000000000000 osRecursiveMutexWait
+     /tmp/cc4G1S3k.s:2931   .text.osSemaphoreGetCount:0000000000000000 $t
+     /tmp/cc4G1S3k.s:2936   .text.osSemaphoreGetCount:0000000000000000 osSemaphoreGetCount
                      .debug_frame:0000000000000010 $d
 
 UNDEFINED SYMBOLS

@@ -1,0 +1,20 @@
+arm-none-eabi-gdb
+# PROGRAM THE DEVICE
+(gdb) target remote localhost:3333 # Connect to the OpenOCD GDB server
+(gdb) monitor reset halt # Reset and Stop
+(gdb) monitor flash protect 0 0 11 off # Disable Flash Protection
+(gdb) !find `pwd` -name *.elf # Find elf file /w absolute path
+/complete/absolute/path/to/iotoggle.elf
+(gdb) monitor flash write_image erase "/complete/absolute/path/to/iotoggle.elf"
+# SOMETHING JUST FOR FUN
+(gdb) monitor reset run # Reset and Run
+# DEBUG THE PROGRAM
+(gdb) monitor reset halt
+(gdb) file iotoggle.elf # Select Binary to Debug
+(gdb) load # Load Debugging Symbols
+(gdb) break main.c:85 # Setup a breakpoint
+(gdb) continue # Wait until triggered
+Breakpoint 1, main () at main.c:85
+85 GPIO_SetBits(GPIOD, GPIO_Pin_14);
+(gdb) disconnect
+(gdb) quit
