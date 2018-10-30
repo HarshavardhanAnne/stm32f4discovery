@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccWCMbNl.s 			page 1
+ARM GAS  /tmp/ccLggd7b.s 			page 1
 
 
    1              		.syntax unified
@@ -58,7 +58,7 @@ ARM GAS  /tmp/ccWCMbNl.s 			page 1
   28:Src/stm32f4xx_hal_msp.c ****   *    software, must execute solely and exclusively on microcontroller or
   29:Src/stm32f4xx_hal_msp.c ****   *    microprocessor devices manufactured by or for STMicroelectronics.
   30:Src/stm32f4xx_hal_msp.c ****   * 5. Redistribution and use of this software other than as permitted under 
-ARM GAS  /tmp/ccWCMbNl.s 			page 2
+ARM GAS  /tmp/ccLggd7b.s 			page 2
 
 
   31:Src/stm32f4xx_hal_msp.c ****   *    this license is void and will automatically terminate your rights under 
@@ -118,7 +118,7 @@ ARM GAS  /tmp/ccWCMbNl.s 			page 1
   49 0012 5A6C     		ldr	r2, [r3, #68]
   50 0014 02F48042 		and	r2, r2, #16384
   51 0018 0092     		str	r2, [sp]
-ARM GAS  /tmp/ccWCMbNl.s 			page 3
+ARM GAS  /tmp/ccLggd7b.s 			page 3
 
 
   52 001a 009A     		ldr	r2, [sp]
@@ -178,7 +178,7 @@ ARM GAS  /tmp/ccWCMbNl.s 			page 1
   78:Src/stm32f4xx_hal_msp.c ****   /* DebugMonitor_IRQn interrupt configuration */
   79:Src/stm32f4xx_hal_msp.c ****   HAL_NVIC_SetPriority(DebugMonitor_IRQn, 0, 0);
   93              		.loc 1 79 0
-ARM GAS  /tmp/ccWCMbNl.s 			page 4
+ARM GAS  /tmp/ccLggd7b.s 			page 4
 
 
   94 0066 6FF00300 		mvn	r0, #3
@@ -238,7 +238,7 @@ ARM GAS  /tmp/ccWCMbNl.s 			page 1
   93:Src/stm32f4xx_hal_msp.c ****   GPIO_InitTypeDef GPIO_InitStruct;
   94:Src/stm32f4xx_hal_msp.c ****   if(hcan->Instance==CAN1)
  137              		.loc 1 94 0
-ARM GAS  /tmp/ccWCMbNl.s 			page 5
+ARM GAS  /tmp/ccLggd7b.s 			page 5
 
 
  138 0000 0268     		ldr	r2, [r0]
@@ -298,7 +298,7 @@ ARM GAS  /tmp/ccWCMbNl.s 			page 1
  175 0036 0923     		movs	r3, #9
  176 0038 0593     		str	r3, [sp, #20]
  111:Src/stm32f4xx_hal_msp.c ****     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-ARM GAS  /tmp/ccWCMbNl.s 			page 6
+ARM GAS  /tmp/ccLggd7b.s 			page 6
 
 
  177              		.loc 1 111 0
@@ -358,7 +358,7 @@ ARM GAS  /tmp/ccWCMbNl.s 			page 1
  221              		.loc 1 123 0
  222 0002 0268     		ldr	r2, [r0]
  223 0004 064B     		ldr	r3, .L14
-ARM GAS  /tmp/ccWCMbNl.s 			page 7
+ARM GAS  /tmp/ccLggd7b.s 			page 7
 
 
  224 0006 9A42     		cmp	r2, r3
@@ -418,7 +418,7 @@ ARM GAS  /tmp/ccWCMbNl.s 			page 1
  258              		@ args = 0, pretend = 0, frame = 24
  259              		@ frame_needed = 0, uses_anonymous_args = 0
  260              	.LVL15:
-ARM GAS  /tmp/ccWCMbNl.s 			page 8
+ARM GAS  /tmp/ccLggd7b.s 			page 8
 
 
  146:Src/stm32f4xx_hal_msp.c **** 
@@ -478,7 +478,7 @@ ARM GAS  /tmp/ccWCMbNl.s 			page 1
  164:Src/stm32f4xx_hal_msp.c **** 
  165:Src/stm32f4xx_hal_msp.c ****     /* Peripheral clock enable */
  166:Src/stm32f4xx_hal_msp.c ****     __HAL_RCC_I2C1_CLK_ENABLE();
-ARM GAS  /tmp/ccWCMbNl.s 			page 9
+ARM GAS  /tmp/ccLggd7b.s 			page 9
 
 
  296              		.loc 1 166 0
@@ -538,7 +538,7 @@ ARM GAS  /tmp/ccWCMbNl.s 			page 1
  343              	.LCFI12:
  344              		.cfi_def_cfa_offset 8
  345              		.cfi_offset 3, -8
-ARM GAS  /tmp/ccWCMbNl.s 			page 10
+ARM GAS  /tmp/ccLggd7b.s 			page 10
 
 
  346              		.cfi_offset 14, -4
@@ -598,7 +598,7 @@ ARM GAS  /tmp/ccWCMbNl.s 			page 1
  196:Src/stm32f4xx_hal_msp.c **** }
  197:Src/stm32f4xx_hal_msp.c **** 
  198:Src/stm32f4xx_hal_msp.c **** void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi)
-ARM GAS  /tmp/ccWCMbNl.s 			page 11
+ARM GAS  /tmp/ccLggd7b.s 			page 11
 
 
  199:Src/stm32f4xx_hal_msp.c **** {
@@ -658,7 +658,7 @@ ARM GAS  /tmp/ccWCMbNl.s 			page 1
  417 002a 0223     		movs	r3, #2
  418 002c 0293     		str	r3, [sp, #8]
  217:Src/stm32f4xx_hal_msp.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
-ARM GAS  /tmp/ccWCMbNl.s 			page 12
+ARM GAS  /tmp/ccLggd7b.s 			page 12
 
 
  419              		.loc 1 217 0
@@ -718,7 +718,7 @@ ARM GAS  /tmp/ccWCMbNl.s 			page 1
  462              		.cfi_startproc
  463              		@ args = 0, pretend = 0, frame = 0
  464              		@ frame_needed = 0, uses_anonymous_args = 0
-ARM GAS  /tmp/ccWCMbNl.s 			page 13
+ARM GAS  /tmp/ccLggd7b.s 			page 13
 
 
  465              	.LVL26:
@@ -778,7 +778,7 @@ ARM GAS  /tmp/ccWCMbNl.s 			page 1
  246:Src/stm32f4xx_hal_msp.c **** 
  247:Src/stm32f4xx_hal_msp.c ****   /* USER CODE BEGIN SPI1_MspDeInit 1 */
  248:Src/stm32f4xx_hal_msp.c **** 
-ARM GAS  /tmp/ccWCMbNl.s 			page 14
+ARM GAS  /tmp/ccLggd7b.s 			page 14
 
 
  249:Src/stm32f4xx_hal_msp.c ****   /* USER CODE END SPI1_MspDeInit 1 */
@@ -838,7 +838,7 @@ ARM GAS  /tmp/ccWCMbNl.s 			page 1
  537              		.loc 1 270 0
  538 0024 0323     		movs	r3, #3
  539 0026 0193     		str	r3, [sp, #4]
-ARM GAS  /tmp/ccWCMbNl.s 			page 15
+ARM GAS  /tmp/ccLggd7b.s 			page 15
 
 
  271:Src/stm32f4xx_hal_msp.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
@@ -898,7 +898,7 @@ ARM GAS  /tmp/ccWCMbNl.s 			page 1
  584              	HAL_UART_MspDeInit:
  585              	.LFB131:
  283:Src/stm32f4xx_hal_msp.c **** 
-ARM GAS  /tmp/ccWCMbNl.s 			page 16
+ARM GAS  /tmp/ccLggd7b.s 			page 16
 
 
  284:Src/stm32f4xx_hal_msp.c **** void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
@@ -958,7 +958,7 @@ ARM GAS  /tmp/ccWCMbNl.s 			page 1
  625              		.file 2 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
  626              		.file 3 "/usr/include/newlib/machine/_default_types.h"
  627              		.file 4 "/usr/include/newlib/sys/_stdint.h"
-ARM GAS  /tmp/ccWCMbNl.s 			page 17
+ARM GAS  /tmp/ccLggd7b.s 			page 17
 
 
  628              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h"
@@ -971,38 +971,38 @@ ARM GAS  /tmp/ccWCMbNl.s 			page 1
  635              		.file 12 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h"
  636              		.file 13 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h"
  637              		.file 14 "Drivers/CMSIS/Include/core_cm4.h"
-ARM GAS  /tmp/ccWCMbNl.s 			page 18
+ARM GAS  /tmp/ccLggd7b.s 			page 18
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 stm32f4xx_hal_msp.c
-     /tmp/ccWCMbNl.s:21     .text.HAL_MspInit:0000000000000000 $t
-     /tmp/ccWCMbNl.s:26     .text.HAL_MspInit:0000000000000000 HAL_MspInit
-     /tmp/ccWCMbNl.s:120    .text.HAL_MspInit:0000000000000090 $d
-     /tmp/ccWCMbNl.s:125    .text.HAL_CAN_MspInit:0000000000000000 $t
-     /tmp/ccWCMbNl.s:130    .text.HAL_CAN_MspInit:0000000000000000 HAL_CAN_MspInit
-     /tmp/ccWCMbNl.s:198    .text.HAL_CAN_MspInit:000000000000004c $d
-     /tmp/ccWCMbNl.s:204    .text.HAL_CAN_MspDeInit:0000000000000000 $t
-     /tmp/ccWCMbNl.s:209    .text.HAL_CAN_MspDeInit:0000000000000000 HAL_CAN_MspDeInit
-     /tmp/ccWCMbNl.s:242    .text.HAL_CAN_MspDeInit:0000000000000020 $d
-     /tmp/ccWCMbNl.s:249    .text.HAL_I2C_MspInit:0000000000000000 $t
-     /tmp/ccWCMbNl.s:254    .text.HAL_I2C_MspInit:0000000000000000 HAL_I2C_MspInit
-     /tmp/ccWCMbNl.s:323    .text.HAL_I2C_MspInit:000000000000004c $d
-     /tmp/ccWCMbNl.s:330    .text.HAL_I2C_MspDeInit:0000000000000000 $t
-     /tmp/ccWCMbNl.s:335    .text.HAL_I2C_MspDeInit:0000000000000000 HAL_I2C_MspDeInit
-     /tmp/ccWCMbNl.s:368    .text.HAL_I2C_MspDeInit:0000000000000020 $d
-     /tmp/ccWCMbNl.s:375    .text.HAL_SPI_MspInit:0000000000000000 $t
-     /tmp/ccWCMbNl.s:380    .text.HAL_SPI_MspInit:0000000000000000 HAL_SPI_MspInit
-     /tmp/ccWCMbNl.s:448    .text.HAL_SPI_MspInit:0000000000000048 $d
-     /tmp/ccWCMbNl.s:454    .text.HAL_SPI_MspDeInit:0000000000000000 $t
-     /tmp/ccWCMbNl.s:459    .text.HAL_SPI_MspDeInit:0000000000000000 HAL_SPI_MspDeInit
-     /tmp/ccWCMbNl.s:492    .text.HAL_SPI_MspDeInit:0000000000000020 $d
-     /tmp/ccWCMbNl.s:499    .text.HAL_UART_MspInit:0000000000000000 $t
-     /tmp/ccWCMbNl.s:504    .text.HAL_UART_MspInit:0000000000000000 HAL_UART_MspInit
-     /tmp/ccWCMbNl.s:572    .text.HAL_UART_MspInit:0000000000000048 $d
-     /tmp/ccWCMbNl.s:579    .text.HAL_UART_MspDeInit:0000000000000000 $t
-     /tmp/ccWCMbNl.s:584    .text.HAL_UART_MspDeInit:0000000000000000 HAL_UART_MspDeInit
-     /tmp/ccWCMbNl.s:617    .text.HAL_UART_MspDeInit:0000000000000020 $d
+     /tmp/ccLggd7b.s:21     .text.HAL_MspInit:0000000000000000 $t
+     /tmp/ccLggd7b.s:26     .text.HAL_MspInit:0000000000000000 HAL_MspInit
+     /tmp/ccLggd7b.s:120    .text.HAL_MspInit:0000000000000090 $d
+     /tmp/ccLggd7b.s:125    .text.HAL_CAN_MspInit:0000000000000000 $t
+     /tmp/ccLggd7b.s:130    .text.HAL_CAN_MspInit:0000000000000000 HAL_CAN_MspInit
+     /tmp/ccLggd7b.s:198    .text.HAL_CAN_MspInit:000000000000004c $d
+     /tmp/ccLggd7b.s:204    .text.HAL_CAN_MspDeInit:0000000000000000 $t
+     /tmp/ccLggd7b.s:209    .text.HAL_CAN_MspDeInit:0000000000000000 HAL_CAN_MspDeInit
+     /tmp/ccLggd7b.s:242    .text.HAL_CAN_MspDeInit:0000000000000020 $d
+     /tmp/ccLggd7b.s:249    .text.HAL_I2C_MspInit:0000000000000000 $t
+     /tmp/ccLggd7b.s:254    .text.HAL_I2C_MspInit:0000000000000000 HAL_I2C_MspInit
+     /tmp/ccLggd7b.s:323    .text.HAL_I2C_MspInit:000000000000004c $d
+     /tmp/ccLggd7b.s:330    .text.HAL_I2C_MspDeInit:0000000000000000 $t
+     /tmp/ccLggd7b.s:335    .text.HAL_I2C_MspDeInit:0000000000000000 HAL_I2C_MspDeInit
+     /tmp/ccLggd7b.s:368    .text.HAL_I2C_MspDeInit:0000000000000020 $d
+     /tmp/ccLggd7b.s:375    .text.HAL_SPI_MspInit:0000000000000000 $t
+     /tmp/ccLggd7b.s:380    .text.HAL_SPI_MspInit:0000000000000000 HAL_SPI_MspInit
+     /tmp/ccLggd7b.s:448    .text.HAL_SPI_MspInit:0000000000000048 $d
+     /tmp/ccLggd7b.s:454    .text.HAL_SPI_MspDeInit:0000000000000000 $t
+     /tmp/ccLggd7b.s:459    .text.HAL_SPI_MspDeInit:0000000000000000 HAL_SPI_MspDeInit
+     /tmp/ccLggd7b.s:492    .text.HAL_SPI_MspDeInit:0000000000000020 $d
+     /tmp/ccLggd7b.s:499    .text.HAL_UART_MspInit:0000000000000000 $t
+     /tmp/ccLggd7b.s:504    .text.HAL_UART_MspInit:0000000000000000 HAL_UART_MspInit
+     /tmp/ccLggd7b.s:572    .text.HAL_UART_MspInit:0000000000000048 $d
+     /tmp/ccLggd7b.s:579    .text.HAL_UART_MspDeInit:0000000000000000 $t
+     /tmp/ccLggd7b.s:584    .text.HAL_UART_MspDeInit:0000000000000000 HAL_UART_MspDeInit
+     /tmp/ccLggd7b.s:617    .text.HAL_UART_MspDeInit:0000000000000020 $d
                      .debug_frame:0000000000000010 $d
 
 UNDEFINED SYMBOLS

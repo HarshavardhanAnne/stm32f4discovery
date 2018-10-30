@@ -71,6 +71,7 @@ osThreadId defaultTaskHandle;
 osThreadId i2cTaskHandle;
 osThreadId uartTaskHandle;
 osThreadId canTaskHandle;
+osThreadId spiTaskHandle;
 //osThreadId ledTaskHandle;
 #define MY_I2C_SPEED 400000
 #define I2C_ADDRESS_IMU (uint16_t)(0b1101000 << 1)
@@ -83,6 +84,19 @@ uint8_t i2c_tx_buff_accel[6];
 uint8_t i2c_tx_buff_gyro[6];
 uint8_t i2c_rx_buff_gyro[6];
 int16_t i2c_accel[3];
+uint8_t spi_address[2] = {0b10000100,0b00000000};
+uint8_t spi_rx_buff[2];
+uint8_t arr[9];
+//CANTX - PB9
+//CANRX - PB8
+//I2CSDA - PB7
+//I2CSCL - PB6
+//UARTtx - PA0
+//UARTrx - PA1
+//SPISCK - PA5
+//SPIMISO - PA6
+//SPIMOSI - PA7
+//SPICS - PA4 //This is NSS pin
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -99,6 +113,7 @@ void StartDefaultTask(void const * argument);
 void write_i2c(void const *argument);
 void uart_debug(uint8_t* arr, uint8_t buffsize);
 void canTest(void const *argument);
+void uartTest(void const *argument);
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
@@ -143,18 +158,46 @@ void writei2c(void const *argument) {
 }
 
 void uartTest(void const *argument) {
-  /*int i;
-  int j = 0;
+  int i = 0;
   for (i = 0; i < 9; i++) {
-    i2c_rx_buff[i] = j;
-    j += 1;
+    arr[i] = i;
   }
-
   while (1) {
     HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
-    //uart_debug(i2c_rx_buff, sizeof(i2c_rx_buff));
+    //HAL_UART_Transmit(&huart4,ptr,size_,HAL_MAX_DELAY);
+    uart_debug(arr, sizeof(arr));
+    osDelay(100);
+  }
+}
+
+void spiTest(void const *argument) {
+  HAL_StatusTypeDef status;
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
+  while (1) {
     osDelay(1000);
-  }*/
+    status = HAL_OK;
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4,GPIO_PIN_RESET);
+    HAL_Delay(1);
+    //status = HAL_SPI_Transmit(&hspi1, spi_address,1,HAL_MAX_DELAY);
+    //status = HAL_SPI_Receive(&hspi1, spi_rx_buff,1,HAL_MAX_DELAY);
+    //status = HAL_SPI_Transmit(&hspi1, spi_address+1,1,HAL_MAX_DELAY);
+    //status = HAL_SPI_Receive(&hspi1, spi_rx_buff+1,1,HAL_MAX_DELAY);
+    status = HAL_SPI_TransmitReceive(&hspi1,spi_address,spi_rx_buff,1,HAL_MAX_DELAY);
+    //HAL_Delay(1);
+    if (status != HAL_OK) {
+      HAL_GPIO_WritePin(GPIOD, GREEN_LED, GPIO_PIN_SET);
+    }
+    else {
+      HAL_GPIO_WritePin(GPIOD, GREEN_LED, GPIO_PIN_RESET);
+    }
+
+    status = HAL_SPI_TransmitReceive(&hspi1,spi_address+1,spi_rx_buff+1,1,HAL_MAX_DELAY);
+    HAL_Delay(1);
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
+    //spi_rx_buff[0] = 'A';
+    //spi_rx_buff[1] = 'F';
+    uart_debug(spi_rx_buff, sizeof(spi_rx_buff));
+  }
 }
 
 //CANTX - PB9
@@ -204,11 +247,13 @@ void canTest(void const *argument) {
 
 void uart_debug(uint8_t* arr, uint8_t buffsize) {
   HAL_StatusTypeDef status = HAL_OK;
+  
   status = HAL_UART_Transmit(&huart4, arr, buffsize, HAL_MAX_DELAY);
   if (status != HAL_OK) {
     //HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
   }
   else {
+    HAL_GPIO_TogglePin(GPIOD,GPIO_PIN_15);
     //HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
   }
 }
@@ -284,11 +329,11 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
-  MX_UART4_Init();
   MX_GPIO_Init();
+  MX_UART4_Init();
   MX_SPI1_Init();
   MX_I2C1_Init();
-  MX_CAN1_Init();
+  //MX_CAN1_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -313,13 +358,15 @@ int main(void)
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   //osThreadDef(uartTask, uartTest, osPriorityAboveNormal, 1, 128);
-  osThreadDef(canTask, canTest, osPriorityAboveNormal, 1, 128);
-  canTaskHandle = osThreadCreate(osThread(canTask),NULL);
+  //osThreadDef(canTask, canTest, osPriorityAboveNormal, 1, 128);
+  //canTaskHandle = osThreadCreate(osThread(canTask),NULL);
   //uartTaskHandle = osThreadCreate(osThread(uartTask), NULL);
   //osThreadDef(i2cTask, writei2c, osPriorityAboveNormal,1,256);
   //i2cTaskHandle = osThreadCreate(osThread(i2cTask),NULL);
   //osThreadDef(ledTask, Leds, osPriorityAboveNormal, 1, 128);
   //ledTaskHandle = osThreadCreate(osThread(ledTask),NULL);
+  osThreadDef(spiTask,spiTest,osPriorityAboveNormal,1,128);
+  spiTaskHandle = osThreadCreate(osThread(spiTask),NULL);
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_QUEUES */
@@ -463,7 +510,7 @@ static void MX_SPI1_Init(void)
   {
     _Error_Handler(__FILE__, __LINE__);
   }
-
+  
 }
 
 /* UART4 init function */
@@ -471,7 +518,7 @@ static void MX_UART4_Init(void)
 {
 
   huart4.Instance = UART4;
-  huart4.Init.BaudRate = 115200;
+  huart4.Init.BaudRate = 57600;
   huart4.Init.WordLength = UART_WORDLENGTH_8B;
   huart4.Init.StopBits = UART_STOPBITS_1;
   huart4.Init.Parity = UART_PARITY_NONE;
@@ -518,6 +565,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  GPIO_InitStruct.Pin = GPIO_PIN_4;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
 
 }
 
