@@ -1,0 +1,277 @@
+ARM GAS  /tmp/cc6nEXk9.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m4
+   3              		.eabi_attribute 27, 1
+   4              		.eabi_attribute 28, 1
+   5              		.fpu fpv4-sp-d16
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.thumb
+  16              		.file	"eecs473.c"
+  17              		.text
+  18              	.Ltext0:
+  19              		.cfi_sections	.debug_frame
+  20              		.section	.text.eecs_GPIO_Init,"ax",%progbits
+  21              		.align	2
+  22              		.global	eecs_GPIO_Init
+  23              		.thumb
+  24              		.thumb_func
+  26              	eecs_GPIO_Init:
+  27              	.LFB123:
+  28              		.file 1 "Src/eecs473.c"
+   1:Src/eecs473.c **** #include "eecs473.h"
+   2:Src/eecs473.c **** 
+   3:Src/eecs473.c **** //Author - Harshavardhan Anne
+   4:Src/eecs473.c **** 
+   5:Src/eecs473.c **** //GPIO
+   6:Src/eecs473.c **** 
+   7:Src/eecs473.c **** void eecs_GPIO_Init(GPIO_TypeDef *GPIOx,uint16_t Pins,uint32_t Mode,uint32_t Pull,uint32_t Speed) {
+  29              		.loc 1 7 0
+  30              		.cfi_startproc
+  31              		@ args = 4, pretend = 0, frame = 32
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              	.LVL0:
+  34 0000 30B5     		push	{r4, r5, lr}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 12
+  37              		.cfi_offset 4, -12
+  38              		.cfi_offset 5, -8
+  39              		.cfi_offset 14, -4
+  40 0002 89B0     		sub	sp, sp, #36
+  41              	.LCFI1:
+  42              		.cfi_def_cfa_offset 48
+   8:Src/eecs473.c ****   if (!eecsGPIO.clock_enable) {
+  43              		.loc 1 8 0
+  44 0004 1848     		ldr	r0, .L4
+  45              	.LVL1:
+  46 0006 C068     		ldr	r0, [r0, #12]
+  47 0008 10BB     		cbnz	r0, .L2
+  48              	.LBB2:
+   9:Src/eecs473.c ****   	/* GPIO Ports Clock Enable */
+  10:Src/eecs473.c ****     __HAL_RCC_GPIOA_CLK_ENABLE();
+ARM GAS  /tmp/cc6nEXk9.s 			page 2
+
+
+  49              		.loc 1 10 0
+  50 000a 0024     		movs	r4, #0
+  51 000c 0094     		str	r4, [sp]
+  52 000e 1748     		ldr	r0, .L4+4
+  53 0010 056B     		ldr	r5, [r0, #48]
+  54 0012 45F00105 		orr	r5, r5, #1
+  55 0016 0563     		str	r5, [r0, #48]
+  56              	.LVL2:
+  57 0018 056B     		ldr	r5, [r0, #48]
+  58 001a 05F00105 		and	r5, r5, #1
+  59 001e 0095     		str	r5, [sp]
+  60 0020 009D     		ldr	r5, [sp]
+  61              	.LBE2:
+  62              	.LBB3:
+  11:Src/eecs473.c ****     __HAL_RCC_GPIOD_CLK_ENABLE();
+  63              		.loc 1 11 0
+  64 0022 0194     		str	r4, [sp, #4]
+  65 0024 056B     		ldr	r5, [r0, #48]
+  66 0026 45F00805 		orr	r5, r5, #8
+  67 002a 0563     		str	r5, [r0, #48]
+  68 002c 056B     		ldr	r5, [r0, #48]
+  69 002e 05F00805 		and	r5, r5, #8
+  70 0032 0195     		str	r5, [sp, #4]
+  71 0034 019D     		ldr	r5, [sp, #4]
+  72              	.LBE3:
+  73              	.LBB4:
+  12:Src/eecs473.c ****     __HAL_RCC_GPIOB_CLK_ENABLE();
+  74              		.loc 1 12 0
+  75 0036 0294     		str	r4, [sp, #8]
+  76 0038 046B     		ldr	r4, [r0, #48]
+  77 003a 44F00204 		orr	r4, r4, #2
+  78 003e 0463     		str	r4, [r0, #48]
+  79 0040 006B     		ldr	r0, [r0, #48]
+  80 0042 00F00200 		and	r0, r0, #2
+  81 0046 0290     		str	r0, [sp, #8]
+  82 0048 0298     		ldr	r0, [sp, #8]
+  83              	.LBE4:
+  13:Src/eecs473.c ****     eecsGPIO.clock_enable = 1;
+  84              		.loc 1 13 0
+  85 004a 0124     		movs	r4, #1
+  86 004c 0648     		ldr	r0, .L4
+  87 004e C460     		str	r4, [r0, #12]
+  88              	.L2:
+  14:Src/eecs473.c ****   }
+  15:Src/eecs473.c **** 
+  16:Src/eecs473.c ****   GPIO_InitTypeDef GPIO_InitStruct;
+  17:Src/eecs473.c **** 
+  18:Src/eecs473.c ****   /*Configure GPIO pins : PD12 PD13 PD14 PD15 */
+  19:Src/eecs473.c ****   GPIO_InitStruct.Pin = Pins;
+  89              		.loc 1 19 0
+  90 0050 0391     		str	r1, [sp, #12]
+  20:Src/eecs473.c ****   GPIO_InitStruct.Mode = Mode;
+  91              		.loc 1 20 0
+  92 0052 0492     		str	r2, [sp, #16]
+  21:Src/eecs473.c ****   GPIO_InitStruct.Pull = Pull;
+  93              		.loc 1 21 0
+  94 0054 0593     		str	r3, [sp, #20]
+ARM GAS  /tmp/cc6nEXk9.s 			page 3
+
+
+  22:Src/eecs473.c ****   GPIO_InitStruct.Speed = Speed;
+  95              		.loc 1 22 0
+  96 0056 0C9B     		ldr	r3, [sp, #48]
+  97              	.LVL3:
+  98 0058 0693     		str	r3, [sp, #24]
+  23:Src/eecs473.c ****   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+  99              		.loc 1 23 0
+ 100 005a 0548     		ldr	r0, .L4+8
+ 101 005c 03A9     		add	r1, sp, #12
+ 102              	.LVL4:
+ 103 005e FFF7FEFF 		bl	HAL_GPIO_Init
+ 104              	.LVL5:
+  24:Src/eecs473.c **** 
+  25:Src/eecs473.c **** 
+  26:Src/eecs473.c ****   /*GPIO_InitStruct.Pin = GPIO_PIN_8 | GPIO_PIN_9;
+  27:Src/eecs473.c ****   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  28:Src/eecs473.c ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+  29:Src/eecs473.c ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+  30:Src/eecs473.c ****   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  31:Src/eecs473.c **** 
+  32:Src/eecs473.c ****   GPIO_InitStruct.Pin = GPIO_PIN_4;
+  33:Src/eecs473.c ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  34:Src/eecs473.c ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+  35:Src/eecs473.c ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  36:Src/eecs473.c ****   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  37:Src/eecs473.c ****   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);*/
+  38:Src/eecs473.c **** }
+ 105              		.loc 1 38 0
+ 106 0062 09B0     		add	sp, sp, #36
+ 107              	.LCFI2:
+ 108              		.cfi_def_cfa_offset 12
+ 109              		@ sp needed
+ 110 0064 30BD     		pop	{r4, r5, pc}
+ 111              	.L5:
+ 112 0066 00BF     		.align	2
+ 113              	.L4:
+ 114 0068 00000000 		.word	eecsGPIO
+ 115 006c 00380240 		.word	1073887232
+ 116 0070 000C0240 		.word	1073875968
+ 117              		.cfi_endproc
+ 118              	.LFE123:
+ 120              		.section	.text.eecs_GPIO_Write,"ax",%progbits
+ 121              		.align	2
+ 122              		.global	eecs_GPIO_Write
+ 123              		.thumb
+ 124              		.thumb_func
+ 126              	eecs_GPIO_Write:
+ 127              	.LFB124:
+  39:Src/eecs473.c **** 
+  40:Src/eecs473.c **** void eecs_GPIO_Write(GPIO_TypeDef *GPIOx,uint16_t Pin, GPIO_PinState PinState) {
+ 128              		.loc 1 40 0
+ 129              		.cfi_startproc
+ 130              		@ args = 0, pretend = 0, frame = 0
+ 131              		@ frame_needed = 0, uses_anonymous_args = 0
+ 132              	.LVL6:
+ 133 0000 08B5     		push	{r3, lr}
+ 134              	.LCFI3:
+ARM GAS  /tmp/cc6nEXk9.s 			page 4
+
+
+ 135              		.cfi_def_cfa_offset 8
+ 136              		.cfi_offset 3, -8
+ 137              		.cfi_offset 14, -4
+  41:Src/eecs473.c ****   HAL_GPIO_WritePin(GPIOx,Pin,PinState);
+ 138              		.loc 1 41 0
+ 139 0002 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 140              	.LVL7:
+ 141 0006 08BD     		pop	{r3, pc}
+ 142              		.cfi_endproc
+ 143              	.LFE124:
+ 145              		.section	.text.eecs_GPIO_Toggle,"ax",%progbits
+ 146              		.align	2
+ 147              		.global	eecs_GPIO_Toggle
+ 148              		.thumb
+ 149              		.thumb_func
+ 151              	eecs_GPIO_Toggle:
+ 152              	.LFB125:
+  42:Src/eecs473.c **** }
+  43:Src/eecs473.c **** 
+  44:Src/eecs473.c **** void eecs_GPIO_Toggle(GPIO_TypeDef *GPIOx, uint16_t Pin) {
+ 153              		.loc 1 44 0
+ 154              		.cfi_startproc
+ 155              		@ args = 0, pretend = 0, frame = 0
+ 156              		@ frame_needed = 0, uses_anonymous_args = 0
+ 157              	.LVL8:
+ 158 0000 08B5     		push	{r3, lr}
+ 159              	.LCFI4:
+ 160              		.cfi_def_cfa_offset 8
+ 161              		.cfi_offset 3, -8
+ 162              		.cfi_offset 14, -4
+  45:Src/eecs473.c ****   HAL_GPIO_TogglePin(GPIOx,Pin);
+ 163              		.loc 1 45 0
+ 164 0002 FFF7FEFF 		bl	HAL_GPIO_TogglePin
+ 165              	.LVL9:
+ 166 0006 08BD     		pop	{r3, pc}
+ 167              		.cfi_endproc
+ 168              	.LFE125:
+ 170              		.section	.text.eecs_Error_Handler,"ax",%progbits
+ 171              		.align	2
+ 172              		.global	eecs_Error_Handler
+ 173              		.thumb
+ 174              		.thumb_func
+ 176              	eecs_Error_Handler:
+ 177              	.LFB126:
+  46:Src/eecs473.c **** }
+  47:Src/eecs473.c **** 
+  48:Src/eecs473.c **** 
+  49:Src/eecs473.c **** void eecs_Error_Handler() {
+ 178              		.loc 1 49 0
+ 179              		.cfi_startproc
+ 180              		@ Volatile: function does not return.
+ 181              		@ args = 0, pretend = 0, frame = 0
+ 182              		@ frame_needed = 0, uses_anonymous_args = 0
+ 183              		@ link register save eliminated.
+ 184              	.L11:
+  50:Src/eecs473.c **** 	while (1) {
+  51:Src/eecs473.c **** 
+ARM GAS  /tmp/cc6nEXk9.s 			page 5
+
+
+  52:Src/eecs473.c **** 	}
+ 185              		.loc 1 52 0 discriminator 1
+ 186 0000 FEE7     		b	.L11
+ 187              		.cfi_endproc
+ 188              	.LFE126:
+ 190 0002 00BF     		.text
+ 191              	.Letext0:
+ 192              		.file 2 "/usr/include/newlib/machine/_default_types.h"
+ 193              		.file 3 "/usr/include/newlib/sys/_stdint.h"
+ 194              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
+ 195              		.file 5 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+ 196              		.file 6 "Inc/eecs473.h"
+ 197              		.file 7 "Drivers/CMSIS/Include/core_cm4.h"
+ARM GAS  /tmp/cc6nEXk9.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 eecs473.c
+     /tmp/cc6nEXk9.s:21     .text.eecs_GPIO_Init:0000000000000000 $t
+     /tmp/cc6nEXk9.s:26     .text.eecs_GPIO_Init:0000000000000000 eecs_GPIO_Init
+     /tmp/cc6nEXk9.s:114    .text.eecs_GPIO_Init:0000000000000068 $d
+     /tmp/cc6nEXk9.s:121    .text.eecs_GPIO_Write:0000000000000000 $t
+     /tmp/cc6nEXk9.s:126    .text.eecs_GPIO_Write:0000000000000000 eecs_GPIO_Write
+     /tmp/cc6nEXk9.s:146    .text.eecs_GPIO_Toggle:0000000000000000 $t
+     /tmp/cc6nEXk9.s:151    .text.eecs_GPIO_Toggle:0000000000000000 eecs_GPIO_Toggle
+     /tmp/cc6nEXk9.s:171    .text.eecs_Error_Handler:0000000000000000 $t
+     /tmp/cc6nEXk9.s:176    .text.eecs_Error_Handler:0000000000000000 eecs_Error_Handler
+                     .debug_frame:0000000000000010 $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_Init
+eecsGPIO
+HAL_GPIO_WritePin
+HAL_GPIO_TogglePin

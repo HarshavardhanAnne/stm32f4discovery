@@ -52,7 +52,7 @@
 #include "cmsis_os.h"
 
 /* USER CODE BEGIN Includes */
-
+//#include <eecs473.h>
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -72,6 +72,10 @@ osThreadId i2cTaskHandle;
 osThreadId uartTaskHandle;
 osThreadId canTaskHandle;
 osThreadId spiTaskHandle;
+osThreadId adcTaskHandle;
+ADC_HandleTypeDef g_AdcHandle;
+//struct eecs_GPIO GPIO = {&eecs_GPIO_Init,&eecs_GPIO_Write,&eecs_GPIO_Toggle,0};
+//struct eecs_UART UART = {&eecs_UART_Init,&eecs_UART_Print,&eecs_UART_Test};
 //osThreadId ledTaskHandle;
 #define MY_I2C_SPEED 400000
 #define I2C_ADDRESS_IMU (uint16_t)(0b1101000 << 1)
@@ -85,8 +89,11 @@ uint8_t i2c_tx_buff_gyro[6];
 uint8_t i2c_rx_buff_gyro[6];
 int16_t i2c_accel[3];
 uint8_t spi_address[2] = {0b10000100,0b00000000};
+uint8_t max_data_addr[2] = {0b00111000,0b00000000};
 uint8_t spi_rx_buff[2];
 uint8_t arr[9];
+volatile uint32_t g_ADCValue;
+
 //CANTX - PB9
 //CANRX - PB8
 //I2CSDA - PB7
@@ -114,6 +121,8 @@ void write_i2c(void const *argument);
 void uart_debug(uint8_t* arr, uint8_t buffsize);
 void canTest(void const *argument);
 void uartTest(void const *argument);
+void ConfigureADC();
+void adcTest(void const *argument);
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
@@ -215,15 +224,16 @@ void canTest(void const *argument) {
   tx_buffer.ExtId = 0x500;
   tx_buffer.IDE = CAN_ID_STD;
   tx_buffer.RTR = CAN_RTR_DATA;
-  tx_buffer.DLC = sizeof(data);
+  tx_buffer.DLC = sizeof(g_ADCValue);
   HAL_StatusTypeDef status = HAL_OK;
   while (1) {
     //osDelay(50); //20Hz 
     //osDelay(1); //1 kHz works for 8 bytes of data !THIS SOMETIMES FAILS
     osDelay(4); //250 Hz , this works with 8 bytes
     status = HAL_OK;
-    data_ptr = (data_sel) ? data : data2;
-    data_sel ^= 0b1;
+    data_ptr = &g_ADCValue;
+    //data_ptr = (data_sel) ? data : data2;
+    //data_sel ^= 0b1;
     while (HAL_CAN_IsTxMessagePending(&hcan1, (uint32_t)CAN_TX_MAILBOX0)) {
       //HAL_GPIO_WritePin(GPIOD, ORANGE_LED, GPIO_PIN_SET);
       //osDelay(100);
@@ -299,6 +309,67 @@ void Leds(void const *argument) {
     osDelayUntil(&prevWakeTime, 50);
   }
 }
+void ConfigureADC() {
+    GPIO_InitTypeDef gpioInit;
+ 
+    __GPIOC_CLK_ENABLE();
+    __ADC1_CLK_ENABLE();
+ 
+    gpioInit.Pin = GPIO_PIN_1;
+    gpioInit.Mode = GPIO_MODE_ANALOG;
+    gpioInit.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(GPIOC, &gpioInit);
+ 
+    HAL_NVIC_SetPriority(ADC_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(ADC_IRQn);
+ 
+    ADC_ChannelConfTypeDef adcChannel;
+ 
+    g_AdcHandle.Instance = ADC1;
+ 
+    g_AdcHandle.Init.ClockPrescaler = ADC_CLOCKPRESCALER_PCLK_DIV2;
+    g_AdcHandle.Init.Resolution = ADC_RESOLUTION_12B;
+    g_AdcHandle.Init.ScanConvMode = DISABLE;
+    g_AdcHandle.Init.ContinuousConvMode = ENABLE;
+    g_AdcHandle.Init.DiscontinuousConvMode = DISABLE;
+    g_AdcHandle.Init.NbrOfDiscConversion = 0;
+    g_AdcHandle.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+    g_AdcHandle.Init.ExternalTrigConv = ADC_EXTERNALTRIGCONV_T1_CC1;
+    g_AdcHandle.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+    g_AdcHandle.Init.NbrOfConversion = 1;
+    g_AdcHandle.Init.DMAContinuousRequests = ENABLE;
+    g_AdcHandle.Init.EOCSelection = DISABLE;
+ 
+    HAL_ADC_Init(&g_AdcHandle);
+ 
+    adcChannel.Channel = ADC_CHANNEL_11;
+    adcChannel.Rank = 1;
+    adcChannel.SamplingTime = ADC_SAMPLETIME_480CYCLES;
+    adcChannel.Offset = 0;
+ 
+    if (HAL_ADC_ConfigChannel(&g_AdcHandle, &adcChannel) != HAL_OK)
+    {
+        while (1) {
+          HAL_GPIO_TogglePin(GPIOD,BLUE_LED);
+          HAL_Delay(100);
+        }
+    }
+}
+
+void adcTest(void const *argument) {
+  ConfigureADC();
+  HAL_ADC_Start(&g_AdcHandle);
+  int g_MeasurementNumber;
+  while (1) {
+    osDelay(100);
+    if (HAL_ADC_PollForConversion(&g_AdcHandle,1000000) == HAL_OK) {
+      g_ADCValue = HAL_ADC_GetValue(&g_AdcHandle);
+      g_MeasurementNumber++;
+    }
+  }
+
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -333,7 +404,7 @@ int main(void)
   MX_UART4_Init();
   MX_SPI1_Init();
   MX_I2C1_Init();
-  //MX_CAN1_Init();
+  MX_CAN1_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -357,16 +428,18 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
+  osThreadDef(adcTask, adcTest, osPriorityAboveNormal,1,128);
+  adcTaskHandle = osThreadCreate(osThread(adcTask),NULL);
+  osThreadDef(canTask, canTest, osPriorityAboveNormal, 1, 128);
+  canTaskHandle = osThreadCreate(osThread(canTask),NULL);
   //osThreadDef(uartTask, uartTest, osPriorityAboveNormal, 1, 128);
-  //osThreadDef(canTask, canTest, osPriorityAboveNormal, 1, 128);
-  //canTaskHandle = osThreadCreate(osThread(canTask),NULL);
   //uartTaskHandle = osThreadCreate(osThread(uartTask), NULL);
   //osThreadDef(i2cTask, writei2c, osPriorityAboveNormal,1,256);
   //i2cTaskHandle = osThreadCreate(osThread(i2cTask),NULL);
   //osThreadDef(ledTask, Leds, osPriorityAboveNormal, 1, 128);
   //ledTaskHandle = osThreadCreate(osThread(ledTask),NULL);
-  osThreadDef(spiTask,spiTest,osPriorityAboveNormal,1,128);
-  spiTaskHandle = osThreadCreate(osThread(spiTask),NULL);
+  //osThreadDef(spiTask,spiTest,osPriorityAboveNormal,1,128);
+  //spiTaskHandle = osThreadCreate(osThread(spiTask),NULL);
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_QUEUES */

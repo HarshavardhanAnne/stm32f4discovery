@@ -1,4 +1,4 @@
-ARM GAS  /tmp/cc53JE5J.s 			page 1
+ARM GAS  /tmp/ccLxlMfl.s 			page 1
 
 
    1              		.syntax unified
@@ -58,7 +58,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
   29:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c ****      *    platform software that is more than just the market leader, it     *
   30:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c ****      *    is the industry's de facto standard.                               *
   31:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c ****      *                                                                       *
-ARM GAS  /tmp/cc53JE5J.s 			page 2
+ARM GAS  /tmp/ccLxlMfl.s 			page 2
 
 
   32:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c ****      *    Help yourself get started quickly while simultaneously helping     *
@@ -118,7 +118,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
   86:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** #else
   87:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 	/* The way the SysTick is clocked is not modified in case it is not the same
   88:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 	as the core. */
-ARM GAS  /tmp/cc53JE5J.s 			page 3
+ARM GAS  /tmp/ccLxlMfl.s 			page 3
 
 
   89:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 	#define portNVIC_SYSTICK_CLK_BIT	( 0 )
@@ -178,7 +178,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
  143:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** calculations. */
  144:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** #define portMISSED_COUNTS_FACTOR			( 45UL )
  145:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 
-ARM GAS  /tmp/cc53JE5J.s 			page 4
+ARM GAS  /tmp/ccLxlMfl.s 			page 4
 
 
  146:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** /* Let the user override the pre-loading of the initial LR with the address of
@@ -238,7 +238,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
  200:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c ****  */
  201:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** #if configUSE_TICKLESS_IDLE == 1
  202:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 	static uint32_t xMaximumPossibleSuppressedTicks = 0;
-ARM GAS  /tmp/cc53JE5J.s 			page 5
+ARM GAS  /tmp/ccLxlMfl.s 			page 5
 
 
  203:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** #endif /* configUSE_TICKLESS_IDLE */
@@ -298,7 +298,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
  257:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
  258:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 
  259:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** static void prvTaskExitError( void )
-ARM GAS  /tmp/cc53JE5J.s 			page 6
+ARM GAS  /tmp/ccLxlMfl.s 			page 6
 
 
  260:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** {
@@ -358,7 +358,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
   33:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h ****      *    to support the FreeRTOS project by purchasing a FreeRTOS           *
   34:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h ****      *    tutorial book, reference manual, or both:                          *
   35:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h ****      *    http://www.FreeRTOS.org/Documentation                              *
-ARM GAS  /tmp/cc53JE5J.s 			page 7
+ARM GAS  /tmp/ccLxlMfl.s 			page 7
 
 
   36:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h ****      *                                                                       *
@@ -418,7 +418,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
   90:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h **** #define portFLOAT		float
   91:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h **** #define portDOUBLE		double
   92:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h **** #define portLONG		long
-ARM GAS  /tmp/cc53JE5J.s 			page 8
+ARM GAS  /tmp/ccLxlMfl.s 			page 8
 
 
   93:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h **** #define portSHORT		short
@@ -478,7 +478,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
  147:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h **** 
  148:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
  149:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h **** 
-ARM GAS  /tmp/cc53JE5J.s 			page 9
+ARM GAS  /tmp/ccLxlMfl.s 			page 9
 
 
  150:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h **** /* Task function macros as described on the FreeRTOS.org WEB site.  These are
@@ -538,7 +538,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
  204:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h **** 
  205:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h **** #define portINLINE	__inline
  206:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h **** 
-ARM GAS  /tmp/cc53JE5J.s 			page 10
+ARM GAS  /tmp/ccLxlMfl.s 			page 10
 
 
  207:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h **** #ifndef portFORCE_INLINE
@@ -598,7 +598,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
   65 0028 BFF34F8F 		dsb														
   66              	
   67              	@ 0 "" 2
-ARM GAS  /tmp/cc53JE5J.s 			page 11
+ARM GAS  /tmp/ccLxlMfl.s 			page 11
 
 
   68              	.LVL1:
@@ -658,7 +658,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
   97 0002 0068     	 ldr r0, [r0] 			
   98 0004 0068     	 ldr r0, [r0] 			
   99 0006 80F30888 	 msr msp, r0			
-ARM GAS  /tmp/cc53JE5J.s 			page 12
+ARM GAS  /tmp/ccLxlMfl.s 			page 12
 
 
  100 000a 62B6     	 cpsie i				
@@ -718,7 +718,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
  331:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 		functions can be called.  ISR safe functions are those that end in
  332:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 		"FromISR".  FreeRTOS maintains separate thread and ISR API functions to
  333:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 		ensure interrupt entry is as fast and simple as possible.
-ARM GAS  /tmp/cc53JE5J.s 			page 13
+ARM GAS  /tmp/ccLxlMfl.s 			page 13
 
 
  334:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 
@@ -778,7 +778,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
  388:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 	/* Should never get here as the tasks will now be executing!  Call the task
  389:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 	exit error function to prevent compiler warnings about a static function
  390:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 	not being called in the case that the application writer overrides this
-ARM GAS  /tmp/cc53JE5J.s 			page 14
+ARM GAS  /tmp/ccLxlMfl.s 			page 14
 
 
  391:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 	functionality by defining configTASK_RETURN_ADDRESS. */
@@ -838,7 +838,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
  445:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 	"	ldr	r2, [r3]						\n"
  446:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 	"										\n"
  447:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 	"	tst r14, #0x10						\n" /* Is the task using the FPU context?  If so, push high vfp registers. *
-ARM GAS  /tmp/cc53JE5J.s 			page 15
+ARM GAS  /tmp/ccLxlMfl.s 			page 15
 
 
  448:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 	"	it eq								\n"
@@ -898,7 +898,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
  502:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 		if( xTaskIncrementTick() != pdFALSE )
  503:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 		{
  504:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 			/* A context switch is required.  Context switching is performed in
-ARM GAS  /tmp/cc53JE5J.s 			page 16
+ARM GAS  /tmp/ccLxlMfl.s 			page 16
 
 
  505:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 			the PendSV interrupt.  Pend the PendSV interrupt. */
@@ -958,7 +958,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
  559:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 			periods. */
  560:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 			portNVIC_SYSTICK_LOAD_REG = ulTimerCountsForOneTick - 1UL;
  561:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 
-ARM GAS  /tmp/cc53JE5J.s 			page 17
+ARM GAS  /tmp/ccLxlMfl.s 			page 17
 
 
  562:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 			/* Re-enable interrupts - see comments above the cpsid instruction()
@@ -1018,7 +1018,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
  616:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 				that took too long. */
  617:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 				if( ( ulCalculatedLoadValue < ulStoppedTimerCompensation ) || ( ulCalculatedLoadValue > ulTimer
  618:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 				{
-ARM GAS  /tmp/cc53JE5J.s 			page 18
+ARM GAS  /tmp/ccLxlMfl.s 			page 18
 
 
  619:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 					ulCalculatedLoadValue = ( ulTimerCountsForOneTick - 1UL );
@@ -1078,7 +1078,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
  673:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 	/* Calculate the constants required to configure the tick interrupt. */
  674:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 	#if configUSE_TICKLESS_IDLE == 1
  675:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 	{
-ARM GAS  /tmp/cc53JE5J.s 			page 19
+ARM GAS  /tmp/ccLxlMfl.s 			page 19
 
 
  676:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 		ulTimerCountsForOneTick = ( configSYSTICK_CLOCK_HZ / configTICK_RATE_HZ );
@@ -1138,7 +1138,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
  150              		@ frame_needed = 0, uses_anonymous_args = 0
  151              		@ link register save eliminated.
  152              	.LVL2:
-ARM GAS  /tmp/cc53JE5J.s 			page 20
+ARM GAS  /tmp/ccLxlMfl.s 			page 20
 
 
  238:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 	pxTopOfStack--;
@@ -1198,7 +1198,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
  201 0004 0868     		ldr r0, [r1]					
  202 0006 B0E8F04F 		ldmia r0!, {r4-r11, r14}		
  203 000a 80F30988 		msr psp, r0						
-ARM GAS  /tmp/cc53JE5J.s 			page 21
+ARM GAS  /tmp/ccLxlMfl.s 			page 21
 
 
  204 000e BFF36F8F 		isb								
@@ -1258,7 +1258,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
  256 001e 00BF     		.align	2
  257              	.L16:
  258 0020 00000000 		.word	.LANCHOR0
-ARM GAS  /tmp/cc53JE5J.s 			page 22
+ARM GAS  /tmp/ccLxlMfl.s 			page 22
 
 
  259              		.cfi_endproc
@@ -1318,7 +1318,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
  311              	@ 0 "" 2
  312              	.LVL12:
  313              		.thumb
-ARM GAS  /tmp/cc53JE5J.s 			page 23
+ARM GAS  /tmp/ccLxlMfl.s 			page 23
 
 
  314              	.L20:
@@ -1378,7 +1378,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
  365 0018 013B     		subs	r3, r3, #1
  366 001a 034A     		ldr	r2, .L27
  367 001c 1360     		str	r3, [r2]
-ARM GAS  /tmp/cc53JE5J.s 			page 24
+ARM GAS  /tmp/ccLxlMfl.s 			page 24
 
 
  428:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 	{
@@ -1438,7 +1438,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
  387              		.cfi_endproc
  388              	.LFE12:
  390              		.section	.text.PendSV_Handler,"ax",%progbits
-ARM GAS  /tmp/cc53JE5J.s 			page 25
+ARM GAS  /tmp/ccLxlMfl.s 			page 25
 
 
  391              		.align	2
@@ -1498,7 +1498,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
  444 005a 00BFAFF3 		.align 4							
  444      0080
  445 0060 00000000 	pxCurrentTCBConst: .word pxCurrentTCB	
-ARM GAS  /tmp/cc53JE5J.s 			page 26
+ARM GAS  /tmp/ccLxlMfl.s 			page 26
 
 
  446              	
@@ -1558,7 +1558,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
  497 0020 0023     		movs	r3, #0
  498              	@ 271 "Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h" 1
  499 0022 83F31188 			msr basepri, r3	
-ARM GAS  /tmp/cc53JE5J.s 			page 27
+ARM GAS  /tmp/ccLxlMfl.s 			page 27
 
 
  500              	@ 0 "" 2
@@ -1618,7 +1618,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
  555              	xPortStartScheduler:
  556              	.LFB9:
  313:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 	/* configMAX_SYSCALL_INTERRUPT_PRIORITY must not be set to 0.
-ARM GAS  /tmp/cc53JE5J.s 			page 28
+ARM GAS  /tmp/ccLxlMfl.s 			page 28
 
 
  557              		.loc 1 313 0
@@ -1678,7 +1678,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
  322:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 
  606              		.loc 1 322 0 discriminator 3
  607 0036 FEE7     		b	.L42
-ARM GAS  /tmp/cc53JE5J.s 			page 29
+ARM GAS  /tmp/ccLxlMfl.s 			page 29
 
 
  608              	.L41:
@@ -1738,7 +1738,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
  653              	.L43:
  351:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 		{
  654              		.loc 1 351 0
-ARM GAS  /tmp/cc53JE5J.s 			page 30
+ARM GAS  /tmp/ccLxlMfl.s 			page 30
 
 
  655 0078 9DF80330 		ldrb	r3, [sp, #3]	@ zero_extendqisi2
@@ -1798,7 +1798,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
  698              		.loc 1 392 0
  699 00c4 FFF7FEFF 		bl	prvTaskExitError
  700              	.LVL25:
-ARM GAS  /tmp/cc53JE5J.s 			page 31
+ARM GAS  /tmp/ccLxlMfl.s 			page 31
 
 
  701              	.L47:
@@ -1858,7 +1858,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
  740 000a 9B5C     		ldrb	r3, [r3, r2]	@ zero_extendqisi2
  741              	.LVL27:
  742 000c DBB2     		uxtb	r3, r3
-ARM GAS  /tmp/cc53JE5J.s 			page 32
+ARM GAS  /tmp/ccLxlMfl.s 			page 32
 
 
  743              	.LVL28:
@@ -1918,7 +1918,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
  747:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 		define the interrupt's pre-emption priority bits and bits that define
  748:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 		the interrupt's sub-priority.  For simplicity all bits must be defined
  749:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 		to be pre-emption priority bits.  The following assertion will fail if
-ARM GAS  /tmp/cc53JE5J.s 			page 33
+ARM GAS  /tmp/ccLxlMfl.s 			page 33
 
 
  750:Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c **** 		this is not the case (if some bits represent a sub-priority).
@@ -1978,7 +1978,7 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
  816 0000 00000000 		.space	4
  817              		.section	.data.uxCriticalNesting,"aw",%progbits
  818              		.align	2
-ARM GAS  /tmp/cc53JE5J.s 			page 34
+ARM GAS  /tmp/ccLxlMfl.s 			page 34
 
 
  819              		.set	.LANCHOR0,. + 0
@@ -1991,67 +1991,67 @@ ARM GAS  /tmp/cc53JE5J.s 			page 1
  828              		.file 5 "Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h"
  829              		.file 6 "Inc/FreeRTOSConfig.h"
  830              		.file 7 "Middlewares/Third_Party/FreeRTOS/Source/include/task.h"
-ARM GAS  /tmp/cc53JE5J.s 			page 35
+ARM GAS  /tmp/ccLxlMfl.s 			page 35
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 port.c
-     /tmp/cc53JE5J.s:21     .text.prvTaskExitError:0000000000000000 $t
-     /tmp/cc53JE5J.s:25     .text.prvTaskExitError:0000000000000000 prvTaskExitError
-     /tmp/cc53JE5J.s:78     .text.prvTaskExitError:0000000000000030 $d
-     /tmp/cc53JE5J.s:83     .text.prvPortStartFirstTask:0000000000000000 $t
-     /tmp/cc53JE5J.s:87     .text.prvPortStartFirstTask:0000000000000000 prvPortStartFirstTask
-     /tmp/cc53JE5J.s:114    .text.vPortEnableVFP:0000000000000000 $t
-     /tmp/cc53JE5J.s:118    .text.vPortEnableVFP:0000000000000000 vPortEnableVFP
-     /tmp/cc53JE5J.s:140    .text.pxPortInitialiseStack:0000000000000000 $t
-     /tmp/cc53JE5J.s:145    .text.pxPortInitialiseStack:0000000000000000 pxPortInitialiseStack
-     /tmp/cc53JE5J.s:180    .text.pxPortInitialiseStack:0000000000000028 $d
-     /tmp/cc53JE5J.s:185    .text.SVC_Handler:0000000000000000 $t
-     /tmp/cc53JE5J.s:190    .text.SVC_Handler:0000000000000000 SVC_Handler
-     /tmp/cc53JE5J.s:210    .text.SVC_Handler:0000000000000020 pxCurrentTCBConst2
-     /tmp/cc53JE5J.s:210    .text.SVC_Handler:0000000000000020 $d
-     /tmp/cc53JE5J.s:219    .text.vPortEndScheduler:0000000000000000 $t
-     /tmp/cc53JE5J.s:224    .text.vPortEndScheduler:0000000000000000 vPortEndScheduler
-     /tmp/cc53JE5J.s:258    .text.vPortEndScheduler:0000000000000020 $d
-     /tmp/cc53JE5J.s:263    .text.vPortEnterCritical:0000000000000000 $t
-     /tmp/cc53JE5J.s:268    .text.vPortEnterCritical:0000000000000000 vPortEnterCritical
-     /tmp/cc53JE5J.s:324    .text.vPortEnterCritical:000000000000003c $d
-     /tmp/cc53JE5J.s:330    .text.vPortExitCritical:0000000000000000 $t
-     /tmp/cc53JE5J.s:335    .text.vPortExitCritical:0000000000000000 vPortExitCritical
-     /tmp/cc53JE5J.s:384    .text.vPortExitCritical:0000000000000028 $d
-     /tmp/cc53JE5J.s:391    .text.PendSV_Handler:0000000000000000 $t
-     /tmp/cc53JE5J.s:396    .text.PendSV_Handler:0000000000000000 PendSV_Handler
-     /tmp/cc53JE5J.s:445    .text.PendSV_Handler:0000000000000060 pxCurrentTCBConst
-     /tmp/cc53JE5J.s:445    .text.PendSV_Handler:0000000000000060 $d
-     /tmp/cc53JE5J.s:454    .text.xPortSysTickHandler:0000000000000000 $t
-     /tmp/cc53JE5J.s:459    .text.xPortSysTickHandler:0000000000000000 xPortSysTickHandler
-     /tmp/cc53JE5J.s:506    .text.xPortSysTickHandler:0000000000000028 $d
-     /tmp/cc53JE5J.s:513    .text.vPortSetupTimerInterrupt:0000000000000000 $t
-     /tmp/cc53JE5J.s:518    .text.vPortSetupTimerInterrupt:0000000000000000 vPortSetupTimerInterrupt
-     /tmp/cc53JE5J.s:542    .text.vPortSetupTimerInterrupt:000000000000001c $d
-     /tmp/cc53JE5J.s:550    .text.xPortStartScheduler:0000000000000000 $t
-     /tmp/cc53JE5J.s:555    .text.xPortStartScheduler:0000000000000000 xPortStartScheduler
-     /tmp/cc53JE5J.s:704    .text.xPortStartScheduler:00000000000000c8 $d
-     /tmp/cc53JE5J.s:717    .text.vPortValidateInterruptPriority:0000000000000000 $t
-     /tmp/cc53JE5J.s:722    .text.vPortValidateInterruptPriority:0000000000000000 vPortValidateInterruptPriority
-     /tmp/cc53JE5J.s:797    .text.vPortValidateInterruptPriority:000000000000004c $d
-     /tmp/cc53JE5J.s:808    .bss.ucMaxSysCallPriority:0000000000000000 ucMaxSysCallPriority
-     /tmp/cc53JE5J.s:809    .bss.ucMaxSysCallPriority:0000000000000000 $d
-     /tmp/cc53JE5J.s:811    .bss.ulMaxPRIGROUPValue:0000000000000000 $d
-     /tmp/cc53JE5J.s:815    .bss.ulMaxPRIGROUPValue:0000000000000000 ulMaxPRIGROUPValue
-     /tmp/cc53JE5J.s:818    .data.uxCriticalNesting:0000000000000000 $d
-     /tmp/cc53JE5J.s:822    .data.uxCriticalNesting:0000000000000000 uxCriticalNesting
-     /tmp/cc53JE5J.s:139    .text.vPortEnableVFP:000000000000000e $d
-     /tmp/cc53JE5J.s:2311   .text.vPortEnableVFP:0000000000000010 $d
-     /tmp/cc53JE5J.s:113    .text.prvPortStartFirstTask:000000000000001a $d
-     /tmp/cc53JE5J.s:2311   .text.prvPortStartFirstTask:000000000000001c $d
+     /tmp/ccLxlMfl.s:21     .text.prvTaskExitError:0000000000000000 $t
+     /tmp/ccLxlMfl.s:25     .text.prvTaskExitError:0000000000000000 prvTaskExitError
+     /tmp/ccLxlMfl.s:78     .text.prvTaskExitError:0000000000000030 $d
+     /tmp/ccLxlMfl.s:83     .text.prvPortStartFirstTask:0000000000000000 $t
+     /tmp/ccLxlMfl.s:87     .text.prvPortStartFirstTask:0000000000000000 prvPortStartFirstTask
+     /tmp/ccLxlMfl.s:114    .text.vPortEnableVFP:0000000000000000 $t
+     /tmp/ccLxlMfl.s:118    .text.vPortEnableVFP:0000000000000000 vPortEnableVFP
+     /tmp/ccLxlMfl.s:140    .text.pxPortInitialiseStack:0000000000000000 $t
+     /tmp/ccLxlMfl.s:145    .text.pxPortInitialiseStack:0000000000000000 pxPortInitialiseStack
+     /tmp/ccLxlMfl.s:180    .text.pxPortInitialiseStack:0000000000000028 $d
+     /tmp/ccLxlMfl.s:185    .text.SVC_Handler:0000000000000000 $t
+     /tmp/ccLxlMfl.s:190    .text.SVC_Handler:0000000000000000 SVC_Handler
+     /tmp/ccLxlMfl.s:210    .text.SVC_Handler:0000000000000020 pxCurrentTCBConst2
+     /tmp/ccLxlMfl.s:210    .text.SVC_Handler:0000000000000020 $d
+     /tmp/ccLxlMfl.s:219    .text.vPortEndScheduler:0000000000000000 $t
+     /tmp/ccLxlMfl.s:224    .text.vPortEndScheduler:0000000000000000 vPortEndScheduler
+     /tmp/ccLxlMfl.s:258    .text.vPortEndScheduler:0000000000000020 $d
+     /tmp/ccLxlMfl.s:263    .text.vPortEnterCritical:0000000000000000 $t
+     /tmp/ccLxlMfl.s:268    .text.vPortEnterCritical:0000000000000000 vPortEnterCritical
+     /tmp/ccLxlMfl.s:324    .text.vPortEnterCritical:000000000000003c $d
+     /tmp/ccLxlMfl.s:330    .text.vPortExitCritical:0000000000000000 $t
+     /tmp/ccLxlMfl.s:335    .text.vPortExitCritical:0000000000000000 vPortExitCritical
+     /tmp/ccLxlMfl.s:384    .text.vPortExitCritical:0000000000000028 $d
+     /tmp/ccLxlMfl.s:391    .text.PendSV_Handler:0000000000000000 $t
+     /tmp/ccLxlMfl.s:396    .text.PendSV_Handler:0000000000000000 PendSV_Handler
+     /tmp/ccLxlMfl.s:445    .text.PendSV_Handler:0000000000000060 pxCurrentTCBConst
+     /tmp/ccLxlMfl.s:445    .text.PendSV_Handler:0000000000000060 $d
+     /tmp/ccLxlMfl.s:454    .text.xPortSysTickHandler:0000000000000000 $t
+     /tmp/ccLxlMfl.s:459    .text.xPortSysTickHandler:0000000000000000 xPortSysTickHandler
+     /tmp/ccLxlMfl.s:506    .text.xPortSysTickHandler:0000000000000028 $d
+     /tmp/ccLxlMfl.s:513    .text.vPortSetupTimerInterrupt:0000000000000000 $t
+     /tmp/ccLxlMfl.s:518    .text.vPortSetupTimerInterrupt:0000000000000000 vPortSetupTimerInterrupt
+     /tmp/ccLxlMfl.s:542    .text.vPortSetupTimerInterrupt:000000000000001c $d
+     /tmp/ccLxlMfl.s:550    .text.xPortStartScheduler:0000000000000000 $t
+     /tmp/ccLxlMfl.s:555    .text.xPortStartScheduler:0000000000000000 xPortStartScheduler
+     /tmp/ccLxlMfl.s:704    .text.xPortStartScheduler:00000000000000c8 $d
+     /tmp/ccLxlMfl.s:717    .text.vPortValidateInterruptPriority:0000000000000000 $t
+     /tmp/ccLxlMfl.s:722    .text.vPortValidateInterruptPriority:0000000000000000 vPortValidateInterruptPriority
+     /tmp/ccLxlMfl.s:797    .text.vPortValidateInterruptPriority:000000000000004c $d
+     /tmp/ccLxlMfl.s:808    .bss.ucMaxSysCallPriority:0000000000000000 ucMaxSysCallPriority
+     /tmp/ccLxlMfl.s:809    .bss.ucMaxSysCallPriority:0000000000000000 $d
+     /tmp/ccLxlMfl.s:811    .bss.ulMaxPRIGROUPValue:0000000000000000 $d
+     /tmp/ccLxlMfl.s:815    .bss.ulMaxPRIGROUPValue:0000000000000000 ulMaxPRIGROUPValue
+     /tmp/ccLxlMfl.s:818    .data.uxCriticalNesting:0000000000000000 $d
+     /tmp/ccLxlMfl.s:822    .data.uxCriticalNesting:0000000000000000 uxCriticalNesting
+     /tmp/ccLxlMfl.s:139    .text.vPortEnableVFP:000000000000000e $d
+     /tmp/ccLxlMfl.s:2311   .text.vPortEnableVFP:0000000000000010 $d
+     /tmp/ccLxlMfl.s:113    .text.prvPortStartFirstTask:000000000000001a $d
+     /tmp/ccLxlMfl.s:2311   .text.prvPortStartFirstTask:000000000000001c $d
                      .debug_frame:0000000000000010 $d
 
 UNDEFINED SYMBOLS
 pxCurrentTCB
 vTaskSwitchContext
 xTaskIncrementTick
-ARM GAS  /tmp/cc53JE5J.s 			page 36
+ARM GAS  /tmp/ccLxlMfl.s 			page 36
 
 
 SystemCoreClock
