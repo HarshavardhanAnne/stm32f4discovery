@@ -4,14 +4,17 @@
 
 //GPIO
 
-void eecs_GPIO_Init(GPIO_TypeDef *GPIOx,uint16_t Pins,uint32_t Mode,uint32_t Pull,uint32_t Speed) {
-  if (!eecsGPIO.clock_enable) {
-  	/* GPIO Ports Clock Enable */
+void eecs_GPIO_Start_Clocks(void) {
+  if (!CLOCK_ENABLED) {
+    /* GPIO Ports Clock Enable */
     __HAL_RCC_GPIOA_CLK_ENABLE();
     __HAL_RCC_GPIOD_CLK_ENABLE();
     __HAL_RCC_GPIOB_CLK_ENABLE();
-    eecsGPIO.clock_enable = 1;
+    CLOCK_ENABLED = 1;
   }
+}
+
+void eecs_GPIO_Init(GPIO_TypeDef *GPIOx,uint16_t Pins,uint32_t Mode,uint32_t Pull,uint32_t Speed) {
 
   GPIO_InitTypeDef GPIO_InitStruct;
 

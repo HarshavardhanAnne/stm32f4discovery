@@ -52,7 +52,7 @@
 #include "cmsis_os.h"
 
 /* USER CODE BEGIN Includes */
-//#include <eecs473.h>
+#include <eecs473.h>
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -74,8 +74,6 @@ osThreadId canTaskHandle;
 osThreadId spiTaskHandle;
 osThreadId adcTaskHandle;
 ADC_HandleTypeDef g_AdcHandle;
-//struct eecs_GPIO GPIO = {&eecs_GPIO_Init,&eecs_GPIO_Write,&eecs_GPIO_Toggle,0};
-//struct eecs_UART UART = {&eecs_UART_Init,&eecs_UART_Print,&eecs_UART_Test};
 //osThreadId ledTaskHandle;
 #define MY_I2C_SPEED 400000
 #define I2C_ADDRESS_IMU (uint16_t)(0b1101000 << 1)
@@ -89,8 +87,9 @@ uint8_t i2c_tx_buff_gyro[6];
 uint8_t i2c_rx_buff_gyro[6];
 int16_t i2c_accel[3];
 uint8_t spi_address[2] = {0b10000100,0b00000000};
-uint8_t max_data_addr[2] = {0b00111000,0b00000000};
 uint8_t spi_rx_buff[2];
+uint8_t max_data_addr[2] = {0b00111000,0b00000000};
+uint8_t max_rx_buff[2];
 uint8_t arr[9];
 volatile uint32_t g_ADCValue;
 
@@ -191,7 +190,7 @@ void spiTest(void const *argument) {
     //status = HAL_SPI_Receive(&hspi1, spi_rx_buff,1,HAL_MAX_DELAY);
     //status = HAL_SPI_Transmit(&hspi1, spi_address+1,1,HAL_MAX_DELAY);
     //status = HAL_SPI_Receive(&hspi1, spi_rx_buff+1,1,HAL_MAX_DELAY);
-    status = HAL_SPI_TransmitReceive(&hspi1,spi_address,spi_rx_buff,1,HAL_MAX_DELAY);
+    status = HAL_SPI_TransmitReceive(&hspi1,max_data_addr,max_rx_buff,1,HAL_MAX_DELAY);
     //HAL_Delay(1);
     if (status != HAL_OK) {
       HAL_GPIO_WritePin(GPIOD, GREEN_LED, GPIO_PIN_SET);
@@ -200,12 +199,12 @@ void spiTest(void const *argument) {
       HAL_GPIO_WritePin(GPIOD, GREEN_LED, GPIO_PIN_RESET);
     }
 
-    status = HAL_SPI_TransmitReceive(&hspi1,spi_address+1,spi_rx_buff+1,1,HAL_MAX_DELAY);
+    status = HAL_SPI_TransmitReceive(&hspi1,max_data_addr+1,max_rx_buff+1,1,HAL_MAX_DELAY);
     HAL_Delay(1);
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
     //spi_rx_buff[0] = 'A';
     //spi_rx_buff[1] = 'F';
-    uart_debug(spi_rx_buff, sizeof(spi_rx_buff));
+    uart_debug(max_rx_buff, sizeof(max_rx_buff));
   }
 }
 
