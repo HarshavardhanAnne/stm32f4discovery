@@ -3,57 +3,7 @@
 
 #include <stdlib.h>
 #include <stdint.h>
-#include "stm32f4xx_hal.h"
-
-int CLOCK_ENABLED = 0;
-
-const uint16_t pins[] = {GPIO_PIN_0,
-				 GPIO_PIN_1,
-				 GPIO_PIN_2,
-				 GPIO_PIN_3,
-				 GPIO_PIN_4,
-				 GPIO_PIN_5,
-				 GPIO_PIN_6,
-				 GPIO_PIN_7,
-				 GPIO_PIN_8,
-				 GPIO_PIN_9,
-				 GPIO_PIN_10,
-				 GPIO_PIN_11,
-				 GPIO_PIN_12,
-				 GPIO_PIN_13,
-				 GPIO_PIN_14,
-				 GPIO_PIN_15};
-
-/*#define GREEN_LED pins[12];
-#define ORANGE_LED pins[13];
-#define RED_LED pins[14];
-#define BLUE_LED pins[15];*/
-
-const uint32_t modes[] = {GPIO_MODE_INPUT,
-				  GPIO_MODE_OUTPUT_PP,
-				  GPIO_MODE_OUTPUT_OD,
-				  GPIO_MODE_AF_PP,
-				  GPIO_MODE_AF_OD,
-				  GPIO_MODE_ANALOG,
-				  GPIO_MODE_IT_RISING,
-				  GPIO_MODE_IT_FALLING,
-				  GPIO_MODE_IT_RISING_FALLING,
-				  GPIO_MODE_EVT_RISING,
-				  GPIO_MODE_EVT_FALLING,
-				  GPIO_MODE_EVT_RISING_FALLING};
-
-const uint32_t speeds[] = {GPIO_SPEED_FREQ_LOW,
-				   GPIO_SPEED_FREQ_MEDIUM,
-				   GPIO_SPEED_FREQ_HIGH,
-				   GPIO_SPEED_FREQ_VERY_HIGH};
-
-const uint32_t pulls[] = {GPIO_NOPULL,
-				  GPIO_PULLUP,
-				  GPIO_PULLDOWN};
-
-GPIO_PinState HIGH = GPIO_PIN_SET;
-GPIO_PinState LOW = GPIO_PIN_RESET;
-
+//#include "stm32f4xx_hal.h"
 
 UART_HandleTypeDef huart;
 SPI_HandleTypeDef hspi2;
@@ -61,6 +11,80 @@ SPI_HandleTypeDef hspi3;
 I2C_HandleTypeDef hi2c;
 CAN_HandleTypeDef hcan;
 
+const uint16_t pins[16] = {GPIO_PIN_0,
+					 								 GPIO_PIN_1,
+					 								 GPIO_PIN_2,
+					 								 GPIO_PIN_3,
+					 								 GPIO_PIN_4,
+					 								 GPIO_PIN_5,
+					 								 GPIO_PIN_6,
+													 GPIO_PIN_7,
+													 GPIO_PIN_8,
+													 GPIO_PIN_9,
+													 GPIO_PIN_10,
+													 GPIO_PIN_11,
+													 GPIO_PIN_12,
+													 GPIO_PIN_13,
+													 GPIO_PIN_14,
+													 GPIO_PIN_15};
+const uint32_t modes[] = {GPIO_MODE_INPUT,
+				  								GPIO_MODE_OUTPUT_PP,
+				  								GPIO_MODE_OUTPUT_OD,
+				  								GPIO_MODE_AF_PP,
+				  								GPIO_MODE_AF_OD,
+				  								GPIO_MODE_ANALOG,
+				  								GPIO_MODE_IT_RISING,
+				  								GPIO_MODE_IT_FALLING,
+				  								GPIO_MODE_IT_RISING_FALLING,
+				  								GPIO_MODE_EVT_RISING,
+				  								GPIO_MODE_EVT_FALLING,
+				  								GPIO_MODE_EVT_RISING_FALLING};
+const uint32_t speeds[] = {GPIO_SPEED_FREQ_LOW,
+				   								 GPIO_SPEED_FREQ_MEDIUM,
+				   								 GPIO_SPEED_FREQ_HIGH,
+				  								 GPIO_SPEED_FREQ_VERY_HIGH};
+const uint32_t pulls[] = {GPIO_NOPULL,
+													GPIO_PULLUP,
+				  								GPIO_PULLDOWN};
+
+struct pin_pair {
+	GPIO_TypeDef* GPIOx;
+	uint16_t pin;
+};
+
+struct SPI {
+  uint8_t address[2];// = {0b10000100,0b00000000};
+  uint8_t data[2];
+  struct pin_pair cs[4];
+};
+struct I2C {
+	uint8_t address_accel[6];
+	uint8_t address_gyro[6];
+	uint8_t data_accel[6];
+	uint8_t data_gyro[6];
+};
+
+struct pin_pair cs1a = {GPIOA,GPIO_PIN_4};
+struct pin_pair cs1b = {GPIOA,GPIO_PIN_3};
+struct pin_pair cs2a = {GPIOB,GPIO_PIN_1};
+struct pin_pair cs2b = {GPIOA,GPIO_PIN_2};
+struct pin_pair cs3a = {GPIOC,GPIO_PIN_7};
+struct pin_pair cs3b = {GPIOC,GPIO_PIN_6};
+struct pin_pair cs4a = {GPIOC,GPIO_PIN_9};
+struct pin_pair cs4b = {GPIOC,GPIO_PIN_8};
+struct SPI spiA;
+struct SPI spiB;
+struct I2C i2c;
+
+GPIO_PinState HIGH = GPIO_PIN_SET;
+GPIO_PinState LOW = GPIO_PIN_RESET;
+
+/*define GREEN_LED pins[12];
+define ORANGE_LED pins[13];
+define RED_LED pins[14];
+define BLUE_LED pins[15];*/
+
+int CLOCK_ENABLED = 0;
 
 void eecs_Error_Handler();
 void eecs_GPIO_Init(GPIO_TypeDef*,uint16_t,uint32_t,uint32_t,uint32_t);
@@ -71,7 +95,12 @@ void eecs_UART_Init(void);
 void eecs_UART_Print(uint8_t*,uint8_t);
 void eecs_UART_Test(void const *);
 
+void eecs_I2C_Init(void);
+
 void eecs_SPI_Init(int);
+void eecs_SPI_Read(SPI_HandleTypeDef,uint8_t*,uint8_t*);
+
+
 void eecs_GPIO_Clock_Init(void) {
   if (!CLOCK_ENABLED) {
     /* GPIO Ports Clock Enable */
@@ -131,45 +160,68 @@ void eecs_UART_Test(void const *argument) {
 }
 
 void eecs_SPI_Init(int spi_bus) {
-  SPI_HandleTypeDef* spiptr = (spi_bus==2) ? &hspi2:&hspi3;
-  spiptr->Instance = (spi_bus == 2) ? SPI2:SPI3;
-  spiptr->Init.Mode = SPI_MODE_MASTER;
-  spiptr->Init.Direction = SPI_DIRECTION_2LINES;
-  spiptr->Init.DataSize = SPI_DATASIZE_8BIT;
-  spiptr->Init.CLKPolarity = SPI_POLARITY_LOW;
-  spiptr->Init.CLKPhase = SPI_PHASE_1EDGE;
-  spiptr->Init.NSS = SPI_NSS_SOFT;
-  spiptr->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
-  spiptr->Init.FirstBit = SPI_FIRSTBIT_MSB;
-  spiptr->Init.TIMode = SPI_TIMODE_DISABLE;
-  spiptr->Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
-  spiptr->Init.CRCPolynomial = 10;
+  SPI_HandleTypeDef* spi_handle_ptr = (spi_bus==2) ? &hspi2:&hspi3;
+  spi_handle_ptr->Instance = (spi_bus == 2) ? SPI2:SPI3;
+  spi_handle_ptr->Init.Mode = SPI_MODE_MASTER;
+  spi_handle_ptr->Init.Direction = SPI_DIRECTION_2LINES;
+  spi_handle_ptr->Init.DataSize = SPI_DATASIZE_8BIT;
+  spi_handle_ptr->Init.CLKPolarity = SPI_POLARITY_LOW;
+  spi_handle_ptr->Init.CLKPhase = SPI_PHASE_1EDGE;
+  spi_handle_ptr->Init.NSS = SPI_NSS_SOFT;
+  spi_handle_ptr->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  spi_handle_ptr->Init.FirstBit = SPI_FIRSTBIT_MSB;
+  spi_handle_ptr->Init.TIMode = SPI_TIMODE_DISABLE;
+  spi_handle_ptr->Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+  spi_handle_ptr->Init.CRCPolynomial = 10;
 
-  /*hspi1.Instance = (spi_bus == 2) ? SPI2:SPI3;
-  hspi1.Init.Mode = SPI_MODE_MASTER;
-  hspi1.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
-  hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
-  hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
-  hspi1.Init.NSS = SPI_NSS_SOFT;
-  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
-  hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
-  hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
-  hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
-  hspi1.Init.CRCPolynomial = 10;*/
-
-  if (HAL_SPI_Init(spiptr) != HAL_OK)
+  if (HAL_SPI_Init(spi_handle_ptr) != HAL_OK)
   {
-    _Error_Handler(__FILE__, __LINE__);
+    eecs_Error_Handler();
+  }
+
+  //SPI address initialization
+  struct SPI* spiptr = (spi_bus==2) ? &spiA:&spiB;
+  spiptr->address[0] = 0b00111000; //MAX1415 address
+  spiptr->address[1] = 0b00000000; 
+
+  spiptr->cs[0] = (spi_bus==2) ? cs1a:cs1b;
+  spiptr->cs[1] = (spi_bus==2) ? cs2a:cs2b;
+  spiptr->cs[2] = (spi_bus==2) ? cs3a:cs3b;
+  spiptr->cs[3] = (spi_bus==2) ? cs4a:cs4b;
+}
+
+void eecs_SPI_Read(struct SPI* spi,uint8_t* address, uint8_t* data,) {
+	HAL_StatusTypeDef status;
+
+	status = HAL_SPI_TransmitReceive(&hspi,address,data,1,HAL_MAX_DELAY);
+	if (status != HAL_OK) {
+		//do something
+	}
+
+	status = HAL_
+}
+
+void eecs_I2C_Init(void) {
+  hi2c.Instance = I2C2;
+  hi2c.Init.ClockSpeed = 100000;
+  hi2c.Init.DutyCycle = I2C_DUTYCYCLE_2;
+  hi2c.Init.OwnAddress1 = 0;
+  hi2c.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+  hi2c.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+  hi2c.Init.OwnAddress2 = 0;
+  hi2c.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+  hi2c.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+  if (HAL_I2C_Init(&hi2c) != HAL_OK)
+  {
+    eecs_Error_Handler();
   }
 }
 
 
 
-
 void eecs_Error_Handler() {
 	while (1) {
-		eecs_GPIO_Toggle(GPIOD, pins[15]);
+		//eecs_GPIO_Toggle(GPIOD, GPIO_PIN_15);
 		HAL_DELAY(1000);
 	}
 }
