@@ -561,7 +561,6 @@ static void MX_I2C1_Init(void)
 
 }
 
-
 /* SPI1 init function */
 static void MX_SPI1_Init(void)
 {
