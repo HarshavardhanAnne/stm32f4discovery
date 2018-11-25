@@ -56,6 +56,7 @@ struct SPI {
   uint8_t address[2];// = {0b10000100,0b00000000};
   uint8_t data[2];
   struct pin_pair cs[4];
+  SPI_HandleTypeDef* hspi;
 };
 struct I2C {
 	uint8_t address_accel[6];
@@ -72,8 +73,9 @@ struct pin_pair cs3a = {GPIOC,GPIO_PIN_7};
 struct pin_pair cs3b = {GPIOC,GPIO_PIN_6};
 struct pin_pair cs4a = {GPIOC,GPIO_PIN_9};
 struct pin_pair cs4b = {GPIOC,GPIO_PIN_8};
-struct SPI spiA;
-struct SPI spiB;
+
+struct SPI* spiA;
+struct SPI* spiB;
 struct I2C i2c;
 
 GPIO_PinState HIGH = GPIO_PIN_SET;
@@ -180,7 +182,7 @@ void eecs_SPI_Init(int spi_bus) {
   }
 
   //SPI address initialization
-  struct SPI* spiptr = (spi_bus==2) ? &spiA:&spiB;
+  struct SPI* spiptr = (spi_bus==2) ? spiA:spiB;
   spiptr->address[0] = 0b00111000; //MAX1415 address
   spiptr->address[1] = 0b00000000; 
 
@@ -190,15 +192,27 @@ void eecs_SPI_Init(int spi_bus) {
   spiptr->cs[3] = (spi_bus==2) ? cs4a:cs4b;
 }
 
-void eecs_SPI_Read(struct SPI* spi,uint8_t* address, uint8_t* data,) {
+void eecs_SPI_Read(struct SPI* spi,uint8_t* address, uint8_t* data,uint8_t csPin) {
 	HAL_StatusTypeDef status;
-
+	if (csPin > 3) {
+		//uart error msg
+		return;
+	}
+	HAL_GPIO_WritePin(spi->cs[csPin].GPIOx,spi->cs[csPin].pin,GPIO_PIN_RESET);
+	//HAL_Delay(1);
+	osDelay(1);
 	status = HAL_SPI_TransmitReceive(&hspi,address,data,1,HAL_MAX_DELAY);
 	if (status != HAL_OK) {
 		//do something
 	}
+	status = HAL_SPI_TransmitReceive(&hspi,address+1,data+1,1,HAL_MAX_DELAY);
+	if (status != HAL_OK) {
+		//uart error msg
+	}
+	osDelay(1); //delay before pulling CS pin high
+	HAL_GPIO_WritePin(spi->cs[csPin].GPIOx,spi->cs[csPin].pin,GPIO_PIN_SET);
 
-	status = HAL_
+	return;
 }
 
 void eecs_I2C_Init(void) {
