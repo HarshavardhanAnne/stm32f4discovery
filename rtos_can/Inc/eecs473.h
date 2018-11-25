@@ -56,7 +56,7 @@ struct SPI {
   uint8_t address[2];// = {0b10000100,0b00000000};
   uint8_t data[2];
   struct pin_pair cs[4];
-  SPI_HandleTypeDef* hspi;
+  SPI_HandleTypeDef *hspi;
 };
 struct I2C {
 	uint8_t address_accel[6];
@@ -100,8 +100,7 @@ void eecs_UART_Test(void const *);
 void eecs_I2C_Init(void);
 
 void eecs_SPI_Init(int);
-void eecs_SPI_Read(SPI_HandleTypeDef,uint8_t*,uint8_t*);
-
+void eecs_SPI_Read(struct SPI*,uint8_t*, uint8_t*,uint8_t);
 
 void eecs_GPIO_Clock_Init(void) {
   if (!CLOCK_ENABLED) {
@@ -183,6 +182,8 @@ void eecs_SPI_Init(int spi_bus) {
 
   //SPI address initialization
   struct SPI* spiptr = (spi_bus==2) ? spiA:spiB;
+  spiptr->hspi = (spi_bus==2) ? &hspi2:&hspi3;
+
   spiptr->address[0] = 0b00111000; //MAX1415 address
   spiptr->address[1] = 0b00000000; 
 
@@ -201,11 +202,11 @@ void eecs_SPI_Read(struct SPI* spi,uint8_t* address, uint8_t* data,uint8_t csPin
 	HAL_GPIO_WritePin(spi->cs[csPin].GPIOx,spi->cs[csPin].pin,GPIO_PIN_RESET);
 	//HAL_Delay(1);
 	osDelay(1);
-	status = HAL_SPI_TransmitReceive(&hspi,address,data,1,HAL_MAX_DELAY);
+	status = HAL_SPI_TransmitReceive(spi->hspi,address,data,1,HAL_MAX_DELAY);
 	if (status != HAL_OK) {
 		//do something
 	}
-	status = HAL_SPI_TransmitReceive(&hspi,address+1,data+1,1,HAL_MAX_DELAY);
+	status = HAL_SPI_TransmitReceive(spi->hspi,address+1,data+1,1,HAL_MAX_DELAY);
 	if (status != HAL_OK) {
 		//uart error msg
 	}
