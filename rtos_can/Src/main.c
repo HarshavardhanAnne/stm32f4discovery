@@ -52,7 +52,7 @@
 #include "cmsis_os.h"
 
 /* USER CODE BEGIN Includes */
-#include <eecs473.h>
+//#include <eecs473.h>
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -76,7 +76,7 @@ osThreadId adcTaskHandle;
 ADC_HandleTypeDef g_AdcHandle;
 //osThreadId ledTaskHandle;
 #define MY_I2C_SPEED 400000
-#define I2C_ADDRESS_IMU (uint16_t)(0b1101000 << 1)
+#define I2C_ADDRESS_IMU (uint8_t)(0b1101000 << 1)
 #define RED_LED GPIO_PIN_14
 #define GREEN_LED GPIO_PIN_12
 #define BLUE_LED GPIO_PIN_15
@@ -85,7 +85,7 @@ uint8_t i2c_rx_buff_accel[6];
 uint8_t i2c_tx_buff_accel[6];
 uint8_t i2c_tx_buff_gyro[6];
 uint8_t i2c_rx_buff_gyro[6];
-int16_t i2c_accel[3];
+int16_t i2c_accel[4];
 uint8_t spi_address[2] = {0b10000100,0b00000000};
 uint8_t spi_rx_buff[2];
 uint8_t max_data_addr[2] = {0b00111000,0b00000000};
@@ -130,18 +130,20 @@ void writei2c(void const *argument) {
   HAL_StatusTypeDef status = HAL_OK;
   uint32_t prevWakeTime;
   uint32_t nextWakeTime;
-  int addr = 59;
+  uint8_t addr = 59;
   int i;
   for (i = 0; i < 6; i++) {
     i2c_tx_buff_accel[i] = addr++;
-    i2c_rx_buff_accel[i] = i;
+    //i2c_rx_buff_accel[i] = i;
   }
+  i2c_rx_buff_accel[0] = 0;
+  i2c_rx_buff_accel[1] = 0;
   //ACCEL_XOUT_H , ACCEL_XOUT_L
   while (1) {
     //prevWakeTime = osKernelSysTick();
     //nextWakeTime += (1000 * osKernelSysTick())
     //osDelayUntil(&prevWakeTime,5000);
-    osDelay(3000);
+    osDelay(5);
     status = HAL_OK;
     for (i = 0; i < 6; i++) {
       status = HAL_I2C_Master_Transmit(&hi2c1,I2C_ADDRESS_IMU,i2c_tx_buff_accel+i,sizeof(uint8_t),10);
@@ -150,18 +152,19 @@ void writei2c(void const *argument) {
         HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
       }
       else {
-        HAL_GPIO_WritePin(GPIOD,GPIO_PIN_15, GPIO_PIN_RESET);
+        //HAL_GPIO_WritePin(GPIOD,GPIO_PIN_15, GPIO_PIN_RESET);
       }
       status = HAL_I2C_Master_Receive(&hi2c1,I2C_ADDRESS_IMU,i2c_rx_buff_accel+i,sizeof(uint8_t),10);
     }
     //itoa
     //debug();
-    i2c_accel[0] = (i2c_rx_buff_accel[0] << 8) + i2c_rx_buff_accel[1];
-    i2c_accel[1] = (i2c_rx_buff_accel[2] << 8) + i2c_rx_buff_accel[3];
-    i2c_accel[2] = (i2c_rx_buff_accel[4] << 8) + i2c_rx_buff_accel[5];
+    i2c_accel[0] = 0;
+    i2c_accel[1] = (i2c_rx_buff_accel[1] << 8) + i2c_rx_buff_accel[0];
+    i2c_accel[2] = (i2c_rx_buff_accel[3] << 8) + i2c_rx_buff_accel[2];
+    i2c_accel[3] = (i2c_rx_buff_accel[5] << 8) + i2c_rx_buff_accel[4];
     //uart_debug(i2c_accel,sizeof(i2c_accel));
     //HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
-    HAL_GPIO_TogglePin(GPIOD,GPIO_PIN_12); //GPIOD12 is green
+    //HAL_GPIO_TogglePin(GPIOD,GPIO_PIN_12); //GPIOD12 is green
   }
 }
 
@@ -182,7 +185,7 @@ void spiTest(void const *argument) {
   HAL_StatusTypeDef status;
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
   while (1) {
-    osDelay(1000);
+    osDelay(10);
     status = HAL_OK;
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4,GPIO_PIN_RESET);
     HAL_Delay(1);
@@ -213,24 +216,26 @@ void spiTest(void const *argument) {
 void canTest(void const *argument) {
   HAL_CAN_Start(&hcan1);
   HAL_CAN_WakeUp(&hcan1);
-  uint8_t data[8] = {0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF};
+  uint8_t data[8] = {0,0,1,0,2,0,3,0};
   uint8_t data2[8] = {0xAA,0xAA,0xAA,0xAA,0xAA,0xAA,0xAA,0xAA};
   uint8_t* data_ptr;
   uint8_t data_sel = 0;
   CAN_TxHeaderTypeDef tx_buffer;
   CAN_TxHeaderTypeDef* tx_buffer_ptr = &tx_buffer;
-  tx_buffer.StdId = 0x500;
-  tx_buffer.ExtId = 0x500;
+  tx_buffer.StdId = 0x6FF;
+  tx_buffer.ExtId = 0xF00;
   tx_buffer.IDE = CAN_ID_STD;
   tx_buffer.RTR = CAN_RTR_DATA;
-  tx_buffer.DLC = sizeof(g_ADCValue);
+  tx_buffer.DLC = sizeof(i2c_accel);
   HAL_StatusTypeDef status = HAL_OK;
+
+  data_ptr = &i2c_accel;
   while (1) {
     //osDelay(50); //20Hz 
     //osDelay(1); //1 kHz works for 8 bytes of data !THIS SOMETIMES FAILS
     osDelay(4); //250 Hz , this works with 8 bytes
+    osDelay(25); //40Hz
     status = HAL_OK;
-    data_ptr = &g_ADCValue;
     //data_ptr = (data_sel) ? data : data2;
     //data_sel ^= 0b1;
     while (HAL_CAN_IsTxMessagePending(&hcan1, (uint32_t)CAN_TX_MAILBOX0)) {
@@ -314,7 +319,7 @@ void ConfigureADC() {
     __GPIOC_CLK_ENABLE();
     __ADC1_CLK_ENABLE();
  
-    gpioInit.Pin = GPIO_PIN_1;
+    gpioInit.Pin = GPIO_PIN_4;
     gpioInit.Mode = GPIO_MODE_ANALOG;
     gpioInit.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(GPIOC, &gpioInit);
@@ -360,7 +365,7 @@ void adcTest(void const *argument) {
   HAL_ADC_Start(&g_AdcHandle);
   int g_MeasurementNumber;
   while (1) {
-    osDelay(100);
+    osDelay(5);
     if (HAL_ADC_PollForConversion(&g_AdcHandle,1000000) == HAL_OK) {
       g_ADCValue = HAL_ADC_GetValue(&g_AdcHandle);
       g_MeasurementNumber++;
@@ -427,14 +432,16 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
-  osThreadDef(adcTask, adcTest, osPriorityAboveNormal,1,128);
-  adcTaskHandle = osThreadCreate(osThread(adcTask),NULL);
-  osThreadDef(canTask, canTest, osPriorityAboveNormal, 1, 128);
-  canTaskHandle = osThreadCreate(osThread(canTask),NULL);
   //osThreadDef(uartTask, uartTest, osPriorityAboveNormal, 1, 128);
   //uartTaskHandle = osThreadCreate(osThread(uartTask), NULL);
-  //osThreadDef(i2cTask, writei2c, osPriorityAboveNormal,1,256);
-  //i2cTaskHandle = osThreadCreate(osThread(i2cTask),NULL);
+  osThreadDef(i2cTask, writei2c, osPriorityAboveNormal,1,256);
+  i2cTaskHandle = osThreadCreate(osThread(i2cTask),NULL);
+  //osThreadDef(adcTask, adcTest, osPriorityAboveNormal,1,128);
+  //adcTaskHandle = osThreadCreate(osThread(adcTask),NULL);
+  osThreadDef(canTask, canTest, osPriorityAboveNormal, 1, 128);
+  canTaskHandle = osThreadCreate(osThread(canTask),NULL);
+
+  
   //osThreadDef(ledTask, Leds, osPriorityAboveNormal, 1, 128);
   //ledTaskHandle = osThreadCreate(osThread(ledTask),NULL);
   //osThreadDef(spiTask,spiTest,osPriorityAboveNormal,1,128);
@@ -545,7 +552,7 @@ static void MX_CAN1_Init(void)
 static void MX_I2C1_Init(void)
 {
 
-  hi2c1.Instance = I2C1;
+  hi2c1.Instance = I2C2;
   hi2c1.Init.ClockSpeed = 100000;
   hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
   hi2c1.Init.OwnAddress1 = 0;
