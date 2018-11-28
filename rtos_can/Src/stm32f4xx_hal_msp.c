@@ -197,38 +197,42 @@ void HAL_I2C_MspDeInit(I2C_HandleTypeDef* hi2c)
 
 void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi)
 {
+  //IMPORTANT
+  //SPIA corresponds to SPI3, SPIB corresponds to SPI2
+
   /**SPI2 GPIO Configuration    
-    PA5     ------> SPI2A_SCK
-    PA6     ------> SPI2A_MISO
-    PA7     ------> SPI2A_MOSI 
-    PA4     ------> SPI2A_CS1A
-    PB1     ------> SPI2A_CS2A 
-    PC7     ------> SPI2A_CS3A 
-    PC9     ------> SPI2A_CS4A 
+    PC10     ------> SPI2_SCK
+    PC11     ------> SPI2_MISO
+    PC12     ------> SPI2_MOSI 
+    PC7      ------> SPI3_CS3A 
+    PC6      ------> SPI3_CS3B 
+    PC9      ------> SPI3_CS4A 
+    PC8      ------> SPI3_CS4B
   */
 
   /**SPI3 GPIO Configuration    
-    PA13     ------> SPI3B_SCK
-    PA14     ------> SPI3B_MISO
-    PA15     ------> SPI3B_MOSI 
-    PA3      ------> SPI2B_CS1B
-    PA2      ------> SPI2B_CS2B 
-    PC6      ------> SPI2B_CS3B 
-    PC8      ------> SPI2B_CS4B 
+    PB13     ------> SPI3_SCK
+    PB14     ------> SPI3_MISO
+    PB15     ------> SPI3_MOSI 
+    PA4      ------> SPI2_CS1A
+    PA3      ------> SPI2_CS1B
+    PB1      ------> SPI2_CS2A 
+    PA2      ------> SPI2_CS2B
+
   */
 
   GPIO_InitTypeDef GPIO_InitStruct;
-  if(hspi->Instance==SPI2)
+  if(hspi->Instance==SPI3)
   {
     /* Peripheral clock enable */
-    __HAL_RCC_SPI2_CLK_ENABLE();
+    __HAL_RCC_SPI3_CLK_ENABLE();
   
     GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
-    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    GPIO_InitStruct.Alternate = GPIO_AF6_SPI3;
+    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
     //CS1A
     GPIO_InitStruct.Pin = GPIO_PIN_4;
@@ -246,25 +250,6 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi)
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_SET);
 
-    //CS3A and CS4A
-    GPIO_InitStruct.Pin = GPIO_PIN_7|GPIO_PIN_9;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7|GPIO_PIN_9, GPIO_PIN_SET);
-
-  }
-  else if (hspi->Instance==SPI3) {
-    __HAL_RCC_SPI3_CLK_ENABLE();
-
-    GPIO_InitStruct.Pin = GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
-    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
     //CS1B and CS2B
     GPIO_InitStruct.Pin = GPIO_PIN_3 | GPIO_PIN_2;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -272,6 +257,25 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi)
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3|GPIO_PIN_2, GPIO_PIN_SET);
+
+  }
+  else if (hspi->Instance==SPI2) {
+    __HAL_RCC_SPI2_CLK_ENABLE();
+
+    GPIO_InitStruct.Pin = GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    GPIO_InitStruct.Alternate = GPIO_AF5_SPI2;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+    //CS3A and CS4A
+    GPIO_InitStruct.Pin = GPIO_PIN_7|GPIO_PIN_9;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7|GPIO_PIN_9, GPIO_PIN_SET);
 
     //CS3B and CS4B
     GPIO_InitStruct.Pin = GPIO_PIN_6|GPIO_PIN_8;
@@ -361,6 +365,28 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
   /* USER CODE END UART4_MspDeInit 1 */
   }
 
+}
+
+void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc) {
+  /*
+  PC4 ------> ADC1_IN14  LINPOT1W
+  PC5 ------> ADC1_IN15  LINPOT2W
+  PB0 ------> ADC1_IN8   LINPOT3W
+  XXX ------> ADC1_INX   STEERING
+  */
+  if (hadc->Instance==ADC1) {
+    GPIO_InitTypeDef GPIO_InitStruct;
+
+    GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5;
+    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+    GPIO_InitStruct.Pin = GPIO_PIN_0;
+    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  }
 }
 
 /* USER CODE BEGIN 1 */
