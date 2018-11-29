@@ -182,26 +182,37 @@ void uartTest(void const *argument) {
 }
 
 void spiTest(void const *argument) {
-  eecs_SPI_Init(2);
-  eecs_SPI_Init(3);
   volatile uint16_t val1;
   volatile uint16_t val2;
   volatile uint16_t val3;
   volatile uint16_t val4;
-  //struct SPI* spia = &spiB;
-  //struct SPI* spib = &spiA;
+
+  eecs_SPI_Init(2);
+  eecs_SPI_Init(3);
+
+  //debug led
+  GPIO_InitTypeDef GPIO_InitStruct;
+  GPIO_InitStruct.Pin = GPIO_PIN_4;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  eecs_SPI_Begin(&spiA,0);
+
   while (1) {
     osDelay(10);
     eecs_SPI_Read(&spiA,0,0);
-    eecs_SPI_Read(&spiA,0,1);
-    eecs_SPI_Read(&spiA,1,0);
+    //eecs_SPI_Read(&spiA,0,1);
+    //eecs_SPI_Read(&spiA,1,0);
     //eecs_SPI_Read(&spiA,1,1);
 
-    val1 = (spiA.rxbuffer[0] << 8) + spiA.rxbuffer[1];
-    val2 = (spiA.rxbuffer[2] << 8) + spiA.rxbuffer[3];
-    val3 = (spiA.rxbuffer[4] << 8) + spiA.rxbuffer[5];
-    val4 = (spiA.rxbuffer[6] << 8) + spiA.rxbuffer[7];
+    //val1 = (spiA.rxbuffer[0] << 8) + spiA.rxbuffer[1];
+    //val2 = (spiA.rxbuffer[2] << 8) + spiA.rxbuffer[3];
+    //val3 = (spiA.rxbuffer[4] << 8) + spiA.rxbuffer[5];
+    //val4 = (spiA.rxbuffer[6] << 8) + spiA.rxbuffer[7];
 
+    HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_4);
     //HAL_GPIO_WritePin(GPIOA,GPIO_PIN_3, GPIO_PIN_RESET);
   }
   /*HAL_StatusTypeDef status;
@@ -393,13 +404,13 @@ void adcTest(void const *argument) {
       g_MeasurementNumber++;
     }
   }*/
-  volatile int temp;
+  //volatile int temp;
   eecs_ADC_Init();
   eecs_ADC_Begin();
 
   while (1) {
     osDelay(100);
-    temp = 0;
+    HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_4);
   }
 
 }
@@ -467,12 +478,12 @@ int main(void)
   //uartTaskHandle = osThreadCreate(osThread(uartTask), NULL);
   //osThreadDef(i2cTask, writei2c, osPriorityAboveNormal,1,256);
   //i2cTaskHandle = osThreadCreate(osThread(i2cTask),NULL);
-  osThreadDef(adcTask, adcTest, osPriorityAboveNormal,1,128);
-  adcTaskHandle = osThreadCreate(osThread(adcTask),NULL);
-  //osThreadDef(spiTask,spiTest,osPriorityAboveNormal,1,128);
-  //spiTaskHandle = osThreadCreate(osThread(spiTask),NULL);
-  osThreadDef(canTask, canTest, osPriorityAboveNormal, 1, 128);
-  canTaskHandle = osThreadCreate(osThread(canTask),NULL);
+  //osThreadDef(adcTask, adcTest, osPriorityAboveNormal,1,128);
+  //adcTaskHandle = osThreadCreate(osThread(adcTask),NULL);
+  osThreadDef(spiTask,spiTest,osPriorityAboveNormal,1,128);
+  spiTaskHandle = osThreadCreate(osThread(spiTask),NULL);
+  //osThreadDef(canTask, canTest, osPriorityAboveNormal, 1, 128);
+  //canTaskHandle = osThreadCreate(osThread(canTask),NULL);
 
   
   //osThreadDef(ledTask, Leds, osPriorityAboveNormal, 1, 128);
