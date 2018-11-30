@@ -248,7 +248,7 @@ void spiTest(void const *argument) {
 //CANRX - PB8
 void canTest(void const *argument) {
   uint8_t* data_ptr;
-  data_ptr = adc.data;
+  data_ptr = spiA.rxbuffer;
   HAL_CAN_Start(&hcan1);
   HAL_CAN_WakeUp(&hcan1);
   uint8_t data[8] = {0,0,1,0,2,0,3,0};
@@ -260,7 +260,7 @@ void canTest(void const *argument) {
   tx_buffer.ExtId = 0xF00;
   tx_buffer.IDE = CAN_ID_STD;
   tx_buffer.RTR = CAN_RTR_DATA;
-  tx_buffer.DLC = sizeof(adc.data);
+  tx_buffer.DLC = sizeof(spiA.rxbuffer);
   HAL_StatusTypeDef status = HAL_OK;
 
   //data_ptr = &i2c_accel;//spiA->rxbuffer;//&i2c_accel;

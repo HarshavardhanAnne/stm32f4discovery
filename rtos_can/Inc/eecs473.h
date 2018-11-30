@@ -209,7 +209,7 @@ void eecs_SPI_Init(int spi_bus) {
     hspi2.Init.Direction = SPI_DIRECTION_2LINES;
     hspi2.Init.DataSize = SPI_DATASIZE_8BIT;
     hspi2.Init.CLKPolarity = SPI_POLARITY_HIGH;
-    hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
+    hspi2.Init.CLKPhase = SPI_PHASE_2EDGE;
     hspi2.Init.NSS = SPI_NSS_SOFT;
     hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
     hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
@@ -238,7 +238,7 @@ void eecs_SPI_Init(int spi_bus) {
     hspi3.Init.Direction = SPI_DIRECTION_2LINES;
     hspi3.Init.DataSize = SPI_DATASIZE_8BIT;
     hspi3.Init.CLKPolarity = SPI_POLARITY_HIGH;
-    hspi3.Init.CLKPhase = SPI_PHASE_1EDGE;
+    hspi3.Init.CLKPhase = SPI_PHASE_2EDGE;
     hspi3.Init.NSS = SPI_NSS_SOFT;
     hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_128;
     hspi3.Init.FirstBit = SPI_FIRSTBIT_MSB;
@@ -291,8 +291,9 @@ void eecs_SPI_Wait(struct eecsSPI* spi,GPIO_TypeDef* gpiox,uint16_t pin) {
   spi->drdy = 0x80;
 
   HAL_GPIO_WritePin(gpiox,pin,GPIO_PIN_RESET);
+  //HAL_Delay(1);
 
-  while (spi->drdy && (MAXRETRIES < 1000)) {
+  while (spi->drdy && (MAXRETRIES < 5)) {
     if (HAL_SPI_TransmitReceive(&hspi3,txbuff,&rxbuff,1,HAL_MAX_DELAY) != HAL_OK) {
       //do something
     }
@@ -302,35 +303,40 @@ void eecs_SPI_Wait(struct eecsSPI* spi,GPIO_TypeDef* gpiox,uint16_t pin) {
     spi->drdy &= 0x80;
     MAXRETRIES++;
   }
-
+  //HAL_Delay(1);
   HAL_GPIO_WritePin(gpiox,pin,GPIO_PIN_SET);
 }
 
 void eecs_SPI_Read(struct eecsSPI* spi,uint8_t csPin,uint8_t channel) {
   uint8_t txbuff[2] = {0x38,0x00};
+  txbuff[0] += channel;
   uint8_t csidx = spi->csindex[csPin];
   GPIO_TypeDef* temp_gpiox = (cs[csidx])->gpiox;
   uint16_t temppin = cs[csidx]->pin;
-  uint8_t rxbuff[2];
   uint8_t rxoffset = (4 * csPin + 2 * channel)*sizeof(uint8_t);
   volatile HAL_StatusTypeDef status;
 
   eecs_SPI_Wait(spi, temp_gpiox, temppin);
+  HAL_Delay(10);
+  spi->rxbuffer[0] = 0xAB;
+  spi->rxbuffer[1] = 0xCD;
 
   HAL_GPIO_WritePin(temp_gpiox,temppin,GPIO_PIN_RESET);
+  //HAL_Delay(1);
 
-  status = HAL_SPI_TransmitReceive(&hspi3,txbuff,rxbuff,1,HAL_MAX_DELAY);
+  status = HAL_SPI_TransmitReceive(&hspi3,txbuff,spi->rxbuffer,1,HAL_MAX_DELAY);
   if (status!=HAL_OK) {
     //do something
   }
-  status = HAL_SPI_TransmitReceive(&hspi3,txbuff+1,rxbuff,1,HAL_MAX_DELAY);
+  status = HAL_SPI_TransmitReceive(&hspi3,txbuff+1,spi->rxbuffer,1,HAL_MAX_DELAY);
   if (status!=HAL_OK) {
     //do something
   }
-  status = HAL_SPI_TransmitReceive(&hspi3,txbuff+1,rxbuff+1,1,HAL_MAX_DELAY);
+  status = HAL_SPI_TransmitReceive(&hspi3,txbuff+1,spi->rxbuffer+1,1,HAL_MAX_DELAY);
   if (status!=HAL_OK) {
     //do something
   }
+  //HAL_Delay(1);
   HAL_GPIO_WritePin(temp_gpiox,temppin,GPIO_PIN_SET);
 
 
@@ -364,9 +370,27 @@ void eecs_SPI_Read(struct eecsSPI* spi,uint8_t csPin,uint8_t channel) {
   */
 }
 
+void eecs_SPI_ReadSetupReg(struct eecsSPI* spi, GPIO_TypeDef* gpiox, uint16_t pin) {
+  uint8_t temp;
+  uint8_t tx = 0x18;
+
+  HAL_GPIO_WritePin(gpiox,pin,GPIO_PIN_RESET);
+  //HAL_Delay(1);
+  if (HAL_SPI_TransmitReceive(&hspi3,&tx,&temp,1,HAL_MAX_DELAY)!=HAL_OK) {
+    //do something
+  }
+  tx = 0x00;
+  if (HAL_SPI_TransmitReceive(&hspi3,&tx,&temp,1,HAL_MAX_DELAY)!=HAL_OK) {
+    //do something
+  }
+  //HAL_Delay(1);
+  HAL_GPIO_WritePin(gpiox,pin,GPIO_PIN_SET);
+}
+
 void eecs_SPI_Begin(struct eecsSPI* spi,uint8_t csPin) {
-  uint8_t txbuff[4] = {0x20,0xA5,0x10,0x44};
   uint8_t rxbuff[2];
+  uint8_t txbuff[4] = {0x20,0xA7,0x10,0x44};
+
   //txbuff[5] += channel;
   //uint8_t rxbuff[2];
 	//uint8_t rxoffset = (4 * csPin + 2 * channel)*sizeof(uint8_t);
@@ -382,24 +406,24 @@ void eecs_SPI_Begin(struct eecsSPI* spi,uint8_t csPin) {
   uint16_t pinnum = cs[csidx]->pin;
 
 	HAL_GPIO_WritePin(temp_gpiox,pinnum,GPIO_PIN_RESET);
-  HAL_Delay(1);
+  //HAL_Delay(1);
 
   status = HAL_SPI_TransmitReceive(&hspi3,txbuff+txoffset,rxbuff,1,HAL_MAX_DELAY);
-  HAL_Delay(1);
+  HAL_Delay(100);
   if (status != HAL_OK) {
     //do something
   }
   txoffset++;
 
   status = HAL_SPI_TransmitReceive(&hspi3,txbuff+txoffset,rxbuff,1,HAL_MAX_DELAY);
-  HAL_Delay(1);
+  HAL_Delay(100);
   if (status != HAL_OK) {
     //do something
   }
   txoffset++;
 
   status = HAL_SPI_TransmitReceive(&hspi3,txbuff+txoffset,rxbuff,1,HAL_MAX_DELAY);
-  HAL_Delay(1);
+  HAL_Delay(100);
   if (status != HAL_OK) {
     //do something
   }
@@ -409,8 +433,11 @@ void eecs_SPI_Begin(struct eecsSPI* spi,uint8_t csPin) {
   if (status != HAL_OK) {
     //do something
   }
-
+  //HAL_Delay(1);
   HAL_GPIO_WritePin(temp_gpiox,pinnum,GPIO_PIN_SET);
+
+  HAL_Delay(100);
+  eecs_SPI_ReadSetupReg(spi, temp_gpiox,pinnum);
 
   /*while (drdy && (MAXRETRIES < 3)) {
     MAXRETRIES++;
