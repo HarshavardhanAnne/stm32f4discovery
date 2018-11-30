@@ -199,19 +199,25 @@ void spiTest(void const *argument) {
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   eecs_SPI_Begin(&spiA,0);
+  eecs_SPI_Begin(&spiA,1);
 
   while (1) {
     osDelay(10);
     eecs_SPI_Read(&spiA,0,0);
-    //eecs_SPI_Read(&spiA,0,1);
-    //eecs_SPI_Read(&spiA,1,0);
-    //eecs_SPI_Read(&spiA,1,1);
+    eecs_SPI_Read(&spiA,1,0);
+    //osDelay(1);
+    eecs_SPI_Read(&spiA,0,1);
+    eecs_SPI_Read(&spiA,1,1);
+    /*spiA.candata[0] = (spiA.rxbuffer[0] << 8) + spiA.rxbuffer[1];
+    spiA.candata[1] = (spiA.rxbuffer[2] << 8) + spiA.rxbuffer[3];
+    spiA.candata[2] = (spiA.rxbuffer[4] << 8) + spiA.rxbuffer[5];
+    spiA.candata[3] = (spiA.rxbuffer[6] << 8) + spiA.rxbuffer[7];
 
-    //val1 = (spiA.rxbuffer[0] << 8) + spiA.rxbuffer[1];
-    //val2 = (spiA.rxbuffer[2] << 8) + spiA.rxbuffer[3];
-    //val3 = (spiA.rxbuffer[4] << 8) + spiA.rxbuffer[5];
-    //val4 = (spiA.rxbuffer[6] << 8) + spiA.rxbuffer[7];
-
+    spiB.candata[0] = (spiB.rxbuffer[0] << 8) + spiB.rxbuffer[1];
+    spiB.candata[1] = (spiB.rxbuffer[2] << 8) + spiB.rxbuffer[3];
+    spiB.candata[2] = (spiB.rxbuffer[4] << 8) + spiB.rxbuffer[5];
+    spiB.candata[3] = (spiB.rxbuffer[6] << 8) + spiB.rxbuffer[7];
+*/
     HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_4);
     //HAL_GPIO_WritePin(GPIOA,GPIO_PIN_3, GPIO_PIN_RESET);
   }
@@ -269,7 +275,7 @@ void canTest(void const *argument) {
     //osDelay(1); //1 kHz works for 8 bytes of data !THIS SOMETIMES FAILS
     //osDelay(4); //250 Hz , this works with 8 bytes
     //osDelay(25); //40Hz
-    osDelay(10);
+    osDelay(25);
     status = HAL_OK;
     //data_ptr = (data_sel) ? data : data2;
     //data_sel ^= 0b1;
@@ -482,8 +488,8 @@ int main(void)
   //adcTaskHandle = osThreadCreate(osThread(adcTask),NULL);
   osThreadDef(spiTask,spiTest,osPriorityAboveNormal,1,128);
   spiTaskHandle = osThreadCreate(osThread(spiTask),NULL);
-  //osThreadDef(canTask, canTest, osPriorityAboveNormal, 1, 128);
-  //canTaskHandle = osThreadCreate(osThread(canTask),NULL);
+  osThreadDef(canTask, canTest, osPriorityAboveNormal, 1, 128);
+  canTaskHandle = osThreadCreate(osThread(canTask),NULL);
 
   
   //osThreadDef(ledTask, Leds, osPriorityAboveNormal, 1, 128);
