@@ -64,6 +64,7 @@ struct eecsSPI {
   uint8_t address[3];// = {0b00000000,0b00111000,0b00111001};
   uint8_t rxbuffer[8];
   uint8_t csindex[4];
+  uint16_t candata[4];
   uint8_t drdy;
 };
 struct eecsI2C {
@@ -294,10 +295,10 @@ void eecs_SPI_Wait(struct eecsSPI* spi,GPIO_TypeDef* gpiox,uint16_t pin) {
   //HAL_Delay(1);
 
   while (spi->drdy && (MAXRETRIES < 5)) {
-    if (HAL_SPI_TransmitReceive(&hspi3,txbuff,&rxbuff,1,HAL_MAX_DELAY) != HAL_OK) {
+    if (HAL_SPI_TransmitReceive(spi->hspi,txbuff,&rxbuff,1,HAL_MAX_DELAY) != HAL_OK) {
       //do something
     }
-    if (HAL_SPI_TransmitReceive(&hspi3,txbuff+1,&(spi->drdy),1,HAL_MAX_DELAY) != HAL_OK) {
+    if (HAL_SPI_TransmitReceive(spi->hspi,txbuff+1,&(spi->drdy),1,HAL_MAX_DELAY) != HAL_OK) {
       //do something
     }
     spi->drdy &= 0x80;
@@ -317,22 +318,23 @@ void eecs_SPI_Read(struct eecsSPI* spi,uint8_t csPin,uint8_t channel) {
   volatile HAL_StatusTypeDef status;
 
   eecs_SPI_Wait(spi, temp_gpiox, temppin);
-  HAL_Delay(10);
-  spi->rxbuffer[0] = 0xAB;
-  spi->rxbuffer[1] = 0xCD;
+  //osDelay(1);
+  //HAL_Delay(10);
+  spi->rxbuffer[rxoffset] = 0xCD;
+  spi->rxbuffer[rxoffset] = 0xAB;
 
   HAL_GPIO_WritePin(temp_gpiox,temppin,GPIO_PIN_RESET);
   //HAL_Delay(1);
 
-  status = HAL_SPI_TransmitReceive(&hspi3,txbuff,spi->rxbuffer,1,HAL_MAX_DELAY);
+  status = HAL_SPI_TransmitReceive(spi->hspi,txbuff,spi->rxbuffer+rxoffset,1,HAL_MAX_DELAY);
   if (status!=HAL_OK) {
     //do something
   }
-  status = HAL_SPI_TransmitReceive(&hspi3,txbuff+1,spi->rxbuffer,1,HAL_MAX_DELAY);
+  status = HAL_SPI_TransmitReceive(spi->hspi,txbuff+1,spi->rxbuffer+rxoffset,1,HAL_MAX_DELAY);
   if (status!=HAL_OK) {
     //do something
   }
-  status = HAL_SPI_TransmitReceive(&hspi3,txbuff+1,spi->rxbuffer+1,1,HAL_MAX_DELAY);
+  status = HAL_SPI_TransmitReceive(spi->hspi,txbuff+1,spi->rxbuffer+rxoffset+1,1,HAL_MAX_DELAY);
   if (status!=HAL_OK) {
     //do something
   }
@@ -376,11 +378,11 @@ void eecs_SPI_ReadSetupReg(struct eecsSPI* spi, GPIO_TypeDef* gpiox, uint16_t pi
 
   HAL_GPIO_WritePin(gpiox,pin,GPIO_PIN_RESET);
   //HAL_Delay(1);
-  if (HAL_SPI_TransmitReceive(&hspi3,&tx,&temp,1,HAL_MAX_DELAY)!=HAL_OK) {
+  if (HAL_SPI_TransmitReceive(spi->hspi,&tx,&temp,1,HAL_MAX_DELAY)!=HAL_OK) {
     //do something
   }
   tx = 0x00;
-  if (HAL_SPI_TransmitReceive(&hspi3,&tx,&temp,1,HAL_MAX_DELAY)!=HAL_OK) {
+  if (HAL_SPI_TransmitReceive(spi->hspi,&tx,&temp,1,HAL_MAX_DELAY)!=HAL_OK) {
     //do something
   }
   //HAL_Delay(1);
@@ -408,28 +410,28 @@ void eecs_SPI_Begin(struct eecsSPI* spi,uint8_t csPin) {
 	HAL_GPIO_WritePin(temp_gpiox,pinnum,GPIO_PIN_RESET);
   //HAL_Delay(1);
 
-  status = HAL_SPI_TransmitReceive(&hspi3,txbuff+txoffset,rxbuff,1,HAL_MAX_DELAY);
+  status = HAL_SPI_TransmitReceive(spi->hspi,txbuff+txoffset,rxbuff,1,HAL_MAX_DELAY);
   HAL_Delay(100);
   if (status != HAL_OK) {
     //do something
   }
   txoffset++;
 
-  status = HAL_SPI_TransmitReceive(&hspi3,txbuff+txoffset,rxbuff,1,HAL_MAX_DELAY);
+  status = HAL_SPI_TransmitReceive(spi->hspi,txbuff+txoffset,rxbuff,1,HAL_MAX_DELAY);
   HAL_Delay(100);
   if (status != HAL_OK) {
     //do something
   }
   txoffset++;
 
-  status = HAL_SPI_TransmitReceive(&hspi3,txbuff+txoffset,rxbuff,1,HAL_MAX_DELAY);
+  status = HAL_SPI_TransmitReceive(spi->hspi,txbuff+txoffset,rxbuff,1,HAL_MAX_DELAY);
   HAL_Delay(100);
   if (status != HAL_OK) {
     //do something
   }
   txoffset++;
 
-  status = HAL_SPI_TransmitReceive(&hspi3,txbuff+txoffset,rxbuff,1,HAL_MAX_DELAY);
+  status = HAL_SPI_TransmitReceive(spi->hspi,txbuff+txoffset,rxbuff,1,HAL_MAX_DELAY);
   if (status != HAL_OK) {
     //do something
   }
