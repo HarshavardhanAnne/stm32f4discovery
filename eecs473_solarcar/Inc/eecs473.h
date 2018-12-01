@@ -13,50 +13,50 @@ SPI_HandleTypeDef hspi3;
 I2C_HandleTypeDef hi2c;
 CAN_HandleTypeDef hcan;
 ADC_HandleTypeDef hadc1;
-DMA_HandleTypeDef hdma;
+//DMA_HandleTypeDef hdma;
 
-uint32_t adcbuffer[ADC_BUFFER_LENGTH];
+//uint32_t adcbuffer[ADC_BUFFER_LENGTH];
 
 
 const uint16_t pins[16] = {GPIO_PIN_0,
-					 								 GPIO_PIN_1,
-					 								 GPIO_PIN_2,
-					 								 GPIO_PIN_3,
-					 								 GPIO_PIN_4,
-					 								 GPIO_PIN_5,
-					 								 GPIO_PIN_6,
-													 GPIO_PIN_7,
-													 GPIO_PIN_8,
-													 GPIO_PIN_9,
-													 GPIO_PIN_10,
-													 GPIO_PIN_11,
-													 GPIO_PIN_12,
-													 GPIO_PIN_13,
-													 GPIO_PIN_14,
-													 GPIO_PIN_15};
+                           GPIO_PIN_1,
+                           GPIO_PIN_2,
+                           GPIO_PIN_3,
+                           GPIO_PIN_4,
+                           GPIO_PIN_5,
+                           GPIO_PIN_6,
+                           GPIO_PIN_7,
+                           GPIO_PIN_8,
+                           GPIO_PIN_9,
+                           GPIO_PIN_10,
+                           GPIO_PIN_11,
+                           GPIO_PIN_12,
+                           GPIO_PIN_13,
+                           GPIO_PIN_14,
+                           GPIO_PIN_15};
 const uint32_t modes[] = {GPIO_MODE_INPUT,
-				  								GPIO_MODE_OUTPUT_PP,
-				  								GPIO_MODE_OUTPUT_OD,
-				  								GPIO_MODE_AF_PP,
-				  								GPIO_MODE_AF_OD,
-				  								GPIO_MODE_ANALOG,
-				  								GPIO_MODE_IT_RISING,
-				  								GPIO_MODE_IT_FALLING,
-				  								GPIO_MODE_IT_RISING_FALLING,
-				  								GPIO_MODE_EVT_RISING,
-				  								GPIO_MODE_EVT_FALLING,
-				  								GPIO_MODE_EVT_RISING_FALLING};
+                          GPIO_MODE_OUTPUT_PP,
+                          GPIO_MODE_OUTPUT_OD,
+                          GPIO_MODE_AF_PP,
+                          GPIO_MODE_AF_OD,
+                          GPIO_MODE_ANALOG,
+                          GPIO_MODE_IT_RISING,
+                          GPIO_MODE_IT_FALLING,
+                          GPIO_MODE_IT_RISING_FALLING,
+                          GPIO_MODE_EVT_RISING,
+                          GPIO_MODE_EVT_FALLING,
+                          GPIO_MODE_EVT_RISING_FALLING};
 const uint32_t speeds[] = {GPIO_SPEED_FREQ_LOW,
-				   								 GPIO_SPEED_FREQ_MEDIUM,
-				   								 GPIO_SPEED_FREQ_HIGH,
-				  								 GPIO_SPEED_FREQ_VERY_HIGH};
+                           GPIO_SPEED_FREQ_MEDIUM,
+                           GPIO_SPEED_FREQ_HIGH,
+                           GPIO_SPEED_FREQ_VERY_HIGH};
 const uint32_t pulls[] = {GPIO_NOPULL,
-													GPIO_PULLUP,
-				  								GPIO_PULLDOWN};
+                          GPIO_PULLUP,
+                          GPIO_PULLDOWN};
 
 struct pin_pair {
   GPIO_TypeDef* const gpiox;
-	const uint16_t pin;
+  const uint16_t pin;
 };
 
 struct eecsSPI {
@@ -68,10 +68,10 @@ struct eecsSPI {
   uint8_t drdy;
 };
 struct eecsI2C {
-	uint8_t address_accel[6];
-	uint8_t address_gyro[6];
-	uint8_t data_accel[6];
-	uint8_t data_gyro[6];
+  uint8_t address_accel[6];
+  uint8_t address_gyro[6];
+  uint8_t data_accel[6];
+  uint8_t data_gyro[6];
 };
 
 struct eecsADC {
@@ -127,6 +127,7 @@ void eecs_UART_Test(void const *);
 void eecs_I2C_Init(void);
 
 void eecs_SPI_Init(int);
+void eecs_SPI_ReadSetupReg(struct eecsSPI* , GPIO_TypeDef* , uint16_t );
 void eecs_SPI_Begin(struct eecsSPI* ,uint8_t );
 void eecs_SPI_Wait(struct eecsSPI* ,GPIO_TypeDef* ,uint16_t );
 void eecs_SPI_Read(struct eecsSPI* ,uint8_t ,uint8_t );
@@ -182,15 +183,15 @@ void eecs_UART_Init(void) {
   huart.Init.HwFlowCtl = UART_HWCONTROL_NONE;
   huart.Init.OverSampling = UART_OVERSAMPLING_16;
   if (HAL_UART_Init(&huart) != HAL_OK) {
-  	eecs_Error_Handler();
+    eecs_Error_Handler();
   }
 }
 
 void eecs_UART_Write(uint8_t* arr, uint8_t buffsize) {
-	HAL_StatusTypeDef status = HAL_UART_Transmit(&huart,arr,buffsize,HAL_MAX_DELAY);
-	if (status != HAL_OK) {
+  HAL_StatusTypeDef status = HAL_UART_Transmit(&huart,arr,buffsize,HAL_MAX_DELAY);
+  if (status != HAL_OK) {
 
-	}
+  }
 }
 
 void eecs_UART_Test(void const *argument) {
@@ -280,96 +281,8 @@ void eecs_SPI_Init(int spi_bus) {
   spiptr->csindex[3] = (uint8_t)((spi_bus==2) ? 3:7);
 */
   /*for (i = 0; i < 8; i++) {
-  	spiptr->rxbuffer[i] = 0b11111111;
+    spiptr->rxbuffer[i] = 0b11111111;
   }*/
-}
-
-void eecs_SPI_Wait(struct eecsSPI* spi,GPIO_TypeDef* gpiox,uint16_t pin) {
-  //uint8_t drdy = 0x80;
-  uint8_t rxbuff;
-  uint8_t txbuff[2] = {0x08,0x00};
-  uint8_t MAXRETRIES = 0;
-  spi->drdy = 0x80;
-
-  HAL_GPIO_WritePin(gpiox,pin,GPIO_PIN_RESET);
-  //HAL_Delay(1);
-
-  while (spi->drdy && (MAXRETRIES < 5)) {
-    if (HAL_SPI_TransmitReceive(spi->hspi,txbuff,&rxbuff,1,HAL_MAX_DELAY) != HAL_OK) {
-      //do something
-    }
-    if (HAL_SPI_TransmitReceive(spi->hspi,txbuff+1,&(spi->drdy),1,HAL_MAX_DELAY) != HAL_OK) {
-      //do something
-    }
-    spi->drdy &= 0x80;
-    MAXRETRIES++;
-  }
-  //HAL_Delay(1);
-  HAL_GPIO_WritePin(gpiox,pin,GPIO_PIN_SET);
-}
-
-void eecs_SPI_Read(struct eecsSPI* spi,uint8_t csPin,uint8_t channel) {
-  uint8_t txbuff[2] = {0x38,0x00};
-  txbuff[0] += channel;
-  uint8_t csidx = spi->csindex[csPin];
-  GPIO_TypeDef* temp_gpiox = (cs[csidx])->gpiox;
-  uint16_t temppin = cs[csidx]->pin;
-  uint8_t rxoffset = (4 * csPin + 2 * channel)*sizeof(uint8_t);
-  volatile HAL_StatusTypeDef status;
-
-  eecs_SPI_Wait(spi, temp_gpiox, temppin);
-  //osDelay(1);
-  //HAL_Delay(10);
-  spi->rxbuffer[rxoffset] = 0xCD;
-  spi->rxbuffer[rxoffset] = 0xAB;
-
-  HAL_GPIO_WritePin(temp_gpiox,temppin,GPIO_PIN_RESET);
-  //HAL_Delay(1);
-
-  status = HAL_SPI_TransmitReceive(spi->hspi,txbuff,spi->rxbuffer+rxoffset,1,HAL_MAX_DELAY);
-  if (status!=HAL_OK) {
-    //do something
-  }
-  status = HAL_SPI_TransmitReceive(spi->hspi,txbuff+1,spi->rxbuffer+rxoffset,1,HAL_MAX_DELAY);
-  if (status!=HAL_OK) {
-    //do something
-  }
-  status = HAL_SPI_TransmitReceive(spi->hspi,txbuff+1,spi->rxbuffer+rxoffset+1,1,HAL_MAX_DELAY);
-  if (status!=HAL_OK) {
-    //do something
-  }
-  //HAL_Delay(1);
-  HAL_GPIO_WritePin(temp_gpiox,temppin,GPIO_PIN_SET);
-
-
-
-  //HAL_Delay(1);
-
-  /*
-  while (drdy) {
-    MAXRETRIES++;
-    status = HAL_SPI_Transmit(&hspi3,txbuff+4,1,HAL_MAX_DELAY);
-    if (status != HAL_OK) {
-      //do something
-      temppin = 1;
-    }
-    status = HAL_SPI_Receive(&hspi3,&drdy,1,HAL_MAX_DELAY);
-    if (status != HAL_OK) {
-      //do something
-      temppin = 1;
-    }
-    drdy &= 0x80;
-  }
-  status = HAL_SPI_Transmit(&hspi3,txbuff+5,1,HAL_MAX_DELAY);
-  if (status != HAL_OK) {
-    //do something
-  }
-  status = HAL_SPI_Receive(&hspi3,spi->rxbuffer,2,HAL_MAX_DELAY);
-  if (status != HAL_OK) {
-    //do something
-  }
-  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_4,GPIO_PIN_SET);
-  */
 }
 
 void eecs_SPI_ReadSetupReg(struct eecsSPI* spi, GPIO_TypeDef* gpiox, uint16_t pin) {
@@ -395,19 +308,19 @@ void eecs_SPI_Begin(struct eecsSPI* spi,uint8_t csPin) {
 
   //txbuff[5] += channel;
   //uint8_t rxbuff[2];
-	//uint8_t rxoffset = (4 * csPin + 2 * channel)*sizeof(uint8_t);
+  //uint8_t rxoffset = (4 * csPin + 2 * channel)*sizeof(uint8_t);
   uint8_t txoffset = 0;
-	volatile HAL_StatusTypeDef status;
-	if (csPin < 0 || csPin > 3) {
-		//uart error msg
-		return;
-	}
+  volatile HAL_StatusTypeDef status;
+  if (csPin < 0 || csPin > 3) {
+    //uart error msg
+    return;
+  }
   uint8_t csidx = spi->csindex[csPin];
 
   GPIO_TypeDef* temp_gpiox = (cs[csidx])->gpiox;
   uint16_t pinnum = cs[csidx]->pin;
 
-	HAL_GPIO_WritePin(temp_gpiox,pinnum,GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(temp_gpiox,pinnum,GPIO_PIN_RESET);
   //HAL_Delay(1);
 
   status = HAL_SPI_TransmitReceive(spi->hspi,txbuff+txoffset,rxbuff,1,HAL_MAX_DELAY);
@@ -470,31 +383,128 @@ void eecs_SPI_Begin(struct eecsSPI* spi,uint8_t csPin) {
   }
 
 
-	HAL_Delay(1);
-	//osDelay(1);
-	status = HAL_SPI_TransmitReceive(&hspi3,spi->address+channel,spi->rxbuffer+rxoffset,1,HAL_MAX_DELAY);
-	if (status != HAL_OK) {
-		//do something
+  HAL_Delay(1);
+  //osDelay(1);
+  status = HAL_SPI_TransmitReceive(&hspi3,spi->address+channel,spi->rxbuffer+rxoffset,1,HAL_MAX_DELAY);
+  if (status != HAL_OK) {
+    //do something
     temppin = 1;
-	}
+  }
   HAL_Delay(1);
   HAL_GPIO_WritePin(temp_gpiox,pinnum,GPIO_PIN_SET);
 
   HAL_GPIO_WritePin(temp_gpiox,pinnum,GPIO_PIN_RESET);
-	status = HAL_SPI_TransmitReceive(&hspi3,spi->address+2,spi->rxbuffer+rxoffset,1,HAL_MAX_DELAY);
-	if (status != HAL_OK) {
-		//uart error msg
+  status = HAL_SPI_TransmitReceive(&hspi3,spi->address+2,spi->rxbuffer+rxoffset,1,HAL_MAX_DELAY);
+  if (status != HAL_OK) {
+    //uart error msg
     temppin = 1;
-	}
+  }
   HAL_Delay(1);
   /*HAL_GPIO_WritePin(temp_gpiox,pinnum,GPIO_PIN_SET);
   HAL_GPIO_WritePin(temp_gpiox,pinnum,GPIO_PIN_RESET);
   //status = HAL_SPI_TransmitReceive(&hspi3,spi->address+2,spi->rxbuffer+rxoffset+1,1,HAL_MAX_DELAY);
-	HAL_Delay(1);
-	//osDelay(1); //delay before pulling CS pin high
-	HAL_GPIO_WritePin(temp_gpiox,pinnum,GPIO_PIN_SET);
+  HAL_Delay(1);
+  //osDelay(1); //delay before pulling CS pin high
+  HAL_GPIO_WritePin(temp_gpiox,pinnum,GPIO_PIN_SET);
   //volatile uint16_t val = (rxbuff[0] << 8) + rxbuff[1];*/
-	return;
+  return;
+}
+
+
+void eecs_SPI_Wait(struct eecsSPI* spi,GPIO_TypeDef* gpiox,uint16_t pin) {
+  //uint8_t drdy = 0x80;
+  uint8_t rxbuff;
+  uint8_t txbuff[2] = {0x08,0x00};
+  uint8_t MAXRETRIES = 0;
+  spi->drdy = 0x80;
+
+  HAL_GPIO_WritePin(gpiox,pin,GPIO_PIN_RESET);
+  //HAL_Delay(1);
+
+  while (spi->drdy && (MAXRETRIES < 5)) {
+    if (HAL_SPI_TransmitReceive(spi->hspi,txbuff,&rxbuff,1,HAL_MAX_DELAY) != HAL_OK) {
+      //do something
+    }
+    if (HAL_SPI_TransmitReceive(spi->hspi,txbuff+1,&(spi->drdy),1,HAL_MAX_DELAY) != HAL_OK) {
+      //do something
+    }
+    spi->drdy &= 0x80;
+    MAXRETRIES++;
+  }
+  //HAL_Delay(1);
+  HAL_GPIO_WritePin(gpiox,pin,GPIO_PIN_SET);
+}
+
+void eecs_SPI_Read(struct eecsSPI* spi,uint8_t csPin,uint8_t channel) {
+  uint8_t txbuff[2] = {0x38,0x00};
+  uint8_t rxbuff[2];
+  uint16_t oldValue;
+  uint16_t newValue;
+  txbuff[0] += channel;
+  uint8_t csidx = spi->csindex[csPin];
+  GPIO_TypeDef* temp_gpiox = (cs[csidx])->gpiox;
+  uint16_t temppin = cs[csidx]->pin;
+  //uint8_t rxoffset = (4 * csPin + 2 * channel)*sizeof(uint8_t);
+  uint8_t rxoffset = (2 * csPin + channel)*sizeof(uint8_t);
+  volatile HAL_StatusTypeDef status;
+
+  eecs_SPI_Wait(spi, temp_gpiox, temppin);
+  //osDelay(1);
+  //HAL_Delay(10);
+  spi->rxbuffer[rxoffset] = 0xCD;
+  spi->rxbuffer[rxoffset] = 0xAB;
+
+  HAL_GPIO_WritePin(temp_gpiox,temppin,GPIO_PIN_RESET);
+  //HAL_Delay(1);
+
+  status = HAL_SPI_TransmitReceive(spi->hspi,txbuff,rxbuff,1,HAL_MAX_DELAY);
+  if (status!=HAL_OK) {
+    //do something
+  }
+  status = HAL_SPI_TransmitReceive(spi->hspi,txbuff+1,rxbuff+1,1,HAL_MAX_DELAY);
+  if (status!=HAL_OK) {
+    //do something
+  }
+  status = HAL_SPI_TransmitReceive(spi->hspi,txbuff+1,rxbuff,1,HAL_MAX_DELAY);
+  if (status!=HAL_OK) {
+    //do something
+  }
+  //HAL_Delay(1);
+  HAL_GPIO_WritePin(temp_gpiox,temppin,GPIO_PIN_SET);
+
+  oldValue = *(spi->candata+rxoffset);
+  newValue = (rxbuff[0] << 8) + rxbuff[1];
+  oldValue += (newValue - oldValue) / 500; //Tune N=500 for better sampling
+
+  *(spi->candata+rxoffset) = oldValue;
+
+  //HAL_Delay(1);
+
+  /*
+  while (drdy) {
+    MAXRETRIES++;
+    status = HAL_SPI_Transmit(&hspi3,txbuff+4,1,HAL_MAX_DELAY);
+    if (status != HAL_OK) {
+      //do something
+      temppin = 1;
+    }
+    status = HAL_SPI_Receive(&hspi3,&drdy,1,HAL_MAX_DELAY);
+    if (status != HAL_OK) {
+      //do something
+      temppin = 1;
+    }
+    drdy &= 0x80;
+  }
+  status = HAL_SPI_Transmit(&hspi3,txbuff+5,1,HAL_MAX_DELAY);
+  if (status != HAL_OK) {
+    //do something
+  }
+  status = HAL_SPI_Receive(&hspi3,spi->rxbuffer,2,HAL_MAX_DELAY);
+  if (status != HAL_OK) {
+    //do something
+  }
+  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_4,GPIO_PIN_SET);
+  */
 }
 
 void eecs_I2C_Init(void) {
@@ -513,7 +523,7 @@ void eecs_I2C_Init(void) {
   }
 }
 
-void eecs_ADC_Init(void) {
+/*void eecs_ADC_Init(void) {
   __ADC1_CLK_ENABLE();
 
   HAL_NVIC_SetPriority(ADC_IRQn, 0, 0);
@@ -614,7 +624,7 @@ void ADC_IRQHandler() {
 void eecs_ADC_Begin(void) {
   HAL_ADC_Start_DMA(&hadc1,adcbuffer,ADC_BUFFER_LENGTH);
 }
-
+*/
 void eecs_CAN_Init() {
   hcan.Instance = CAN1;
   hcan.Init.Prescaler = 2;
@@ -635,8 +645,8 @@ void eecs_CAN_Init() {
 }
 
 void eecs_Error_Handler() {
-	while (1) {
-		//eecs_GPIO_Toggle(GPIOD, GPIO_PIN_15);
-		HAL_Delay(1000);
-	}
+  while (1) {
+    //eecs_GPIO_Toggle(GPIOD, GPIO_PIN_15);
+    HAL_Delay(1000);
+  }
 }
