@@ -275,7 +275,7 @@ void canTest(void const *argument) {
     //osDelay(1); //1 kHz works for 8 bytes of data !THIS SOMETIMES FAILS
     //osDelay(4); //250 Hz , this works with 8 bytes
     //osDelay(25); //40Hz
-    osDelay(25);
+    osDelay(50);
     status = HAL_OK;
     //data_ptr = (data_sel) ? data : data2;
     //data_sel ^= 0b1;
@@ -486,7 +486,7 @@ int main(void)
   //i2cTaskHandle = osThreadCreate(osThread(i2cTask),NULL);
   //osThreadDef(adcTask, adcTest, osPriorityAboveNormal,1,128);
   //adcTaskHandle = osThreadCreate(osThread(adcTask),NULL);
-  osThreadDef(spiTask,spiTest,osPriorityAboveNormal,1,128);
+  osThreadDef(spiTask,spiTest,osPriorityHigh,1,128);
   spiTaskHandle = osThreadCreate(osThread(spiTask),NULL);
   osThreadDef(canTask, canTest, osPriorityAboveNormal, 1, 128);
   canTaskHandle = osThreadCreate(osThread(canTask),NULL);
