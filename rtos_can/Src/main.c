@@ -440,7 +440,12 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
+  volatile int i;
+  volatile int j;
 
+  for (i = 0; i < 10; i++) {
+    j = i;
+  }
   /* USER CODE END Init */
 
   /* Configure the system clock */
