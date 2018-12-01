@@ -52,16 +52,15 @@
 #include "cmsis_os.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "eecs473.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
-ADC_HandleTypeDef hadc1;
+CAN_HandleTypeDef hcan1;
 
-I2C_HandleTypeDef hi2c2;
+I2C_HandleTypeDef hi2c1;
 
-SPI_HandleTypeDef hspi2;
-SPI_HandleTypeDef hspi3;
+SPI_HandleTypeDef hspi1;
 
 UART_HandleTypeDef huart4;
 
@@ -69,76 +68,359 @@ osThreadId defaultTaskHandle;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
+osThreadId i2cTaskHandle;
+osThreadId uartTaskHandle;
+osThreadId canTaskHandle;
 osThreadId spiTaskHandle;
+osThreadId adcTaskHandle;
+ADC_HandleTypeDef g_AdcHandle;
+//osThreadId ledTaskHandle;
+#define MY_I2C_SPEED 400000
+#define I2C_ADDRESS_IMU (uint8_t)(0b1101000 << 1)
+#define RED_LED GPIO_PIN_14
+#define GREEN_LED GPIO_PIN_12
+#define BLUE_LED GPIO_PIN_15
+#define ORANGE_LED GPIO_PIN_13
+uint8_t i2c_rx_buff_accel[6];
+uint8_t i2c_tx_buff_accel[6];
+uint8_t i2c_tx_buff_gyro[6];
+uint8_t i2c_rx_buff_gyro[6];
+uint16_t i2c_accel[4];
+uint8_t spi_address[2] = {0b10000100,0b00000000};
+uint8_t spi_rx_buff[2];
+uint8_t max_data_addr[2] = {0b00111000,0b00000000};
+uint8_t max_rx_buff[2];
+uint8_t arr[9];
+volatile uint32_t g_ADCValue;
 
+//CANTX - PB9
+//CANRX - PB8
+//I2CSDA - PB7
+//I2CSCL - PB6
+//UARTtx - PA0
+//UARTrx - PA1
+//SPISCK - PA5
+//SPIMISO - PA6
+//SPIMOSI - PA7
+//SPICS - PA4 //This is NSS pin
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_I2C2_Init(void);
-static void MX_SPI3_Init(void);
 static void MX_UART4_Init(void);
-static void MX_ADC1_Init(void);
-static void MX_SPI2_Init(void);
+static void MX_SPI1_Init(void);
+static void MX_I2C1_Init(void);
+static void MX_CAN1_Init(void);
 void StartDefaultTask(void const * argument);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
-
+void write_i2c(void const *argument);
+void uart_debug(uint8_t* arr, uint8_t buffsize);
+void canTest(void const *argument);
+void uartTest(void const *argument);
+void ConfigureADC();
+void adcTest(void const *argument);
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
-void spiTest(void const* argument) {
-  uint8_t drdy = 0x80;
-  volatile uint16_t temppin;
-  uint8_t txbuff[6] = {0x20,0xA5,0x10,0x44,0x08,0x38};
-  uint8_t rxbuff[2];
-  volatile HAL_StatusTypeDef status;
+void writei2c(void const *argument) {
+  //HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_SET);
+  HAL_StatusTypeDef status = HAL_OK;
+  uint32_t prevWakeTime;
+  uint32_t nextWakeTime;
+  uint8_t addr = 59;
+  int i;
+  for (i = 0; i < 6; i++) {
+    i2c_tx_buff_accel[i] = addr++;
+    //i2c_rx_buff_accel[i] = i;
+  }
+  //i2c_rx_buff_accel[0] = 0;
+  //i2c_rx_buff_accel[1] = 0;
+  //ACCEL_XOUT_H , ACCEL_XOUT_L
   while (1) {
-    osDelay(200);
-    HAL_GPIO_WritePin(GPIOA,GPIO_PIN_4,GPIO_PIN_RESET);
-    status = HAL_SPI_Transmit(&hspi3,txbuff,1,HAL_MAX_DELAY);
-    if (status != HAL_OK) {
-      //do something
-    }
-    status = HAL_SPI_Transmit(&hspi3,txbuff+1,1,HAL_MAX_DELAY);
-    if (status != HAL_OK) {
-      //do something
-    }
-    status = HAL_SPI_Transmit(&hspi3,txbuff+2,1,HAL_MAX_DELAY);
-    if (status != HAL_OK) {
-      //do something
-    }
-    status = HAL_SPI_Transmit(&hspi3,txbuff+3,1,HAL_MAX_DELAY);
-    if (status != HAL_OK) {
-      //do something
-    }
+    //prevWakeTime = osKernelSysTick();
+    //nextWakeTime += (1000 * osKernelSysTick())
+    //osDelayUntil(&prevWakeTime,5000);
+    osDelay(20);
+    status = HAL_OK;
+    for (i = 0; i < 6; i++) {
+      status = HAL_I2C_Master_Transmit(&hi2c1,I2C_ADDRESS_IMU,i2c_tx_buff_accel+i,sizeof(uint8_t),10);
 
-    while (drdy) {
-      status = HAL_SPI_Transmit(&hspi3,txbuff+4,1,HAL_MAX_DELAY);
       if (status != HAL_OK) {
-        //do something
+        HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
       }
-      status = HAL_SPI_Receive(&hspi3,&drdy,1,HAL_MAX_DELAY);
-      if (status != HAL_OK) {
-        //do something
+      else {
+        //HAL_GPIO_WritePin(GPIOD,GPIO_PIN_15, GPIO_PIN_RESET);
       }
-      drdy &= 0x80;
+      status = HAL_I2C_Master_Receive(&hi2c1,I2C_ADDRESS_IMU,i2c_rx_buff_accel+i,sizeof(uint8_t),10);
     }
-    HAL_GPIO_WritePin(GPIOA,GPIO_PIN_4,GPIO_PIN_SET);
-    HAL_Delay(1);
-    HAL_GPIO_WritePin(GPIOA,GPIO_PIN_4,GPIO_PIN_RESET);
-    status = HAL_SPI_Transmit(&hspi3,txbuff+5,1,HAL_MAX_DELAY);
-    if (status != HAL_OK) {
-      //do something
-    }
-    status = HAL_SPI_Receive(&hspi3,rxbuff,2,HAL_MAX_DELAY);
-    if (status != HAL_OK) {
-      //do something
-    }
+    //itoa
+    //debug();
+    i2c_accel[0] = 0;
+    i2c_accel[1] = (i2c_rx_buff_accel[0] << 8) + i2c_rx_buff_accel[1];
+    i2c_accel[2] = (i2c_rx_buff_accel[2] << 8) + i2c_rx_buff_accel[3];
+    i2c_accel[3] = (i2c_rx_buff_accel[4] << 8) + i2c_rx_buff_accel[5];
+    //uart_debug(i2c_accel,sizeof(i2c_accel));
+    //HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
+    //HAL_GPIO_TogglePin(GPIOD,GPIO_PIN_12); //GPIOD12 is green
   }
 }
+
+void uartTest(void const *argument) {
+  int i = 0;
+  for (i = 0; i < 9; i++) {
+    arr[i] = i;
+  }
+  while (1) {
+    HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
+    //HAL_UART_Transmit(&huart4,ptr,size_,HAL_MAX_DELAY);
+    uart_debug(arr, sizeof(arr));
+    osDelay(100);
+  }
+}
+
+void spiTest(void const *argument) {
+  volatile uint16_t val1;
+  volatile uint16_t val2;
+  volatile uint16_t val3;
+  volatile uint16_t val4;
+
+  eecs_SPI_Init(2);
+  eecs_SPI_Init(3);
+
+  //debug led
+  GPIO_InitTypeDef GPIO_InitStruct;
+  GPIO_InitStruct.Pin = GPIO_PIN_4;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  eecs_SPI_Begin(&spiA,0);
+  eecs_SPI_Begin(&spiA,1);
+
+  while (1) {
+    osDelay(10);
+    eecs_SPI_Read(&spiA,0,0);
+    eecs_SPI_Read(&spiA,1,0);
+    //osDelay(1);
+    eecs_SPI_Read(&spiA,0,1);
+    eecs_SPI_Read(&spiA,1,1);
+    /*spiA.candata[0] = (spiA.rxbuffer[0] << 8) + spiA.rxbuffer[1];
+    spiA.candata[1] = (spiA.rxbuffer[2] << 8) + spiA.rxbuffer[3];
+    spiA.candata[2] = (spiA.rxbuffer[4] << 8) + spiA.rxbuffer[5];
+    spiA.candata[3] = (spiA.rxbuffer[6] << 8) + spiA.rxbuffer[7];
+
+    spiB.candata[0] = (spiB.rxbuffer[0] << 8) + spiB.rxbuffer[1];
+    spiB.candata[1] = (spiB.rxbuffer[2] << 8) + spiB.rxbuffer[3];
+    spiB.candata[2] = (spiB.rxbuffer[4] << 8) + spiB.rxbuffer[5];
+    spiB.candata[3] = (spiB.rxbuffer[6] << 8) + spiB.rxbuffer[7];
+*/
+    HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_4);
+    //HAL_GPIO_WritePin(GPIOA,GPIO_PIN_3, GPIO_PIN_RESET);
+  }
+  /*HAL_StatusTypeDef status;
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
+  while (1) {
+    osDelay(10);
+    status = HAL_OK;
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4,GPIO_PIN_RESET);
+    HAL_Delay(1);
+    //status = HAL_SPI_Transmit(&hspi1, spi_address,1,HAL_MAX_DELAY);
+    //status = HAL_SPI_Receive(&hspi1, spi_rx_buff,1,HAL_MAX_DELAY);
+    //status = HAL_SPI_Transmit(&hspi1, spi_address+1,1,HAL_MAX_DELAY);
+    //status = HAL_SPI_Receive(&hspi1, spi_rx_buff+1,1,HAL_MAX_DELAY);
+    status = HAL_SPI_TransmitReceive(&hspi1,max_data_addr,max_rx_buff,1,HAL_MAX_DELAY);
+    //HAL_Delay(1);
+    if (status != HAL_OK) {
+      //HAL_GPIO_WritePin(GPIOD, GREEN_LED, GPIO_PIN_SET);
+    }
+    else {
+      //HAL_GPIO_WritePin(GPIOD, GREEN_LED, GPIO_PIN_RESET);
+    }
+
+    status = HAL_SPI_TransmitReceive(&hspi1,max_data_addr+1,max_rx_buff+1,1,HAL_MAX_DELAY);
+    HAL_Delay(1);
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
+    //spi_rx_buff[0] = 'A';
+    //spi_rx_buff[1] = 'F';
+    //uart_debug(max_rx_buff, sizeof(max_rx_buff));
+  }*/
+}
+
+//CANTX - PB9
+//CANRX - PB8
+void canTest(void const *argument) {
+  uint8_t* data_ptr;
+  data_ptr = spiA.rxbuffer;
+  HAL_CAN_Start(&hcan1);
+  HAL_CAN_WakeUp(&hcan1);
+  uint8_t data[8] = {0,0,1,0,2,0,3,0};
+  uint8_t data2[8] = {0xAA,0xAA,0xAA,0xAA,0xAA,0xAA,0xAA,0xAA};
+  uint8_t data_sel = 0;
+  CAN_TxHeaderTypeDef tx_buffer;
+  CAN_TxHeaderTypeDef* tx_buffer_ptr = &tx_buffer;
+  tx_buffer.StdId = 0x6FB;
+  tx_buffer.ExtId = 0xF00;
+  tx_buffer.IDE = CAN_ID_STD;
+  tx_buffer.RTR = CAN_RTR_DATA;
+  tx_buffer.DLC = sizeof(spiA.rxbuffer);
+  HAL_StatusTypeDef status = HAL_OK;
+
+  //data_ptr = &i2c_accel;//spiA->rxbuffer;//&i2c_accel;
+  while (1) {
+    //osDelay(50); //20Hz 
+    //osDelay(1); //1 kHz works for 8 bytes of data !THIS SOMETIMES FAILS
+    //osDelay(4); //250 Hz , this works with 8 bytes
+    //osDelay(25); //40Hz
+    osDelay(50);
+    status = HAL_OK;
+    //data_ptr = (data_sel) ? data : data2;
+    //data_sel ^= 0b1;
+    while (HAL_CAN_IsTxMessagePending(&hcan1, (uint32_t)CAN_TX_MAILBOX0)) {
+      //HAL_GPIO_WritePin(GPIOD, ORANGE_LED, GPIO_PIN_SET);
+      //osDelay(100);
+      //HAL_GPIO_WritePin(GPIOD, ORANGE_LED, GPIO_PIN_RESET);
+    }
+    status = HAL_CAN_AddTxMessage(&hcan1, tx_buffer_ptr, data_ptr, (uint32_t *)CAN_TX_MAILBOX0);
+
+    if (status == HAL_OK) {
+      //HAL_GPIO_WritePin(GPIOD, GREEN_LED, GPIO_PIN_SET);
+    }
+    else {
+      //HAL_GPIO_WritePin(GPIOD, GREEN_LED, GPIO_PIN_RESET);
+      //HAL_GPIO_TogglePin(GPIOD, RED_LED);
+      //unsigned char temparr[] = {"NOT WORKING"};
+      //uart_debug(temparr, sizeof(temparr));
+    }
+
+  }
+
+}
+
+void uart_debug(uint8_t* arr, uint8_t buffsize) {
+  HAL_StatusTypeDef status = HAL_OK;
+  
+  status = HAL_UART_Transmit(&huart4, arr, buffsize, HAL_MAX_DELAY);
+  if (status != HAL_OK) {
+    //HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
+  }
+  else {
+    HAL_GPIO_TogglePin(GPIOD,GPIO_PIN_15);
+    //HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
+  }
+}
+
+void Leds(void const *argument) {
+
+  /*GPIO_InitTypeDef GPIO_InitStruct;
+
+  __HAL_RCC_GPIOD_CLK_ENABLE();
+  //HAL_GPIO_WritePin(CS_I2C_SPI_GPIO_Port, CS_I2C_SPI_Pin, GPIO_PIN_RESET);
+
+  //Configure GPIO pin Output Level 
+  //HAL_GPIO_WritePin(OTG_FS_PowerSwitchOn_GPIO_Port, OTG_FS_PowerSwitchOn_Pin, GPIO_PIN_SET);
+
+  //Configure GPIO pin Output Level
+  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15|GPIO_PIN_14|GPIO_PIN_13|GPIO_PIN_12, GPIO_PIN_RESET);
+
+  GPIO_InitStruct.Pin = GPIO_PIN_15|GPIO_PIN_14|GPIO_PIN_13|GPIO_PIN_12;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);*/
+  uint32_t prevWakeTime;
+  while (1) {
+    //HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_15|GPIO_PIN_14|GPIO_PIN_13|GPIO_PIN_12);
+    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
+    osDelay(100);
+    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
+    osDelay(100);
+    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);
+    osDelay(100);
+    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
+    osDelay(100);
+    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_SET);
+    osDelay(100);
+    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_RESET);
+    osDelay(100);
+    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET);
+    osDelay(100);
+    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_RESET);
+
+    prevWakeTime = osKernelSysTick();
+    osDelayUntil(&prevWakeTime, 50);
+  }
+}
+void ConfigureADC() {
+    GPIO_InitTypeDef gpioInit;
+    __ADC1_CLK_ENABLE();
+ 
+    gpioInit.Pin = GPIO_PIN_4;
+    gpioInit.Mode = GPIO_MODE_ANALOG;
+    gpioInit.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(GPIOC, &gpioInit);
+ 
+    HAL_NVIC_SetPriority(ADC_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(ADC_IRQn);
+ 
+    ADC_ChannelConfTypeDef adcChannel;
+ 
+    g_AdcHandle.Instance = ADC1;
+ 
+    g_AdcHandle.Init.ClockPrescaler = ADC_CLOCKPRESCALER_PCLK_DIV2;
+    g_AdcHandle.Init.Resolution = ADC_RESOLUTION_12B;
+    g_AdcHandle.Init.ScanConvMode = DISABLE;
+    g_AdcHandle.Init.ContinuousConvMode = ENABLE;
+    g_AdcHandle.Init.DiscontinuousConvMode = DISABLE;
+    g_AdcHandle.Init.NbrOfDiscConversion = 0;
+    g_AdcHandle.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+    g_AdcHandle.Init.ExternalTrigConv = ADC_EXTERNALTRIGCONV_T1_CC1;
+    g_AdcHandle.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+    g_AdcHandle.Init.NbrOfConversion = 1;
+    g_AdcHandle.Init.DMAContinuousRequests = ENABLE;
+    g_AdcHandle.Init.EOCSelection = DISABLE;
+ 
+    HAL_ADC_Init(&g_AdcHandle);
+ 
+    adcChannel.Channel = ADC_CHANNEL_11;
+    adcChannel.Rank = 1;
+    adcChannel.SamplingTime = ADC_SAMPLETIME_480CYCLES;
+    adcChannel.Offset = 0;
+ 
+    if (HAL_ADC_ConfigChannel(&g_AdcHandle, &adcChannel) != HAL_OK)
+    {
+        /*while (1) {
+          //HAL_GPIO_TogglePin(GPIOD,BLUE_LED);
+          //HAL_Delay(100);
+        }*/
+    }
+}
+
+void adcTest(void const *argument) {
+/*  ConfigureADC();
+  HAL_ADC_Start(&g_AdcHandle);
+  int g_MeasurementNumber;
+  while (1) {
+    osDelay(5);
+    if (HAL_ADC_PollForConversion(&g_AdcHandle,1000000) == HAL_OK) {
+      g_ADCValue = HAL_ADC_GetValue(&g_AdcHandle);
+      g_MeasurementNumber++;
+    }
+  }*/
+  //volatile int temp;
+  eecs_ADC_Init();
+  eecs_ADC_Begin();
+
+  while (1) {
+    osDelay(100);
+    HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_4);
+  }
+
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -169,12 +451,12 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
-  MX_GPIO_Init();
-  MX_I2C2_Init();
-  MX_SPI3_Init();
-  MX_UART4_Init();
-  MX_ADC1_Init();
-  MX_SPI2_Init();
+  eecs_GPIO_Clock_Init();
+  //MX_GPIO_Init();
+  //MX_UART4_Init();
+  //MX_SPI1_Init();
+  MX_I2C1_Init();
+  MX_CAN1_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -195,10 +477,24 @@ int main(void)
   /* definition and creation of defaultTask */
   osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
-  osThreadDef(spiTask,spiTest,osPriorityNormal,1,128);
-  spiTaskHandle = osThreadCreate(osThread(spiTask),NULL);
+
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
+  //osThreadDef(uartTask, uartTest, osPriorityAboveNormal, 1, 128);
+  //uartTaskHandle = osThreadCreate(osThread(uartTask), NULL);
+  //osThreadDef(i2cTask, writei2c, osPriorityAboveNormal,1,256);
+  //i2cTaskHandle = osThreadCreate(osThread(i2cTask),NULL);
+  //osThreadDef(adcTask, adcTest, osPriorityAboveNormal,1,128);
+  //adcTaskHandle = osThreadCreate(osThread(adcTask),NULL);
+  osThreadDef(spiTask,spiTest,osPriorityHigh,1,128);
+  spiTaskHandle = osThreadCreate(osThread(spiTask),NULL);
+  osThreadDef(canTask, canTest, osPriorityAboveNormal, 1, 128);
+  canTaskHandle = osThreadCreate(osThread(canTask),NULL);
+
+  
+  //osThreadDef(ledTask, Leds, osPriorityAboveNormal, 1, 128);
+  //ledTaskHandle = osThreadCreate(osThread(ledTask),NULL);
+
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_QUEUES */
@@ -276,111 +572,80 @@ void SystemClock_Config(void)
 
   /* SysTick_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(SysTick_IRQn, 15, 0);
+
+
+
+ /* RCC_PeriphCLKInitTypeDef periphClockConfig;
+  HAL_RCCEx_GetPeriphCLKConfig(&periphClockConfig);
+  periphClockConfig.Adc12ClockSelection = RCC_ADC12PLLCLK_DIV1;
+  HAL_RCCEx_PeriphCLKConfig(&periphClockConfig);*/
 }
 
-/* ADC1 init function */
-static void MX_ADC1_Init(void)
+/* CAN1 init function */
+static void MX_CAN1_Init(void)
 {
 
-  ADC_ChannelConfTypeDef sConfig;
-
-    /**Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
-    */
-  hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
-  hadc1.Init.Resolution = ADC_RESOLUTION_12B;
-  hadc1.Init.ScanConvMode = DISABLE;
-  hadc1.Init.ContinuousConvMode = DISABLE;
-  hadc1.Init.DiscontinuousConvMode = DISABLE;
-  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
-  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
-  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.NbrOfConversion = 1;
-  hadc1.Init.DMAContinuousRequests = DISABLE;
-  hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
-  if (HAL_ADC_Init(&hadc1) != HAL_OK)
-  {
-    _Error_Handler(__FILE__, __LINE__);
-  }
-
-    /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
-    */
-  sConfig.Channel = ADC_CHANNEL_8;
-  sConfig.Rank = 1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
-  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  hcan1.Instance = CAN1;
+  hcan1.Init.Prescaler = 2;
+  hcan1.Init.Mode = CAN_MODE_NORMAL;
+  hcan1.Init.SyncJumpWidth = CAN_SJW_4TQ;
+  hcan1.Init.TimeSeg1 = CAN_BS1_9TQ;
+  hcan1.Init.TimeSeg2 = CAN_BS2_6TQ;
+  hcan1.Init.TimeTriggeredMode = DISABLE;
+  hcan1.Init.AutoBusOff = ENABLE;
+  hcan1.Init.AutoWakeUp = DISABLE;
+  hcan1.Init.AutoRetransmission = DISABLE;
+  hcan1.Init.ReceiveFifoLocked = ENABLE;
+  hcan1.Init.TransmitFifoPriority = ENABLE;
+  if (HAL_CAN_Init(&hcan1) != HAL_OK)
   {
     _Error_Handler(__FILE__, __LINE__);
   }
 
 }
 
-/* I2C2 init function */
-static void MX_I2C2_Init(void)
+/* I2C1 init function */
+static void MX_I2C1_Init(void)
 {
 
-  hi2c2.Instance = I2C2;
-  hi2c2.Init.ClockSpeed = 100000;
-  hi2c2.Init.DutyCycle = I2C_DUTYCYCLE_2;
-  hi2c2.Init.OwnAddress1 = 0;
-  hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
-  hi2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
-  hi2c2.Init.OwnAddress2 = 0;
-  hi2c2.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
-  hi2c2.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
-  if (HAL_I2C_Init(&hi2c2) != HAL_OK)
+  hi2c1.Instance = I2C2;
+  hi2c1.Init.ClockSpeed = 100000;
+  hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
+  hi2c1.Init.OwnAddress1 = 0;
+  hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+  hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+  hi2c1.Init.OwnAddress2 = 0;
+  hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+  hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+  if (HAL_I2C_Init(&hi2c1) != HAL_OK)
   {
     _Error_Handler(__FILE__, __LINE__);
   }
 
 }
 
-/* SPI2 init function */
-static void MX_SPI2_Init(void)
+/* SPI1 init function */
+static void MX_SPI1_Init(void)
 {
 
-  /* SPI2 parameter configuration*/
-  hspi2.Instance = SPI2;
-  hspi2.Init.Mode = SPI_MODE_MASTER;
-  hspi2.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi2.Init.DataSize = SPI_DATASIZE_8BIT;
-  hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
-  hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
-  hspi2.Init.NSS = SPI_NSS_SOFT;
-  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
-  hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
-  hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
-  hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
-  hspi2.Init.CRCPolynomial = 10;
-  if (HAL_SPI_Init(&hspi2) != HAL_OK)
+  /* SPI1 parameter configuration*/
+  hspi1.Instance = SPI1;
+  hspi1.Init.Mode = SPI_MODE_MASTER;
+  hspi1.Init.Direction = SPI_DIRECTION_2LINES;
+  hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
+  hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
+  hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
+  hspi1.Init.NSS = SPI_NSS_SOFT;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
+  hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
+  hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+  hspi1.Init.CRCPolynomial = 10;
+  if (HAL_SPI_Init(&hspi1) != HAL_OK)
   {
     _Error_Handler(__FILE__, __LINE__);
   }
-
-}
-
-/* SPI3 init function */
-static void MX_SPI3_Init(void)
-{
-
-  /* SPI3 parameter configuration*/
-  hspi3.Instance = SPI3;
-  hspi3.Init.Mode = SPI_MODE_MASTER;
-  hspi3.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi3.Init.DataSize = SPI_DATASIZE_8BIT;
-  hspi3.Init.CLKPolarity = SPI_POLARITY_LOW;
-  hspi3.Init.CLKPhase = SPI_PHASE_1EDGE;
-  hspi3.Init.NSS = SPI_NSS_SOFT;
-  hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
-  hspi3.Init.FirstBit = SPI_FIRSTBIT_MSB;
-  hspi3.Init.TIMode = SPI_TIMODE_DISABLE;
-  hspi3.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
-  hspi3.Init.CRCPolynomial = 10;
-  if (HAL_SPI_Init(&hspi3) != HAL_OK)
-  {
-    _Error_Handler(__FILE__, __LINE__);
-  }
-
+  
 }
 
 /* UART4 init function */
@@ -388,7 +653,7 @@ static void MX_UART4_Init(void)
 {
 
   huart4.Instance = UART4;
-  huart4.Init.BaudRate = 115200;
+  huart4.Init.BaudRate = 57600;
   huart4.Init.WordLength = UART_WORDLENGTH_8B;
   huart4.Init.StopBits = UART_STOPBITS_1;
   huart4.Init.Parity = UART_PARITY_NONE;
@@ -416,29 +681,33 @@ static void MX_GPIO_Init(void)
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOA_CLK_ENABLE();
-  __HAL_RCC_GPIOC_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOC_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_RESET);
+  /*Configure GPIO pins : PD12 PD13 PD14 PD15 */
+  GPIO_InitStruct.Pin = GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PA4 */
+
+  GPIO_InitStruct.Pin = GPIO_PIN_8 | GPIO_PIN_9;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
   GPIO_InitStruct.Pin = GPIO_PIN_4;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_4,GPIO_PIN_SET);
-
-  /*Configure GPIO pin : PB8 */
-  GPIO_InitStruct.Pin = GPIO_PIN_8;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
 
 }
 
@@ -496,8 +765,10 @@ void _Error_Handler(char *file, int line)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
+  volatile int i;
   while(1)
   {
+    HAL_GPIO_WritePin(GPIOD, BLUE_LED, GPIO_PIN_SET);
   }
   /* USER CODE END Error_Handler_Debug */
 }
