@@ -75,7 +75,9 @@ osThreadId spiTaskHandle;
 osThreadId adcTaskHandle;
 ADC_HandleTypeDef g_AdcHandle;
 osSemaphoreId spiSemaphore;
+osSemaphoreId spiSemaphore2;
 osSemaphoreDef (spiSemaphore);
+osSemaphoreDef (spiSemaphore2);
 
 //osThreadId ledTaskHandle;
 #define MY_I2C_SPEED 400000
@@ -205,7 +207,7 @@ void spiTest(void const *argument) {
   eecs_SPI_Begin(&spiA,1);
 
   while (1) {
-    osDelay(1);
+    osDelay(5);
     osSemaphoreWait(spiSemaphore,osWaitForever);
     HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,GPIO_PIN_SET);
     //spiA.candata[0] = 0;
@@ -217,6 +219,13 @@ void spiTest(void const *argument) {
     //osDelay(1);
     eecs_SPI_Read(&spiA,0,1);
     eecs_SPI_Read(&spiA,1,1);
+    osSemaphoreRelease(spiSemaphore);
+    /*osSemaphoreWait(spiSemaphore2,osWaitForever);
+    eecs_SPI_Read(&spiA,2,0);
+    eecs_SPI_Read(&spiA,2,1);
+    eecs_SPI_Read(&spiA,3,0);
+    eecs_SPI_Read(&spiA,3,1);
+    osSemaphoreRelease(spiSemaphore2);*/
     /*spiA.candata[0] = (spiA.rxbuffer[0] << 8) + spiA.rxbuffer[1];
     spiA.candata[1] = (spiA.rxbuffer[2] << 8) + spiA.rxbuffer[3];
     spiA.candata[2] = (spiA.rxbuffer[4] << 8) + spiA.rxbuffer[5];
@@ -228,7 +237,6 @@ void spiTest(void const *argument) {
     spiB.candata[3] = (spiB.rxbuffer[6] << 8) + spiB.rxbuffer[7];
 */
     HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,GPIO_PIN_RESET);
-    osSemaphoreRelease(spiSemaphore);
 
     //HAL_GPIO_WritePin(GPIOA,GPIO_PIN_3, GPIO_PIN_RESET);
   }
@@ -290,16 +298,27 @@ void canTest(void const *argument) {
     status = HAL_OK;
     //data_ptr = (data_sel) ? data : data2;
     //data_sel ^= 0b1;
-    while (HAL_CAN_IsTxMessagePending(&hcan1, (uint32_t)CAN_TX_MAILBOX0)) {
+    /*while (HAL_CAN_IsTxMessagePending(&hcan1, (uint32_t)CAN_TX_MAILBOX0)) {
       //HAL_GPIO_WritePin(GPIOD, ORANGE_LED, GPIO_PIN_SET);
       //osDelay(100);
       //HAL_GPIO_WritePin(GPIOD, ORANGE_LED, GPIO_PIN_RESET);
+    }*/
+    if (!HAL_CAN_IsTxMessagePending(&hcan1,(uint32_t)CAN_TX_MAILBOX0)) {
+      data_ptr = spiA.candata;
+      tx_buffer.StdId = 0x6F7;
+      tx_buffer.DLC = sizeof(spiA.candata);
+      osSemaphoreWait(spiSemaphore,osWaitForever);
+      status = HAL_CAN_AddTxMessage(&hcan1, tx_buffer_ptr, data_ptr, (uint32_t *)CAN_TX_MAILBOX0);
+      osSemaphoreRelease(spiSemaphore);
     }
-    data_ptr = spiA.candata;
-    tx_buffer.DLC = sizeof(spiA.candata);
-    osSemaphoreWait(spiSemaphore,osWaitForever);
-    status = HAL_CAN_AddTxMessage(&hcan1, tx_buffer_ptr, data_ptr, (uint32_t *)CAN_TX_MAILBOX0);
-    osSemaphoreRelease(spiSemaphore);
+    /*if (!HAL_CAN_IsTxMessagePending(&hcan1,(uint32_t)CAN_TX_MAILBOX1)) {
+      data_ptr = spiA.candata2;
+      tx_buffer.StdId = 0x6F8;
+      tx_buffer.DLC = sizeof(spiA.candata2);
+      osSemaphoreWait(spiSemaphore2,osWaitForever);
+      status = HAL_CAN_AddTxMessage(&hcan1,tx_buffer_ptr,data_ptr,(uint32_t *)CAN_TX_MAILBOX1);
+      osSemaphoreRelease(spiSemaphore2);
+    }*/
     if (status == HAL_OK) {
       //HAL_GPIO_WritePin(GPIOD, GREEN_LED, GPIO_PIN_SET);
     }
@@ -446,6 +465,7 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
   spiSemaphore = osSemaphoreCreate(osSemaphore(spiSemaphore),1);
+  spiSemaphore2 = osSemaphoreCreate(osSemaphore(spiSemaphore2),1);
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/

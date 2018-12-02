@@ -16,7 +16,8 @@ ADC_HandleTypeDef hadc1;
 //DMA_HandleTypeDef hdma;
 
 //uint32_t adcbuffer[ADC_BUFFER_LENGTH];
-
+uint16_t spiBuffer[500] = {0};
+uint16_t spiBufferCount = 0;
 
 const uint16_t pins[16] = {GPIO_PIN_0,
                            GPIO_PIN_1,
@@ -65,6 +66,7 @@ struct eecsSPI {
   uint8_t rxbuffer[8];
   uint8_t csindex[4];
   uint16_t candata[4];
+  uint16_t candata2[4];
   uint8_t drdy;
 };
 struct eecsI2C {
@@ -131,6 +133,7 @@ void eecs_SPI_ReadSetupReg(struct eecsSPI* , GPIO_TypeDef* , uint16_t );
 void eecs_SPI_Begin(struct eecsSPI* ,uint8_t );
 void eecs_SPI_Wait(struct eecsSPI* ,GPIO_TypeDef* ,uint16_t );
 void eecs_SPI_Read(struct eecsSPI* ,uint8_t ,uint8_t );
+uint16_t average(uint16_t data[]);
 
 
 void eecs_ADC_Init();
@@ -436,6 +439,8 @@ void eecs_SPI_Wait(struct eecsSPI* spi,GPIO_TypeDef* gpiox,uint16_t pin) {
 }
 
 void eecs_SPI_Read(struct eecsSPI* spi,uint8_t csPin,uint8_t channel) {
+  uint16_t i = 0;
+  uint16_t sum = 0;
   uint8_t txbuff[2] = {0x38,0x00};
   uint8_t rxbuff[2];
   uint16_t oldValue;
@@ -445,7 +450,7 @@ void eecs_SPI_Read(struct eecsSPI* spi,uint8_t csPin,uint8_t channel) {
   GPIO_TypeDef* temp_gpiox = (cs[csidx])->gpiox;
   uint16_t temppin = cs[csidx]->pin;
   //uint8_t rxoffset = (4 * csPin + 2 * channel)*sizeof(uint8_t);
-  uint8_t rxoffset = (2 * csPin + channel)*sizeof(uint8_t);
+  uint8_t rxoffset = (2 * (csPin%2) + channel)*sizeof(uint8_t);
   volatile HAL_StatusTypeDef status;
 
   eecs_SPI_Wait(spi, temp_gpiox, temppin);
@@ -472,39 +477,49 @@ void eecs_SPI_Read(struct eecsSPI* spi,uint8_t csPin,uint8_t channel) {
   //HAL_Delay(1);
   HAL_GPIO_WritePin(temp_gpiox,temppin,GPIO_PIN_SET);
 
-  oldValue = *(spi->candata+rxoffset);
+  //FEEDBACK FILTER
   newValue = (rxbuff[0] << 8) + rxbuff[1];
-  oldValue += (newValue - oldValue) / 500; //Tune N=500 for better sampling
+  oldValue = *(spi->candata+rxoffset);
+  oldValue += (newValue - oldValue) / 200; //Tune N=500 for better sampling
 
   *(spi->candata+rxoffset) = oldValue;
+/*  else {
+    oldValue = *(spi->candata2+rxoffset);
+    oldValue += (newValue - oldValue) / 200;
+    *(spi->candata+rxoffset) = oldValue;
+  }*/
+  /*newValue = (rxbuff[0] << 8) + rxbuff[1];
 
-  //HAL_Delay(1);
+  //spiBuffer[500]
+  if (rxoffset == 0) {
+    int i = 0;
 
-  /*
-  while (drdy) {
-    MAXRETRIES++;
-    status = HAL_SPI_Transmit(&hspi3,txbuff+4,1,HAL_MAX_DELAY);
-    if (status != HAL_OK) {
-      //do something
-      temppin = 1;
+    for (i = 499; i > 0; --i) {
+      spiBuffer[i] = spiBuffer[i - 1];
     }
-    status = HAL_SPI_Receive(&hspi3,&drdy,1,HAL_MAX_DELAY);
-    if (status != HAL_OK) {
-      //do something
-      temppin = 1;
-    }
-    drdy &= 0x80;
+
+    spiBuffer[0] = newValue;
+    uint16_t  avg_result = average(spiBuffer);
+    *(spi->candata+rxoffset) = avg_result;
   }
-  status = HAL_SPI_Transmit(&hspi3,txbuff+5,1,HAL_MAX_DELAY);
-  if (status != HAL_OK) {
-    //do something
+  else {
+    *(spi->candata+rxoffset) = newValue;
+  }*/
+}
+
+uint16_t average(uint16_t data[])
+{
+  uint32_t sum = 0;
+  uint16_t avg = 0;
+
+  uint16_t i = 0;
+  for (i = 0; i < 500; ++i) {
+    sum += data[i];
   }
-  status = HAL_SPI_Receive(&hspi3,spi->rxbuffer,2,HAL_MAX_DELAY);
-  if (status != HAL_OK) {
-    //do something
-  }
-  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_4,GPIO_PIN_SET);
-  */
+
+  avg = sum / 500;
+
+  return avg;
 }
 
 void eecs_I2C_Init(void) {
