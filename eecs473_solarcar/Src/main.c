@@ -76,8 +76,23 @@ osThreadId adcTaskHandle;
 ADC_HandleTypeDef g_AdcHandle;
 osSemaphoreId spiSemaphore;
 osSemaphoreId spiSemaphore2;
+osSemaphoreId adcSemaphore;
+osSemaphoreId i2cSemaphore;
 osSemaphoreDef (spiSemaphore);
 osSemaphoreDef (spiSemaphore2);
+osSemaphoreDef (adcSemaphore);
+osSemaphoreDef (i2cSemaphore);
+
+typedef struct {
+  uint32_t StdId;
+  uint32_t DLC;
+  uint16_t data[4];
+} eecsMessage;
+
+osPoolDef(mpool,64,eecsMessage);
+osPoolId mpool;
+osMessageQDef(MsgBox,64,eecsMessage);
+osMessageQId MsgBox;
 
 //osThreadId ledTaskHandle;
 #define MY_I2C_SPEED 400000
@@ -148,8 +163,9 @@ void writei2c(void const *argument) {
     //prevWakeTime = osKernelSysTick();
     //nextWakeTime += (1000 * osKernelSysTick())
     //osDelayUntil(&prevWakeTime,5000);
-    osDelay(20);
+    osDelay(45);
     status = HAL_OK;
+    osSemaphoreWait(i2cSemaphore,osWaitForever);
     for (i = 0; i < 6; i++) {
       status = HAL_I2C_Master_Transmit(&hi2c1,I2C_ADDRESS_IMU,i2c_tx_buff_accel+i,sizeof(uint8_t),10);
 
@@ -161,12 +177,21 @@ void writei2c(void const *argument) {
       }
       status = HAL_I2C_Master_Receive(&hi2c1,I2C_ADDRESS_IMU,i2c_rx_buff_accel+i,sizeof(uint8_t),10);
     }
-    //itoa
-    //debug();
     i2c_accel[0] = 0;
     i2c_accel[1] = (i2c_rx_buff_accel[0] << 8) + i2c_rx_buff_accel[1];
     i2c_accel[2] = (i2c_rx_buff_accel[2] << 8) + i2c_rx_buff_accel[3];
     i2c_accel[3] = (i2c_rx_buff_accel[4] << 8) + i2c_rx_buff_accel[5];
+    osSemaphoreRelease(i2cSemaphore);
+
+    eecsMessage *mptr;
+    mptr = osPoolAlloc(mpool);
+    mptr->StdId = 0x6FF;
+    mptr->DLC = sizeof(i2c_accel);
+    mptr->data[0] = i2c_accel[0];
+    mptr->data[1] = i2c_accel[1];
+    mptr->data[2] = i2c_accel[2];
+    mptr->data[3] = i2c_accel[3];
+    osMessagePut(MsgBox,(uint32_t)mptr,osWaitForever);
     //uart_debug(i2c_accel,sizeof(i2c_accel));
     //HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
     //HAL_GPIO_TogglePin(GPIOD,GPIO_PIN_12); //GPIOD12 is green
@@ -205,68 +230,28 @@ void spiTest(void const *argument) {
 
   eecs_SPI_Begin(&spiA,0); //spi,csPin
   eecs_SPI_Begin(&spiA,1);
+  eecs_SPI_Begin(&spiA,2);
+  eecs_SPI_Begin(&spiA,3);
 
   while (1) {
     osDelay(5);
     osSemaphoreWait(spiSemaphore,osWaitForever);
     HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,GPIO_PIN_SET);
-    //spiA.candata[0] = 0;
-    //spiA.candata[1] = 0;
-    //spiA.candata[2] = 0;
-    //spiA.candata[3] = 0;
     eecs_SPI_Read(&spiA,0,0);
     eecs_SPI_Read(&spiA,1,0);
     //osDelay(1);
     eecs_SPI_Read(&spiA,0,1);
     eecs_SPI_Read(&spiA,1,1);
     osSemaphoreRelease(spiSemaphore);
-    /*osSemaphoreWait(spiSemaphore2,osWaitForever);
+    osSemaphoreWait(spiSemaphore2,osWaitForever);
     eecs_SPI_Read(&spiA,2,0);
-    eecs_SPI_Read(&spiA,2,1);
     eecs_SPI_Read(&spiA,3,0);
+    eecs_SPI_Read(&spiA,2,1);
     eecs_SPI_Read(&spiA,3,1);
-    osSemaphoreRelease(spiSemaphore2);*/
-    /*spiA.candata[0] = (spiA.rxbuffer[0] << 8) + spiA.rxbuffer[1];
-    spiA.candata[1] = (spiA.rxbuffer[2] << 8) + spiA.rxbuffer[3];
-    spiA.candata[2] = (spiA.rxbuffer[4] << 8) + spiA.rxbuffer[5];
-    spiA.candata[3] = (spiA.rxbuffer[6] << 8) + spiA.rxbuffer[7];
+    osSemaphoreRelease(spiSemaphore2);
 
-    spiB.candata[0] = (spiB.rxbuffer[0] << 8) + spiB.rxbuffer[1];
-    spiB.candata[1] = (spiB.rxbuffer[2] << 8) + spiB.rxbuffer[3];
-    spiB.candata[2] = (spiB.rxbuffer[4] << 8) + spiB.rxbuffer[5];
-    spiB.candata[3] = (spiB.rxbuffer[6] << 8) + spiB.rxbuffer[7];
-*/
     HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,GPIO_PIN_RESET);
-
-    //HAL_GPIO_WritePin(GPIOA,GPIO_PIN_3, GPIO_PIN_RESET);
   }
-  /*HAL_StatusTypeDef status;
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
-  while (1) {
-    osDelay(10);
-    status = HAL_OK;
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4,GPIO_PIN_RESET);
-    HAL_Delay(1);
-    //status = HAL_SPI_Transmit(&hspi1, spi_address,1,HAL_MAX_DELAY);
-    //status = HAL_SPI_Receive(&hspi1, spi_rx_buff,1,HAL_MAX_DELAY);
-    //status = HAL_SPI_Transmit(&hspi1, spi_address+1,1,HAL_MAX_DELAY);
-    //status = HAL_SPI_Receive(&hspi1, spi_rx_buff+1,1,HAL_MAX_DELAY);
-    status = HAL_SPI_TransmitReceive(&hspi1,max_data_addr,max_rx_buff,1,HAL_MAX_DELAY);
-    //HAL_Delay(1);
-    if (status != HAL_OK) {
-      //HAL_GPIO_WritePin(GPIOD, GREEN_LED, GPIO_PIN_SET);
-    }
-    else {
-      //HAL_GPIO_WritePin(GPIOD, GREEN_LED, GPIO_PIN_RESET);
-    }
-
-    status = HAL_SPI_TransmitReceive(&hspi1,max_data_addr+1,max_rx_buff+1,1,HAL_MAX_DELAY);
-    HAL_Delay(1);
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
-    //spi_rx_buff[0] = 'A';
-    //spi_rx_buff[1] = 'F';
-    //uart_debug(max_rx_buff, sizeof(max_rx_buff));
-  }*/
 }
 
 //CANTX - PB9
@@ -288,6 +273,8 @@ void canTest(void const *argument) {
   tx_buffer.DLC = sizeof(spiA.candata);
   HAL_StatusTypeDef status = HAL_OK;
 
+  eecsMessage *rptr;
+  osEvent evt;
   //data_ptr = &i2c_accel;//spiA->rxbuffer;//&i2c_accel;
   while (1) {
     //osDelay(50); //20Hz 
@@ -311,22 +298,45 @@ void canTest(void const *argument) {
       status = HAL_CAN_AddTxMessage(&hcan1, tx_buffer_ptr, data_ptr, (uint32_t *)CAN_TX_MAILBOX0);
       osSemaphoreRelease(spiSemaphore);
     }
-    /*if (!HAL_CAN_IsTxMessagePending(&hcan1,(uint32_t)CAN_TX_MAILBOX1)) {
+    if (!HAL_CAN_IsTxMessagePending(&hcan1,(uint32_t)CAN_TX_MAILBOX1)) {
       data_ptr = spiA.candata2;
       tx_buffer.StdId = 0x6F8;
       tx_buffer.DLC = sizeof(spiA.candata2);
       osSemaphoreWait(spiSemaphore2,osWaitForever);
       status = HAL_CAN_AddTxMessage(&hcan1,tx_buffer_ptr,data_ptr,(uint32_t *)CAN_TX_MAILBOX1);
       osSemaphoreRelease(spiSemaphore2);
+    }
+    if (!HAL_CAN_IsTxMessagePending(&hcan1,(uint32_t)CAN_TX_MAILBOX2)) {
+      evt = osMessageGet(MsgBox,osWaitForever);
+      if (evt.status == osEventMessage) {
+        rptr = evt.value.p;
+        data_ptr = rptr->data;
+        tx_buffer.StdId = rptr->StdId;
+        tx_buffer.DLC = rptr->DLC;
+        status = HAL_CAN_AddTxMessage(&hcan1,tx_buffer_ptr,data_ptr,(uint32_t *)CAN_TX_MAILBOX2);
+      }
+    }
+/*    if (!HAL_CAN_IsTxMessagePending(&hcan1,(uint32_t)CAN_TX_MAILBOX2)) {
+      data_ptr = adc.data;
+      tx_buffer.StdId = 0x6FB;
+      tx_buffer.DLC = sizeof(adc.data);
+      osSemaphoreWait(adcSemaphore,osWaitForever);
+      status = HAL_CAN_AddTxMessage(&hcan1,tx_buffer_ptr,data_ptr,(uint32_t *)CAN_TX_MAILBOX2);
+      osSemaphoreRelease(adcSemaphore);
+    }*/
+/*    if (!HAL_CAN_IsTxMessagePending(&hcan1,(uint32_t)CAN_TX_MAILBOX2)) {
+      data_ptr = i2c_accel;
+      tx_buffer.StdId = 0x6FF;
+      tx_buffer.DLC = sizeof(i2c_accel);
+      osSemaphoreWait(i2cSemaphore,osWaitForever);
+      status = HAL_CAN_AddTxMessage(&hcan1,tx_buffer_ptr,data_ptr,(uint32_t *)CAN_TX_MAILBOX2);
+      osSemaphoreRelease(i2cSemaphore);
     }*/
     if (status == HAL_OK) {
-      //HAL_GPIO_WritePin(GPIOD, GREEN_LED, GPIO_PIN_SET);
+
     }
     else {
-      //HAL_GPIO_WritePin(GPIOD, GREEN_LED, GPIO_PIN_RESET);
-      //HAL_GPIO_TogglePin(GPIOD, RED_LED);
-      //unsigned char temparr[] = {"NOT WORKING"};
-      //uart_debug(temparr, sizeof(temparr));
+
     }
 
   }
@@ -444,12 +454,20 @@ void adcTest(void const *argument) {
     }
   }*/
   //volatile int temp;
-  //eecs_ADC_Init();
-  //eecs_ADC_Begin();
+  eecs_ADC_Init();
+  eecs_ADC_Begin();
 
   while (1) {
-    osDelay(100);
-    HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_4);
+    osDelay(50);
+    eecsMessage *mptr;
+    mptr = osPoolAlloc(mpool);
+    mptr->StdId = 0x6FB;
+    mptr->DLC = sizeof(adc.data);
+    mptr->data[0] = adc.data[0];
+    mptr->data[1] = adc.data[1];
+    mptr->data[2] = adc.data[2];
+    mptr->data[3] = adc.data[3];
+    osMessagePut(MsgBox,(uint32_t)mptr,osWaitForever);
   }
 
 }
@@ -466,11 +484,12 @@ int main(void)
   /* USER CODE BEGIN 1 */
   spiSemaphore = osSemaphoreCreate(osSemaphore(spiSemaphore),1);
   spiSemaphore2 = osSemaphoreCreate(osSemaphore(spiSemaphore2),1);
-  /* USER CODE END 1 */
+  adcSemaphore = osSemaphoreCreate(osSemaphore(adcSemaphore),1);
+  i2cSemaphore = osSemaphoreCreate(osSemaphore(i2cSemaphore),1);
+  
+  mpool = osPoolCreate(osPool(mpool));
+  MsgBox = osMessageCreate(osMessageQ(MsgBox),NULL);
 
-  /* MCU Configuration----------------------------------------------------------*/
-
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
 
   /* USER CODE BEGIN Init */
@@ -514,13 +533,13 @@ int main(void)
   /* add threads, ... */
   //osThreadDef(uartTask, uartTest, osPriorityAboveNormal, 1, 128);
   //uartTaskHandle = osThreadCreate(osThread(uartTask), NULL);
-  //osThreadDef(i2cTask, writei2c, osPriorityAboveNormal,1,256);
-  //i2cTaskHandle = osThreadCreate(osThread(i2cTask),NULL);
-  //osThreadDef(adcTask, adcTest, osPriorityAboveNormal,1,128);
-  //adcTaskHandle = osThreadCreate(osThread(adcTask),NULL);
+  osThreadDef(i2cTask, writei2c, osPriorityNormal,1,256);
+  i2cTaskHandle = osThreadCreate(osThread(i2cTask),NULL);
+  osThreadDef(adcTask, adcTest, osPriorityAboveNormal,1,128);
+  adcTaskHandle = osThreadCreate(osThread(adcTask),NULL);
   osThreadDef(spiTask,spiTest,osPriorityRealtime,1,128);
   spiTaskHandle = osThreadCreate(osThread(spiTask),NULL);
-  osThreadDef(canTask, canTest, osPriorityAboveNormal, 1, 128);
+  osThreadDef(canTask, canTest, osPriorityHigh, 1, 2000);
   canTaskHandle = osThreadCreate(osThread(canTask),NULL);
 
   
