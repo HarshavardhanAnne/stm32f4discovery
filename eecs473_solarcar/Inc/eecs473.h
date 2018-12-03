@@ -13,9 +13,9 @@ SPI_HandleTypeDef hspi3;
 I2C_HandleTypeDef hi2c;
 CAN_HandleTypeDef hcan;
 ADC_HandleTypeDef hadc1;
-//DMA_HandleTypeDef hdma;
+DMA_HandleTypeDef hdma;
 
-//uint32_t adcbuffer[ADC_BUFFER_LENGTH];
+uint32_t adcbuffer[ADC_BUFFER_LENGTH];
 uint16_t spiBuffer[500] = {0};
 uint16_t spiBufferCount = 0;
 
@@ -91,14 +91,14 @@ struct eecsCAN {
 */
 //Maybe try getting rid of the pointer in pin_pair struct
 //change GPIO_TypeDef* to GPIO_Typedef
-const struct pin_pair cs1a = {GPIOA,GPIO_PIN_4};
-const struct pin_pair cs1b = {GPIOA,GPIO_PIN_3};
-const struct pin_pair cs2a = {GPIOB,GPIO_PIN_1};
-const struct pin_pair cs2b = {GPIOA,GPIO_PIN_2};
-const struct pin_pair cs3a = {GPIOC,GPIO_PIN_7};
-const struct pin_pair cs3b = {GPIOC,GPIO_PIN_6};
-const struct pin_pair cs4a = {GPIOC,GPIO_PIN_9};
-const struct pin_pair cs4b = {GPIOC,GPIO_PIN_8};
+struct pin_pair cs1a = {GPIOA,GPIO_PIN_4};
+struct pin_pair cs1b = {GPIOA,GPIO_PIN_3};
+struct pin_pair cs2a = {GPIOB,GPIO_PIN_1};
+struct pin_pair cs2b = {GPIOA,GPIO_PIN_2};
+struct pin_pair cs3a = {GPIOC,GPIO_PIN_7};
+struct pin_pair cs3b = {GPIOC,GPIO_PIN_6};
+struct pin_pair cs4a = {GPIOC,GPIO_PIN_9};
+struct pin_pair cs4b = {GPIOC,GPIO_PIN_8};
 
 struct pin_pair* cs[8] = {&cs1a,&cs1b,&cs2a,&cs2b,&cs3a,&cs3b,&cs4a,&cs4b};
 
@@ -124,6 +124,7 @@ void eecs_GPIO_Toggle(GPIO_TypeDef*,uint16_t);
 
 void eecs_UART_Init(void);
 void eecs_UART_Print(uint8_t*,uint8_t);
+void eecs_UART_Debug(uint8_t*,uint8_t);
 void eecs_UART_Test(void const *);
 
 void eecs_I2C_Init(void);
@@ -202,7 +203,7 @@ void eecs_UART_Test(void const *argument) {
   while (1) {
     HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
     //HAL_UART_Transmit(&huart4,ptr,size_,HAL_MAX_DELAY);
-    uart_debug(arr, sizeof(arr));
+    //uart_debug(arr, sizeof(arr));
     osDelay(100);
   }
 }
@@ -477,17 +478,19 @@ void eecs_SPI_Read(struct eecsSPI* spi,uint8_t csPin,uint8_t channel) {
   //HAL_Delay(1);
   HAL_GPIO_WritePin(temp_gpiox,temppin,GPIO_PIN_SET);
 
-  //FEEDBACK FILTER
   newValue = (rxbuff[0] << 8) + rxbuff[1];
-  oldValue = *(spi->candata+rxoffset);
-  oldValue += (newValue - oldValue) / 200; //Tune N=500 for better sampling
+  //FEEDBACK FILTER
+  if (csPin < 2) {
+    oldValue = *(spi->candata+rxoffset);
+    oldValue += (newValue - oldValue) / 200; //Tune N=500 for better sampling
 
-  *(spi->candata+rxoffset) = oldValue;
-/*  else {
+    *(spi->candata+rxoffset) = oldValue;
+  }
+  else {
     oldValue = *(spi->candata2+rxoffset);
     oldValue += (newValue - oldValue) / 200;
-    *(spi->candata+rxoffset) = oldValue;
-  }*/
+    *(spi->candata2+rxoffset) = oldValue;
+  }
   /*newValue = (rxbuff[0] << 8) + rxbuff[1];
 
   //spiBuffer[500]
@@ -538,7 +541,7 @@ void eecs_I2C_Init(void) {
   }
 }
 
-/*void eecs_ADC_Init(void) {
+void eecs_ADC_Init(void) {
   __ADC1_CLK_ENABLE();
 
   HAL_NVIC_SetPriority(ADC_IRQn, 0, 0);
@@ -564,7 +567,7 @@ void eecs_I2C_Init(void) {
 
   //steering sensor should have rank=1;
   adcChannel.Channel = ADC_CHANNEL_13; //steering sensor channel
-  adcChannel.Rank = 1;
+  adcChannel.Rank = 4;
   adcChannel.SamplingTime = ADC_SAMPLETIME_480CYCLES;
   adcChannel.Offset = 0; 
   if (HAL_ADC_ConfigChannel(&hadc1,&adcChannel) != HAL_OK) {
@@ -572,21 +575,21 @@ void eecs_I2C_Init(void) {
   }
 
   adcChannel.Channel = ADC_CHANNEL_14;
-  adcChannel.Rank = 2;
+  adcChannel.Rank = 1;
   adcChannel.SamplingTime = ADC_SAMPLETIME_480CYCLES;
   adcChannel.Offset = 0; 
   if (HAL_ADC_ConfigChannel(&hadc1,&adcChannel) != HAL_OK) {
     //print uart debug message
   }
   adcChannel.Channel = ADC_CHANNEL_15;
-  adcChannel.Rank = 3;
+  adcChannel.Rank = 2;
   adcChannel.SamplingTime = ADC_SAMPLETIME_480CYCLES;
   adcChannel.Offset = 0; 
   if (HAL_ADC_ConfigChannel(&hadc1,&adcChannel) != HAL_OK) {
     //print uart debug message
   }
   adcChannel.Channel = ADC_CHANNEL_8;
-  adcChannel.Rank = 4;
+  adcChannel.Rank = 3;
   adcChannel.SamplingTime = ADC_SAMPLETIME_480CYCLES;
   adcChannel.Offset = 0; 
   if (HAL_ADC_ConfigChannel(&hadc1,&adcChannel) != HAL_OK) {
@@ -620,9 +623,11 @@ void eecs_ADC_ConfigureDMA(void) {
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* AdcHandle) {
   int i;
+  //osSemaphoreWait(adcSemaphore,osWaitForever);
   for (i = 0; i < ADC_BUFFER_LENGTH; i++) {
     adc.data[i] = (uint16_t)(adcbuffer[i]);
   }
+  //osSemaphoreRelease(adcSemaphore);
 }
 
 void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef* AdcHandle) {
@@ -639,7 +644,7 @@ void ADC_IRQHandler() {
 void eecs_ADC_Begin(void) {
   HAL_ADC_Start_DMA(&hadc1,adcbuffer,ADC_BUFFER_LENGTH);
 }
-*/
+
 void eecs_CAN_Init() {
   hcan.Instance = CAN1;
   hcan.Init.Prescaler = 2;
