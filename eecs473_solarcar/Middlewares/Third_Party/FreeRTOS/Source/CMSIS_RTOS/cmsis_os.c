@@ -1545,7 +1545,7 @@ osStatus osThreadResumeAll (void)
 */
 osStatus osDelayUntil (uint32_t *PreviousWakeTime, uint32_t millisec)
 {
-#if INCLUDE_vTaskDelayUntil
+#if 1//INCLUDE_vTaskDelayUntil
   TickType_t ticks = (millisec / portTICK_PERIOD_MS);
   vTaskDelayUntil((TickType_t *) PreviousWakeTime, ticks ? ticks : 1);
   
