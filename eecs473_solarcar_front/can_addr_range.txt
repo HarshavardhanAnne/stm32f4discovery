@@ -1,0 +1,2 @@
+//CAN Address Range
+0x6F7-0x6FF
