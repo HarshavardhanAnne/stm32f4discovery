@@ -291,10 +291,10 @@ void eecs_SPI_Wait(struct eecsSPI* spi,GPIO_TypeDef* gpiox,uint16_t pin) {
   HAL_GPIO_WritePin(gpiox,pin,GPIO_PIN_RESET);
 
   while (spi->drdy && (MAXRETRIES < 5)) {
-    if (HAL_SPI_TransmitReceive(spi->hspi,txbuff,&rxbuff,1,2) != HAL_OK) {
+    if (HAL_SPI_TransmitReceive(spi->hspi,txbuff,&rxbuff,1,1) != HAL_OK) {
       //do something
     }
-    if (HAL_SPI_TransmitReceive(spi->hspi,txbuff+1,&(spi->drdy),1,2) != HAL_OK) {
+    if (HAL_SPI_TransmitReceive(spi->hspi,txbuff+1,&(spi->drdy),1,1) != HAL_OK) {
       //do something
     }
     spi->drdy &= 0x80;
@@ -322,15 +322,15 @@ void eecs_SPI_Read(struct eecsSPI* spi,uint8_t csPin,uint8_t channel) {
 
   HAL_GPIO_WritePin(temp_gpiox,temppin,GPIO_PIN_RESET);
 
-  status = HAL_SPI_TransmitReceive(spi->hspi,txbuff,rxbuff,1,2);
+  status = HAL_SPI_TransmitReceive(spi->hspi,txbuff,rxbuff,1,1);
   if (status!=HAL_OK) {
     //do something
   }
-  status = HAL_SPI_TransmitReceive(spi->hspi,txbuff+1,rxbuff+1,1,2);
+  status = HAL_SPI_TransmitReceive(spi->hspi,txbuff+1,rxbuff+1,1,1);
   if (status!=HAL_OK) {
     //do something
   }
-  status = HAL_SPI_TransmitReceive(spi->hspi,txbuff+1,rxbuff,1,2);
+  status = HAL_SPI_TransmitReceive(spi->hspi,txbuff+1,rxbuff,1,1);
   if (status!=HAL_OK) {
     //do something
   }
