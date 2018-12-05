@@ -314,7 +314,6 @@ void eecs_SPI_Read(struct eecsSPI* spi,uint8_t csPin,uint8_t channel) {
   uint8_t csidx = spi->csindex[csPin];
   GPIO_TypeDef* temp_gpiox = (cs[csidx])->gpiox;
   uint16_t temppin = cs[csidx]->pin;
-  //uint8_t rxoffset = (4 * csPin + 2 * channel)*sizeof(uint8_t);
   uint8_t rxoffset = (2 * (csPin%2) + channel)*sizeof(uint8_t);
   volatile HAL_StatusTypeDef status;
 
@@ -341,13 +340,13 @@ void eecs_SPI_Read(struct eecsSPI* spi,uint8_t csPin,uint8_t channel) {
   //FEEDBACK FILTER
   if (csPin < 2) {
     oldValue = *(spi->candata+rxoffset);
-    oldValue += (newValue - oldValue) / 200; //Tune N=500 for better sampling
+    oldValue += (newValue - oldValue) / 50; //Tune N=500 for better sampling
 
     *(spi->candata+rxoffset) = oldValue;
   }
   else {
     oldValue = *(spi->candata2+rxoffset);
-    oldValue += (newValue - oldValue) / 200;
+    oldValue += (newValue - oldValue) / 50;
     *(spi->candata2+rxoffset) = oldValue;
   }
 }
@@ -454,9 +453,6 @@ void eecs_ADC_Init(void) {
   if (HAL_ADC_ConfigChannel(&hadc1,&adcChannel) != HAL_OK) {
     //print uart debug message
   }
-
-
-  //eecs_ADC_ConfigureDMA();
 }
 
 void eecs_ADC_ConfigureDMA(void) {
@@ -482,17 +478,12 @@ void eecs_ADC_ConfigureDMA(void) {
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* AdcHandle) {
   int i;
-  //osSemaphoreWait(adcSemaphore,osWaitForever);
-  //HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,GPIO_PIN_SET);
   for (i = 0; i < ADC_BUFFER_LENGTH; i++) {
     adc.data[i] = (uint16_t)(adcbuffer[i]);
   }
-  //HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,GPIO_PIN_RESET);
-  //osSemaphoreRelease(adcSemaphore);
 }
 
 void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef* AdcHandle) {
-  //HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_4);
 }
 
 void DMA2_Stream4_IRQHandler() {
@@ -541,7 +532,6 @@ void eecs_CAN_Send(uint32_t mailbox) {
 
 void eecs_Error_Handler() {
   while (1) {
-    //eecs_GPIO_Toggle(GPIOD, GPIO_PIN_15);
     HAL_Delay(1000);
   }
 }
