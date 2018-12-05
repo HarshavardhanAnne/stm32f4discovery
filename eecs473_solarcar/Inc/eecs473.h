@@ -171,6 +171,14 @@ void eecs_SPI_Init(int spi_bus) {
     spiB.csindex[1] = 5;
     spiB.csindex[2] = 6;
     spiB.csindex[3] = 7;
+    spiB.candata[0] = 0xAAAA;
+    spiB.candata[1] = 0xAAAA;
+    spiB.candata[2] = 0xAAAA;
+    spiB.candata[3] = 0xAAAA;
+    spiB.candata2[0] = 0xAAAA;
+    spiB.candata2[1] = 0xAAAA;
+    spiB.candata2[2] = 0xAAAA;
+    spiB.candata2[3] = 0xAAAA;
   }
   else if (spi_bus == 3) {
     hspi3.Instance = SPI3;
@@ -197,6 +205,14 @@ void eecs_SPI_Init(int spi_bus) {
     spiA.csindex[1] = 1;
     spiA.csindex[2] = 2;
     spiA.csindex[3] = 3;
+    spiA.candata[0] = 0xAAAA;
+    spiA.candata[1] = 0xAAAA;
+    spiA.candata[2] = 0xAAAA;
+    spiA.candata[3] = 0xAAAA;
+    spiA.candata2[0] = 0xAAAA;
+    spiA.candata2[1] = 0xAAAA;
+    spiA.candata2[2] = 0xAAAA;
+    spiA.candata2[3] = 0xAAAA;
   }
 }
 
@@ -275,10 +291,10 @@ void eecs_SPI_Wait(struct eecsSPI* spi,GPIO_TypeDef* gpiox,uint16_t pin) {
   HAL_GPIO_WritePin(gpiox,pin,GPIO_PIN_RESET);
 
   while (spi->drdy && (MAXRETRIES < 5)) {
-    if (HAL_SPI_TransmitReceive(spi->hspi,txbuff,&rxbuff,1,HAL_MAX_DELAY) != HAL_OK) {
+    if (HAL_SPI_TransmitReceive(spi->hspi,txbuff,&rxbuff,1,2) != HAL_OK) {
       //do something
     }
-    if (HAL_SPI_TransmitReceive(spi->hspi,txbuff+1,&(spi->drdy),1,HAL_MAX_DELAY) != HAL_OK) {
+    if (HAL_SPI_TransmitReceive(spi->hspi,txbuff+1,&(spi->drdy),1,2) != HAL_OK) {
       //do something
     }
     spi->drdy &= 0x80;
@@ -306,15 +322,15 @@ void eecs_SPI_Read(struct eecsSPI* spi,uint8_t csPin,uint8_t channel) {
 
   HAL_GPIO_WritePin(temp_gpiox,temppin,GPIO_PIN_RESET);
 
-  status = HAL_SPI_TransmitReceive(spi->hspi,txbuff,rxbuff,1,HAL_MAX_DELAY);
+  status = HAL_SPI_TransmitReceive(spi->hspi,txbuff,rxbuff,1,2);
   if (status!=HAL_OK) {
     //do something
   }
-  status = HAL_SPI_TransmitReceive(spi->hspi,txbuff+1,rxbuff+1,1,HAL_MAX_DELAY);
+  status = HAL_SPI_TransmitReceive(spi->hspi,txbuff+1,rxbuff+1,1,2);
   if (status!=HAL_OK) {
     //do something
   }
-  status = HAL_SPI_TransmitReceive(spi->hspi,txbuff+1,rxbuff,1,HAL_MAX_DELAY);
+  status = HAL_SPI_TransmitReceive(spi->hspi,txbuff+1,rxbuff,1,2);
   if (status!=HAL_OK) {
     //do something
   }
@@ -513,6 +529,7 @@ void eecs_CAN_Set_Params(uint32_t id,uint32_t size,uint16_t *data) {
   can.tx_buffer.StdId = id;
   can.tx_buffer.DLC = size;
   can.data_ptr = data;
+}
 
 uint32_t eecs_CAN_Mail_Ready(uint32_t mailbox) {
   return HAL_CAN_IsTxMessagePending(&hcan,(uint32_t)mailbox);
