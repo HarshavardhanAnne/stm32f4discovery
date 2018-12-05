@@ -3,8 +3,7 @@
 
 #include <stdlib.h>
 #include <stdint.h>
-//#include "stm32f4xx_hal.h"
-//#include "stm32f4xx_hal_gpio.h"
+
 #define ADC_BUFFER_LENGTH 4
 
 UART_HandleTypeDef huart;
@@ -19,45 +18,6 @@ uint32_t adcbuffer[ADC_BUFFER_LENGTH];
 uint16_t spiBuffer[500] = {0};
 uint16_t spiBufferCount = 0;
 
-#define I2C_ADDRESS_IMU (uint8_t)(0b1101000 << 1)
-
-/*
-const uint16_t pins[16] = {GPIO_PIN_0,
-                           GPIO_PIN_1,
-                           GPIO_PIN_2,
-                           GPIO_PIN_3,
-                           GPIO_PIN_4,
-                           GPIO_PIN_5,
-                           GPIO_PIN_6,
-                           GPIO_PIN_7,
-                           GPIO_PIN_8,
-                           GPIO_PIN_9,
-                           GPIO_PIN_10,
-                           GPIO_PIN_11,
-                           GPIO_PIN_12,
-                           GPIO_PIN_13,
-                           GPIO_PIN_14,
-                           GPIO_PIN_15};
-const uint32_t modes[] = {GPIO_MODE_INPUT,
-                          GPIO_MODE_OUTPUT_PP,
-                          GPIO_MODE_OUTPUT_OD,
-                          GPIO_MODE_AF_PP,
-                          GPIO_MODE_AF_OD,
-                          GPIO_MODE_ANALOG,
-                          GPIO_MODE_IT_RISING,
-                          GPIO_MODE_IT_FALLING,
-                          GPIO_MODE_IT_RISING_FALLING,
-                          GPIO_MODE_EVT_RISING,
-                          GPIO_MODE_EVT_FALLING,
-                          GPIO_MODE_EVT_RISING_FALLING};
-const uint32_t speeds[] = {GPIO_SPEED_FREQ_LOW,
-                           GPIO_SPEED_FREQ_MEDIUM,
-                           GPIO_SPEED_FREQ_HIGH,
-                           GPIO_SPEED_FREQ_VERY_HIGH};
-const uint32_t pulls[] = {GPIO_NOPULL,
-                          GPIO_PULLUP,
-                          GPIO_PULLDOWN};*/
-
 struct pin_pair {
   GPIO_TypeDef* const gpiox;
   const uint16_t pin;
@@ -65,8 +25,6 @@ struct pin_pair {
 
 struct eecsSPI {
   SPI_HandleTypeDef* hspi;
-  uint8_t address[3];
-  uint8_t rxbuffer[8];
   uint8_t csindex[4];
   uint16_t candata[4];
   uint16_t candata2[4];
@@ -105,11 +63,12 @@ struct eecsSPI spiB;
 struct eecsI2C i2c;
 struct eecsADC adc;
 struct eecsI2C i2c;
+struct eecsCAN can;
 
 GPIO_PinState HIGH = GPIO_PIN_SET;
 GPIO_PinState LOW = GPIO_PIN_RESET;
 
-int CLOCK_ENABLED = 0;
+int GPIO_CLOCK_ENABLED = 0;
 
 void eecs_Error_Handler();
 void eecs_GPIO_Init(GPIO_TypeDef*,uint16_t,uint32_t,uint32_t,uint32_t);
@@ -119,7 +78,6 @@ void eecs_GPIO_Toggle(GPIO_TypeDef*,uint16_t);
 void eecs_UART_Init(void);
 void eecs_UART_Print(uint8_t*,uint8_t);
 void eecs_UART_Debug(uint8_t*,uint8_t);
-void eecs_UART_Test(void const *);
 
 void eecs_I2C_Init(void);
 
@@ -137,20 +95,18 @@ void eecs_ADC_Begin();
 void eecs_ADC_Read();
 
 void eecs_CAN_Init();
-void eecs_CAN_Set_Id();
-void eecs_CAN_Get_Id();
-void eecs_CAN_PushQueue();
-//void eecs_CAN_PopQueue();
+uint32_t eecs_CAN_Mail_Ready(uint32_t);
+void eecs_CAN_Set_Params(uint32_t,uint32_t,uint16_t *);
 void eecs_CAN_Send();
 
 void eecs_GPIO_Clock_Init(void) {
-  if (!CLOCK_ENABLED) {
+  if (!GPIO_CLOCK_ENABLED) {
     /* GPIO Ports Clock Enable */
     __HAL_RCC_GPIOA_CLK_ENABLE();
     __HAL_RCC_GPIOD_CLK_ENABLE();
     __HAL_RCC_GPIOB_CLK_ENABLE();
     __HAL_RCC_GPIOC_CLK_ENABLE();
-    CLOCK_ENABLED = 1;
+    GPIO_CLOCK_ENABLED = 1;
   }
 }
 
@@ -173,7 +129,7 @@ void eecs_GPIO_Toggle(GPIO_TypeDef *GPIOx, uint16_t Pin) {
 
 void eecs_UART_Init(void) {
   huart.Instance = UART4;
-  huart.Init.BaudRate = 57600;
+  huart.Init.BaudRate = 115200;
   huart.Init.WordLength = UART_WORDLENGTH_8B;
   huart.Init.StopBits = UART_STOPBITS_1;
   huart.Init.Parity = UART_PARITY_NONE;
@@ -185,21 +141,8 @@ void eecs_UART_Init(void) {
   }
 }
 
-void eecs_UART_Write(uint8_t* arr, uint8_t buffsize) {
+void eecs_UART_Print(uint8_t* arr, uint8_t buffsize) {
   HAL_StatusTypeDef status = HAL_UART_Transmit(&huart,arr,buffsize,HAL_MAX_DELAY);
-  if (status != HAL_OK) {
-
-  }
-}
-
-void eecs_UART_Test(void const *argument) {
-  char arr[] = "TESTING UART FUNCTION";
-  while (1) {
-    HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
-    //HAL_UART_Transmit(&huart4,ptr,size_,HAL_MAX_DELAY);
-    //uart_debug(arr, sizeof(arr));
-    osDelay(100);
-  }
 }
 
 void eecs_SPI_Init(int spi_bus) {
@@ -224,9 +167,6 @@ void eecs_SPI_Init(int spi_bus) {
     }
 
     spiB.hspi = &hspi2;
-    spiB.address[0] = 0b00000000;
-    spiB.address[1] = 0b00111000; //MAX1415 address CH0
-    spiB.address[2] = 0b00111001; //MAX1415 address CH1
     spiB.csindex[0] = 4;
     spiB.csindex[1] = 5;
     spiB.csindex[2] = 6;
@@ -253,9 +193,6 @@ void eecs_SPI_Init(int spi_bus) {
     }
 
     spiA.hspi = &hspi3;
-    spiA.address[0] = 0b00000000;
-    spiA.address[1] = 0b00111000; //MAX1415 address CH0
-    spiA.address[2] = 0b00111001; //MAX1415 address CH1
     spiA.csindex[0] = 0;
     spiA.csindex[1] = 1;
     spiA.csindex[2] = 2;
@@ -268,7 +205,7 @@ void eecs_SPI_ReadSetupReg(struct eecsSPI* spi, GPIO_TypeDef* gpiox, uint16_t pi
   uint8_t tx = 0x18;
 
   HAL_GPIO_WritePin(gpiox,pin,GPIO_PIN_RESET);
-  //HAL_Delay(1);
+
   if (HAL_SPI_TransmitReceive(spi->hspi,&tx,&temp,1,HAL_MAX_DELAY)!=HAL_OK) {
     //do something
   }
@@ -276,7 +213,6 @@ void eecs_SPI_ReadSetupReg(struct eecsSPI* spi, GPIO_TypeDef* gpiox, uint16_t pi
   if (HAL_SPI_TransmitReceive(spi->hspi,&tx,&temp,1,HAL_MAX_DELAY)!=HAL_OK) {
     //do something
   }
-  //HAL_Delay(1);
   HAL_GPIO_WritePin(gpiox,pin,GPIO_PIN_SET);
 }
 
@@ -322,7 +258,6 @@ void eecs_SPI_Begin(struct eecsSPI* spi,uint8_t csPin) {
   if (status != HAL_OK) {
     //do something
   }
-  //HAL_Delay(1);
   HAL_GPIO_WritePin(temp_gpiox,pinnum,GPIO_PIN_SET);
 
   HAL_Delay(100);
@@ -369,11 +304,7 @@ void eecs_SPI_Read(struct eecsSPI* spi,uint8_t csPin,uint8_t channel) {
 
   eecs_SPI_Wait(spi, temp_gpiox, temppin);
 
-  spi->rxbuffer[rxoffset] = 0xCD;
-  spi->rxbuffer[rxoffset] = 0xAB;
-
   HAL_GPIO_WritePin(temp_gpiox,temppin,GPIO_PIN_RESET);
-  //HAL_Delay(1);
 
   status = HAL_SPI_TransmitReceive(spi->hspi,txbuff,rxbuff,1,HAL_MAX_DELAY);
   if (status!=HAL_OK) {
@@ -414,9 +345,7 @@ uint16_t average(uint16_t data[])
   for (i = 0; i < 500; ++i) {
     sum += data[i];
   }
-
   avg = sum / 500;
-
   return avg;
 }
 
@@ -578,6 +507,18 @@ void eecs_CAN_Init() {
   {
     eecs_Error_Handler();
   }
+}
+
+void eecs_CAN_Set_Params(uint32_t id,uint32_t size,uint16_t *data) {
+  can.tx_buffer.StdId = id;
+  can.tx_buffer.DLC = size;
+  can.data_ptr = data;
+
+uint32_t eecs_CAN_Mail_Ready(uint32_t mailbox) {
+  return HAL_CAN_IsTxMessagePending(&hcan,(uint32_t)mailbox);
+}
+void eecs_CAN_Send(uint32_t mailbox) {
+  HAL_CAN_AddTxMessage(&hcan,&(can.tx_buffer),can.data_ptr,(uint32_t *)mailbox);
 }
 
 void eecs_Error_Handler() {
