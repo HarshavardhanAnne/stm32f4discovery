@@ -134,7 +134,7 @@ void uartTest(void const *argument);
 void ConfigureADC();
 void adcTest(void const *argument);
 
-void putMessageQueue(void const *argument) {
+/*void putMessageQueue(void const *argument) {
   TickType_t tick = osKernelSysTick();
   HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,GPIO_PIN_SET);
   HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,GPIO_PIN_RESET);
@@ -186,32 +186,21 @@ void putMessageQueue(void const *argument) {
     osMessagePut(MsgBox,(uint32_t)mptr,osWaitForever);
     HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,GPIO_PIN_RESET);
   }
-}
+}*/
 
 void putMessageQueueI2C(void const *argument) {
   TickType_t tick = osKernelSysTick();
   HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,GPIO_PIN_SET);
   HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,GPIO_PIN_RESET);
-  eecsMessage *mptr;
   while (1) {
-    osDelayUntil(&tick,50);
+    osDelayUntil(&tick,20);
     HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,GPIO_PIN_SET);
     eecs_I2C_Read();
-    //osSemaphoreWait(i2cSemaphore,osWaitForever);
-    //osSemaphoreRelease(i2cSemaphore);
-    /*mptr = (eecsMessage*)osPoolAlloc(mpool);
-    mptr->StdId = 0x6FF;
-    mptr->DLC = sizeof(i2c.data);
-    mptr->data[0] = i2c.data[0];
-    mptr->data[1] = i2c.data[1];
-    mptr->data[2] = i2c.data[2];
-    mptr->data[3] = i2c.data[3];
-    osMessagePut(MsgBox,(uint32_t)mptr,osWaitForever);*/
     HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,GPIO_PIN_RESET);
   }
 }
 
-void putMessageQueueADC(void const *argument) {
+/*void putMessageQueueADC(void const *argument) {
   TickType_t tick = osKernelSysTick();
   eecsMessage *mptr;
   while (1) {
@@ -226,9 +215,9 @@ void putMessageQueueADC(void const *argument) {
     mptr->data[3] = adc.data[3];
     osMessagePut(MsgBox,(uint32_t)mptr,osWaitForever);
   }
-}
+}*/
 
-void putMessageQueueSPI(void const *argument) {
+/*void putMessageQueueSPI(void const *argument) {
   TickType_t tick = osKernelSysTick();
   eecsMessage *mptr;
   while (1) {
@@ -253,7 +242,7 @@ void putMessageQueueSPI(void const *argument) {
     mptr->data[3] = spiA.candata2[3];
     osMessagePut(MsgBox,(uint32_t)mptr,osWaitForever);
   }
-}
+}*/
 
 /*void uartTest(void const *argument) {
   int i = 0;
@@ -272,7 +261,7 @@ void readSPIA(void const *argument) {
   TickType_t tick = osKernelSysTick();
 
   while (1) {
-    osDelayUntil(&tick,1);
+    osDelayUntil(&tick,2);
     //HAL_GPIO_WritePin(GPIOB,GPIO_PIN_4,GPIO_PIN_SET);
     eecs_SPI_Read(&spiA,0,0);
     eecs_SPI_Read(&spiA,1,0);
@@ -290,7 +279,7 @@ void readSPIB(void const *argument) {
   TickType_t tick = osKernelSysTick();
 
   while (1) {
-    osDelayUntil(&tick,1);
+    osDelayUntil(&tick,2);
     eecs_SPI_Read(&spiB,0,0);
     eecs_SPI_Read(&spiB,1,0);
     eecs_SPI_Read(&spiB,0,1);
@@ -331,7 +320,7 @@ void getMessageQueue(void const *argument) {
     if (!eecs_CAN_Mail_Ready(CAN_TX_MAILBOX0)) {
       switch (MAILBOX_INDEX_0) {
         case (0):
-          eecs_CAN_Set_Params(0x6F7,sizeof(spiA.candata),spiA.candata);
+          eecs_CAN_Set_Params(0x6FC,sizeof(spiA.candata),(uint8_t*)spiA.candata);
           /*data_ptr = spiA.candata;
           tx_buffer.StdId = 0x6F7;
           tx_buffer.DLC = sizeof(spiA.candata);*/
@@ -340,7 +329,7 @@ void getMessageQueue(void const *argument) {
           MAILBOX_INDEX_0++;
           break;
         case (1):
-          eecs_CAN_Set_Params(0x6F8,sizeof(spiA.candata2),spiA.candata2);
+          eecs_CAN_Set_Params(0x6FD,sizeof(spiA.candata2),(uint8_t*)spiA.candata2);
           eecs_CAN_Send(CAN_TX_MAILBOX0);
           /*data_ptr = spiA.candata2;
           tx_buffer.StdId = 0x6F8;
@@ -352,7 +341,7 @@ void getMessageQueue(void const *argument) {
       }
     }
     if (!eecs_CAN_Mail_Ready(CAN_TX_MAILBOX1)) {
-      switch (MAILBOX_INDEX_1) {
+      /*switch (MAILBOX_INDEX_1) {
         case (0):
           eecs_CAN_Set_Params(0x6F9,sizeof(spiB.candata),spiB.candata);
           eecs_CAN_Send(CAN_TX_MAILBOX1);
@@ -360,7 +349,7 @@ void getMessageQueue(void const *argument) {
           tx_buffer.StdId = 0x6F9;
           tx_buffer.DLC = sizeof(random);
           status = HAL_CAN_AddTxMessage(&hcan,tx_buffer_ptr,data_ptr,(uint32_t *)CAN_TX_MAILBOX1);
-          */
+          
           MAILBOX_INDEX_1++;
           break;
         case (1):
@@ -369,36 +358,30 @@ void getMessageQueue(void const *argument) {
           /*data_ptr = random;
           tx_buffer.StdId = 0x6FA;
           tx_buffer.DLC = sizeof(random);
-          status = HAL_CAN_AddTxMessage(&hcan,tx_buffer_ptr,data_ptr,(uint32_t *)CAN_TX_MAILBOX1);*/
+          status = HAL_CAN_AddTxMessage(&hcan,tx_buffer_ptr,data_ptr,(uint32_t *)CAN_TX_MAILBOX1);
           MAILBOX_INDEX_1--;
           break;
-      }
+      }*/
     }
     if (!eecs_CAN_Mail_Ready(CAN_TX_MAILBOX2)) {
       switch (MAILBOX_INDEX_2) {
         case (0):
-          eecs_CAN_Set_Params(0x6FB,sizeof(adc.data),adc.data);
+          eecs_CAN_Set_Params(0x6FE,sizeof(adc.data),(uint8_t*)adc.data);
           eecs_CAN_Send(CAN_TX_MAILBOX2);
-          /*data_ptr = adc.data;
-          tx_buffer.StdId = 0x6FB;
-          tx_buffer.DLC = sizeof(adc.data);
-          status = HAL_CAN_AddTxMessage(&hcan,tx_buffer_ptr,data_ptr,(uint32_t *)CAN_TX_MAILBOX2);
-          //MAILBOX_INDEX_0++;*/
+          MAILBOX_INDEX_2++;
           break;
-        /*case (1):
-          data_ptr = spiA.candata2;
-          tx_buffer.StdId = 0x6F8;
-          tx_buffer.DLC = sizeof(spiA.candata2);
-          status = HAL_CAN_AddTxMessage(&hcan1,tx_buffer_ptr,data_ptr,(uint32_t *)CAN_TX_MAILBOX0);
-          MAILBOX_INDEX_0--;
-          break;*/
+        case (1):
+          eecs_CAN_Set_Params(0x6FF,sizeof(i2c.data),(uint8_t*)i2c.data);
+          eecs_CAN_Send(CAN_TX_MAILBOX2);
+          MAILBOX_INDEX_2--;
+          break;
       }
     }
   }
 
 }
 
-void adcTest(void const *argument) {
+/*void adcTest(void const *argument) {
   //eecs_ADC_Begin();
   TickType_t lastWakeTime = osKernelSysTick();
   while (1) {
@@ -418,7 +401,7 @@ void adcTest(void const *argument) {
     osMessagePut(MsgBox,(uint32_t)mptr,osWaitForever);
   }
 
-}
+}*/
 
 int main(void)
 {
@@ -475,17 +458,17 @@ int main(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 1, 2);
+  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 1, 128);
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
   //osThreadDef(uartTask, uartTest, osPriorityAboveNormal, 1, 128);
   //uartTaskHandle = osThreadCreate(osThread(uartTask), NULL);
   osThreadDef(getMessageQueue, getMessageQueue, osPriorityRealtime, 1, 128);
   getMessageQueueHandle = osThreadCreate(osThread(getMessageQueue),NULL);
-  osThreadDef(putMessageQueueI2C, putMessageQueueI2C, osPriorityNormal,1,32);
+  osThreadDef(putMessageQueueI2C, putMessageQueueI2C, osPriorityAboveNormal,1,128);
   putMessageQueueI2CHandle = osThreadCreate(osThread(putMessageQueueI2C),NULL);
-  osThreadDef(readSPIB,readSPIB,osPriorityAboveNormal,1,128);
-  spiBTaskHandle = osThreadCreate(osThread(readSPIB),NULL);
+  //osThreadDef(readSPIB,readSPIB,osPriorityAboveNormal,1,128);
+  //spiBTaskHandle = osThreadCreate(osThread(readSPIB),NULL);
   osThreadDef(readSPIA,readSPIA,osPriorityAboveNormal,1,128);
   spiATaskHandle = osThreadCreate(osThread(readSPIA),NULL);
   //osThreadDef(putMessageQueueADC, putMessageQueueADC, osPriorityAboveNormal,1,32);
@@ -505,6 +488,14 @@ int main(void)
 
   }
 }
+
+void StartDefaultTask(void const *argument) {
+  TickType_t tick = osKernelSysTick();
+  while (1) {
+
+  }
+}
+
 
 void SystemClock_Config(void)
 {
@@ -554,14 +545,6 @@ void SystemClock_Config(void)
   /* SysTick_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(SysTick_IRQn, 15, 0);
 
-}
-
-void StartDefaultTask(void const * argument)
-{
-
-  for(;;)
-  {
-  }
 }
 
 /**

@@ -96,7 +96,7 @@ void eecs_ADC_Read();
 
 void eecs_CAN_Init();
 uint32_t eecs_CAN_Mail_Ready(uint32_t);
-void eecs_CAN_Set_Params(uint32_t,uint32_t,uint16_t *);
+void eecs_CAN_Set_Params(uint32_t,uint32_t,uint8_t *);
 void eecs_CAN_Send();
 
 void eecs_GPIO_Clock_Init(void) {
@@ -369,7 +369,7 @@ void eecs_I2C_Init(void) {
   uint8_t i;
   uint8_t addr = 59;
   hi2c.Instance = I2C2;
-  hi2c.Init.ClockSpeed = 400000;
+  hi2c.Init.ClockSpeed = 100000;
   hi2c.Init.DutyCycle = I2C_DUTYCYCLE_2;
   hi2c.Init.OwnAddress1 = 0;
   hi2c.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
@@ -389,9 +389,10 @@ void eecs_I2C_Init(void) {
 
 void eecs_I2C_Read() {
   int i;
+  HAL_StatusTypeDef status;
   for (i = 0; i < 6; i++) {
-    HAL_I2C_Master_Transmit(&hi2c,i2c.address,i2c.tx_buff+i,sizeof(uint8_t),10);
-    HAL_I2C_Master_Receive(&hi2c,i2c.address,i2c.rx_buff+i,sizeof(uint8_t),10);
+    status = HAL_I2C_Master_Transmit(&hi2c,i2c.address,i2c.tx_buff+i,sizeof(uint8_t),HAL_MAX_DELAY);
+    status = HAL_I2C_Master_Receive(&hi2c,i2c.address,i2c.rx_buff+i,sizeof(uint8_t),HAL_MAX_DELAY);
   }
   i2c.data[0] = 0;
   i2c.data[1] = (i2c.rx_buff[0] << 8) + i2c.rx_buff[1];
@@ -525,7 +526,7 @@ void eecs_CAN_Init() {
   }
 }
 
-void eecs_CAN_Set_Params(uint32_t id,uint32_t size,uint16_t *data) {
+void eecs_CAN_Set_Params(uint32_t id,uint32_t size,uint8_t *data) {
   can.tx_buffer.StdId = id;
   can.tx_buffer.DLC = size;
   can.data_ptr = data;
