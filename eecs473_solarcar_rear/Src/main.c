@@ -6,6 +6,7 @@
 
 
 osThreadId defaultTaskHandle;
+osThreadId putMessageQueueI2CHandle;
 osThreadId getMessageQueueHandle;
 osThreadId spiATaskHandle;
 osThreadId spiBTaskHandle;
