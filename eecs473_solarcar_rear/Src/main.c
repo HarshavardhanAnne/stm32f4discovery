@@ -67,17 +67,6 @@ void readSPIB(void const *argument) {
 }
 
 void getMessageQueue(void const *argument) {
-  uint8_t* data_ptr;
-  data_ptr = adc.data;
-  HAL_CAN_Start(&hcan);
-  HAL_CAN_WakeUp(&hcan);
-  CAN_TxHeaderTypeDef tx_buffer;
-  CAN_TxHeaderTypeDef* tx_buffer_ptr = &tx_buffer;
-  tx_buffer.IDE = CAN_ID_STD;
-  tx_buffer.RTR = CAN_RTR_DATA;
-  tx_buffer.StdId = 0x6FF;
-  tx_buffer.DLC = sizeof(adc.data);
-  HAL_StatusTypeDef status = HAL_OK;
 
   TickType_t tick = osKernelSysTick();
   while (1) {
@@ -175,6 +164,11 @@ int main(void)
   eecs_SPI_Begin(&spiB,3);
   HAL_Delay(1);
 
+  eecs_I2C_WriteReg(0x28,0x18);
+  HAL_Delay(1);
+  HAL_CAN_Start(&hcan);
+  HAL_CAN_WakeUp(&hcan);
+
     //debug led
   GPIO_InitTypeDef GPIO_InitStruct;
   GPIO_InitStruct.Pin = GPIO_PIN_4;
@@ -205,7 +199,6 @@ int main(void)
 }
 
 void StartDefaultTask(void const *argument) {
-  TickType_t tick = osKernelSysTick();
   while (1) {
 
   }

@@ -91,19 +91,19 @@ void getMessageQueue(void const *argument) {
     if (!eecs_CAN_Mail_Ready(CAN_TX_MAILBOX0)) {
       switch (MAILBOX_INDEX_0) {
         case (0):
-          eecs_CAN_Set_Params(0x6FC,sizeof(spiA.candata),(uint8_t*)spiA.candata);
+          eecs_CAN_Set_Params(0x6F7,sizeof(spiA.candata),(uint8_t*)spiA.candata);
           eecs_CAN_Send(CAN_TX_MAILBOX0);
           MAILBOX_INDEX_0++;
           break;
         case (1):
-          eecs_CAN_Set_Params(0x6FD,sizeof(spiA.candata2),(uint8_t*)spiA.candata2);
+          eecs_CAN_Set_Params(0x6F8,sizeof(spiA.candata2),(uint8_t*)spiA.candata2);
           eecs_CAN_Send(CAN_TX_MAILBOX0);
           MAILBOX_INDEX_0--;
           break;
       }
     }
     if (!eecs_CAN_Mail_Ready(CAN_TX_MAILBOX1)) {
-      /*switch (MAILBOX_INDEX_1) {
+      switch (MAILBOX_INDEX_1) {
         case (0):
           eecs_CAN_Set_Params(0x6F9,sizeof(spiB.candata),spiB.candata);
           eecs_CAN_Send(CAN_TX_MAILBOX1);
@@ -114,19 +114,13 @@ void getMessageQueue(void const *argument) {
           eecs_CAN_Send(CAN_TX_MAILBOX1);
           MAILBOX_INDEX_1--;
           break;
-      }*/
+      }
     }
     if (!eecs_CAN_Mail_Ready(CAN_TX_MAILBOX2)) {
       switch (MAILBOX_INDEX_2) {
         case (0):
-          eecs_CAN_Set_Params(0x6FE,sizeof(adc.data),(uint8_t*)adc.data);
+          eecs_CAN_Set_Params(0x6FB,sizeof(adc.data),(uint8_t*)adc.data);
           eecs_CAN_Send(CAN_TX_MAILBOX2);
-          MAILBOX_INDEX_2++;
-          break;
-        case (1):
-          eecs_CAN_Set_Params(0x6FF,sizeof(i2c.data),(uint8_t*)i2c.data);
-          eecs_CAN_Send(CAN_TX_MAILBOX2);
-          MAILBOX_INDEX_2--;
           break;
       }
     }
@@ -188,10 +182,10 @@ int main(void)
 
   osThreadDef(getMessageQueue, getMessageQueue, osPriorityRealtime, 1, 128);
   getMessageQueueHandle = osThreadCreate(osThread(getMessageQueue),NULL);
-  osThreadDef(putMessageQueueI2C, putMessageQueueI2C, osPriorityAboveNormal,1,128);
-  putMessageQueueI2CHandle = osThreadCreate(osThread(putMessageQueueI2C),NULL);
-  //osThreadDef(readSPIB,readSPIB,osPriorityAboveNormal,1,128);
-  //spiBTaskHandle = osThreadCreate(osThread(readSPIB),NULL);
+  //osThreadDef(putMessageQueueI2C, putMessageQueueI2C, osPriorityAboveNormal,1,128);
+  //putMessageQueueI2CHandle = osThreadCreate(osThread(putMessageQueueI2C),NULL);
+  osThreadDef(readSPIB,readSPIB,osPriorityAboveNormal,1,128);
+  spiBTaskHandle = osThreadCreate(osThread(readSPIB),NULL);
   osThreadDef(readSPIA,readSPIA,osPriorityAboveNormal,1,128);
   spiATaskHandle = osThreadCreate(osThread(readSPIA),NULL);
 

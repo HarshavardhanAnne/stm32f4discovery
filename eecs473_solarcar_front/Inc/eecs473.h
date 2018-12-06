@@ -481,6 +481,12 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* AdcHandle) {
   for (i = 0; i < ADC_BUFFER_LENGTH; i++) {
     adc.data[i] = (uint16_t)(adcbuffer[i]);
   }
+  //2 - 10158
+/*  double newValue = (double)adcbuffer[3] * 10000.0/4032.0;
+  double oldValue = (double)adc.data[3];
+  oldValue += (newValue - oldValue) / 4032.0;
+  oldValue *= 10000;
+  adc.data[3] = (uint16_t)oldValue;*/
 }
 
 void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef* AdcHandle) {

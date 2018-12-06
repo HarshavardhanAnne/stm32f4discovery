@@ -142,7 +142,7 @@ void eecs_UART_Init(void) {
 }
 
 void eecs_UART_Print(uint8_t* arr, uint8_t buffsize) {
-  HAL_StatusTypeDef status = HAL_UART_Transmit(&huart,arr,buffsize,HAL_MAX_DELAY);
+  HAL_UART_Transmit(&huart,arr,buffsize,HAL_MAX_DELAY);
 }
 
 void eecs_SPI_Init(int spi_bus) {
@@ -304,8 +304,6 @@ void eecs_SPI_Wait(struct eecsSPI* spi,GPIO_TypeDef* gpiox,uint16_t pin) {
 }
 
 void eecs_SPI_Read(struct eecsSPI* spi,uint8_t csPin,uint8_t channel) {
-  uint16_t i = 0;
-  uint16_t sum = 0;
   uint8_t txbuff[2] = {0x38,0x00};
   uint8_t rxbuff[2];
   uint16_t oldValue;
@@ -368,7 +366,7 @@ void eecs_I2C_Init(void) {
   uint8_t i;
   uint8_t addr = 59;
   hi2c.Instance = I2C2;
-  hi2c.Init.ClockSpeed = 100000;
+  hi2c.Init.ClockSpeed = 400000;
   hi2c.Init.DutyCycle = I2C_DUTYCYCLE_2;
   hi2c.Init.OwnAddress1 = 0;
   hi2c.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
@@ -386,12 +384,15 @@ void eecs_I2C_Init(void) {
   i2c.address = (uint8_t)(0b1101000 << 1);
 }
 
+void eecs_I2C_WriteReg(uint8_t reg_ptr, uint16_t reg_val) {  
+  HAL_I2C_Mem_Write(&hi2c,i2c.address,(uint16_t)reg_ptr,I2C_MEMADD_SIZE_8BIT,(uint8_t*)(&reg_val),2,100);
+}
+
 void eecs_I2C_Read() {
   int i;
-  HAL_StatusTypeDef status;
   for (i = 0; i < 6; i++) {
-    status = HAL_I2C_Master_Transmit(&hi2c,i2c.address,i2c.tx_buff+i,sizeof(uint8_t),HAL_MAX_DELAY);
-    status = HAL_I2C_Master_Receive(&hi2c,i2c.address,i2c.rx_buff+i,sizeof(uint8_t),HAL_MAX_DELAY);
+    HAL_I2C_Master_Transmit(&hi2c,i2c.address,i2c.tx_buff+i,sizeof(uint8_t),HAL_MAX_DELAY);
+    HAL_I2C_Master_Receive(&hi2c,i2c.address,i2c.rx_buff+i,sizeof(uint8_t),HAL_MAX_DELAY);
   }
   i2c.data[0] = 0;
   i2c.data[1] = (i2c.rx_buff[0] << 8) + i2c.rx_buff[1];
